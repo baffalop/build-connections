@@ -1,10 +1,12 @@
 @react.component
 let make = (~group: Group.t, ~children) => {
+  let toBgClass = color => `bg-${color}-400`
   let color = switch group {
-  | Yellow => "bg-yellow-400"
-  | Green => "bg-green-400"
-  | Blue => "bg-blue-400"
-  | Purple => "bg-purple-400"
+  | Yellow => toBgClass("yellow")
+  | Green => toBgClass("green")
+  | Blue => toBgClass("blue")
+  | Purple => toBgClass("purple")
   }
-  <div className={`p-6 rounded-lg ${color}`}> {children} </div>
+
+  <div className={`p-6 rounded-lg font-bold flex justify-center ${color}`}> {children} </div>
 }
