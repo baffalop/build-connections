@@ -1,19 +1,5 @@
 %%raw(`import './App.css'`)
 
-module Utils = {
-  module Array = {
-    let setAt = (ar, i, v) => {
-      Belt.Array.concatMany([
-        Belt.Array.slice(ar, ~offset=0, ~len=i),
-        [v],
-        Belt.Array.sliceToEnd(ar, i + 1),
-      ])
-    }
-
-    let append = (ar, a) => Belt.Array.concat(ar, [a])
-  }
-}
-
 let toCards = (values: array<array<string>>): array<Puzzle.card> => {
   Belt.Array.zip(Group.rainbow, values)->Belt.Array.flatMap(((group, row)) =>
     row->Belt.Array.map(value => {Puzzle.group, value: Js.String.trim(value)})
