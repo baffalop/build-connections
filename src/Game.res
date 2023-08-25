@@ -15,6 +15,9 @@ let make = (~cards: Puzzle.cards) => {
 
   <Form
     buttons={<>
+      <button type_="button" className="action" onClick={_ => setUnsolved(Belt.Array.shuffle)}>
+        {React.string("Shuffle")}
+      </button>
       <button
         type_="button"
         className="action"
