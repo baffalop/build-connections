@@ -8,8 +8,7 @@ body {
 
 button.action {
   @apply rounded-full pt-1 pb-1.5 px-2.5 bg-white font-medium border border-neutral-700
-    hover:bg-neutral-200 active:bg-neutral-300
-    disabled:text-neutral-500 disabled:border-neutral-500 disabled:bg-neutral-100
+    hover:bg-neutral-200 disabled:text-neutral-500 disabled:border-neutral-500 disabled:bg-neutral-100
     cursor-pointer disabled:cursor-default;
 }
 
