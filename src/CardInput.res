@@ -1,6 +1,6 @@
 @react.component
-let make = (~group: Group.t, ~children) => {
-  let toBgClass = color => `bg-${color}-400`
+let make = (~group: Group.t, ~children: string) => {
+  let toBgClass = color => `bg-${color}-400 focus:bg-${color}-300`
   let color = switch group {
   | Yellow => toBgClass("yellow")
   | Green => toBgClass("green")
@@ -8,5 +8,7 @@ let make = (~group: Group.t, ~children) => {
   | Purple => toBgClass("purple")
   }
 
-  <div className={`p-6 rounded-lg font-bold flex justify-center ${color}`}> {children} </div>
+  <input
+    className={`p-6 rounded-lg font-bold flex justify-center ${color} appearance-none outline-none`}
+  />
 }
