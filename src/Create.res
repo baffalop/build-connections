@@ -62,12 +62,19 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
   let clearRow = row => setValues(Utils.Array.setAt(_, row, blankRow))
   let clearAll = _ => setValues(_ => blankValues)
 
-  <form
-    className="space-y-6"
-    onSubmit={e => {
-      ReactEvent.Form.preventDefault(e)
-      values->Puzzle.makeCards->onCreate
-    }}>
+  <Form
+    buttons={<>
+      <button type_="button" className="action" onClick={clearAll}>
+        {React.string("Clear All")}
+      </button>
+      <button type_="button" className="action" onClick={_ => setValues(_ => sampleValues)}>
+        {React.string("Fill (test)")}
+      </button>
+      <button type_="submit" className="action primary" disabled={!allValuesFilled}>
+        {React.string("Create")}
+      </button>
+    </>}
+    onSubmit={() => values->Puzzle.makeCards->onCreate}>
     <div className="grid gap-3 grid-cols-[auto_auto_auto_auto_auto]">
       {Belt.Array.zip(Group.rainbow, values)
       ->Belt.Array.mapWithIndex((row, (group, groupValues)) => {
@@ -81,16 +88,5 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
       ->Belt.Array.concatMany
       ->React.array}
     </div>
-    <div className="flex justify-start gap-3">
-      <button type_="submit" className="action primary" disabled={!allValuesFilled}>
-        {React.string("Create")}
-      </button>
-      <button type_="button" className="action" onClick={clearAll}>
-        {React.string("Clear All")}
-      </button>
-      <button type_="button" className="action" onClick={_ => setValues(_ => sampleValues)}>
-        {React.string("Fill (test)")}
-      </button>
-    </div>
-  </form>
+  </Form>
 }
