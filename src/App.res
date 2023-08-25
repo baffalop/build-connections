@@ -36,6 +36,7 @@ let make = () => {
   }
 
   let clearRow = row => setValues(Utils.Array.setAt(_, row, Belt.Array.make(4, "")))
+  let allValuesFilled = values->Belt.Array.every(Belt.Array.every(_, v => v != ""))
 
   let onCreate = Console.log2("Created", _)
 
@@ -65,6 +66,8 @@ let make = () => {
       ->Belt.Array.concatMany
       ->React.array}
     </div>
-    <button type_="submit" className="action"> {React.string("Create")} </button>
+    <button type_="submit" className="action" disabled={!allValuesFilled}>
+      {React.string("Create")}
+    </button>
   </form>
 }
