@@ -6,8 +6,10 @@ type step =
 let make = () => {
   let (step, setStep) = React.useState(() => Create)
 
-  switch step {
-  | Create => <Create onCreate={cards => setStep(_ => Game(cards))} />
-  | Game(cards) => <Game cards />
-  }
+  <div className="m-10 max-w-max">
+    {switch step {
+    | Create => <Create onCreate={cards => setStep(_ => Game(cards))} />
+    | Game(cards) => <Game cards />
+    }}
+  </div>
 }
