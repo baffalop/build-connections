@@ -26,9 +26,8 @@ let toCards = (values: array<array<string>>): array<card> => {
 }
 
 @react.component
-let make = () => {
+let make = (~onCreate: array<card> => unit) => {
   let (values, setValues) = React.useState(() => Belt.Array.make(4, Belt.Array.make(4, "")))
-  let allValuesFilled = values->Belt.Array.every(Belt.Array.every(_, v => Js.String.trim(v) != ""))
 
   let setValue = (row, col, value) => {
     setValues(values => {
@@ -38,14 +37,14 @@ let make = () => {
 
   let clearRow = row => setValues(Utils.Array.setAt(_, row, Belt.Array.make(4, "")))
 
-  let onCreate = Console.log2("Created", _)
+  let allValuesFilled = values->Belt.Array.every(Belt.Array.every(_, v => Js.String.trim(v) != ""))
 
-  let onSubmit = e => {
-    ReactEvent.Form.preventDefault(e)
-    values->toCards->onCreate
-  }
-
-  <form className="m-8 space-y-6" onSubmit>
+  <form
+    className="m-8 space-y-6"
+    onSubmit={e => {
+      ReactEvent.Form.preventDefault(e)
+      values->toCards->onCreate
+    }}>
     <div className="grid gap-3 grid-cols-[1fr_1fr_1fr_1fr_auto] max-w-sm">
       {Belt.Array.zip(Group.rainbow, values)
       ->Belt.Array.mapWithIndex((row, (group, groupValues)) => {
