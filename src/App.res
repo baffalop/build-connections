@@ -21,13 +21,14 @@ type card = {
 
 let toCards = (values: array<array<string>>): array<card> => {
   Belt.Array.zip(Group.rainbow, values)->Belt.Array.flatMap(((group, row)) =>
-    row->Belt.Array.map(value => {group, value})
+    row->Belt.Array.map(value => {group, value: Js.String.trim(value)})
   )
 }
 
 @react.component
 let make = () => {
   let (values, setValues) = React.useState(() => Belt.Array.make(4, Belt.Array.make(4, "")))
+  let allValuesFilled = values->Belt.Array.every(Belt.Array.every(_, v => Js.String.trim(v) != ""))
 
   let setValue = (row, col, value) => {
     setValues(values => {
@@ -36,7 +37,6 @@ let make = () => {
   }
 
   let clearRow = row => setValues(Utils.Array.setAt(_, row, Belt.Array.make(4, "")))
-  let allValuesFilled = values->Belt.Array.every(Belt.Array.every(_, v => v != ""))
 
   let onCreate = Console.log2("Created", _)
 
