@@ -47,12 +47,6 @@ let sampleValues = [
   ["now", "continue", "on", "thanks"],
 ]
 
-let toCards = (values: array<array<string>>): Puzzle.cards => {
-  Belt.Array.zip(Group.rainbow, values)->Belt.Array.flatMap(((group, row)) =>
-    row->Belt.Array.mapWithIndex((i, value) => {Puzzle.group, key: i, value: Js.String.trim(value)})
-  )
-}
-
 @react.component
 let make = (~onCreate: array<Puzzle.card> => unit) => {
   let (values, setValues) = React.useState(() => blankValues)
@@ -72,7 +66,7 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
     className="space-y-6"
     onSubmit={e => {
       ReactEvent.Form.preventDefault(e)
-      values->toCards->onCreate
+      values->Puzzle.makeCards->onCreate
     }}>
     <div className="grid gap-3 grid-cols-[auto_auto_auto_auto_auto]">
       {Belt.Array.zip(Group.rainbow, values)
