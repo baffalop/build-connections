@@ -1,6 +1,6 @@
 %%raw(`import './App.css'`)
 
-let toCards = (values: array<array<string>>): array<Puzzle.card> => {
+let toCards = (values: array<array<string>>): Puzzle.cards => {
   Belt.Array.zip(Group.rainbow, values)->Belt.Array.flatMap(((group, row)) =>
     row->Belt.Array.map(value => {Puzzle.group, value: Js.String.trim(value)})
   )
