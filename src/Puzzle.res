@@ -15,10 +15,7 @@ let makeCards = (values: array<array<string>>): cards => {
   )
 }
 
-let cardKey = id =>
-  switch id {
-  | CardId(group, i) => `${Group.name(group)}-${Belt.Int.toString(i)}`
-  }
+let cardKey = (CardId(group, i)) => `${Group.name(group)}-${Belt.Int.toString(i)}`
 
 type match =
   | Unknown
