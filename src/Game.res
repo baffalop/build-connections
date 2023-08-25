@@ -42,15 +42,11 @@ let make = (~cards: Puzzle.cards) => {
         type_="button" className="action" onClick={_ => deselectAll()} disabled={!hasSelection}>
         {React.string("Deselect All")}
       </button>
-      <button
-        type_="submit"
-        className="action primary"
-        disabled={!hasFullSelection}
-        onClick={_ => solve()}>
+      <button type_="submit" className="action primary" disabled={!hasFullSelection}>
         {React.string("Submit")}
       </button>
     </>}
-    onSubmit={() => Console.log("Submit")}>
+    onSubmit={solve}>
     <div className="grid grid-cols-[auto_auto_auto_auto] gap-3">
       {solved
       ->Belt.Array.map(({group, cards}) => {
