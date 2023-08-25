@@ -7,7 +7,7 @@ let make = (~cards: Puzzle.cards) => {
     ->Belt.Array.map(({group, key, value}) => {
       <button
         key={`${Group.name(group)}-${Belt.Int.toString(key)}`}
-        className="p-6 rounded-lg w-32 bg-neutral-200 cursor-pointer">
+        className="card p-6 w-32 bg-neutral-200 cursor-pointer">
         {React.string(value)}
       </button>
     })

@@ -12,3 +12,7 @@ button.action {
     disabled:text-neutral-500 disabled:border-neutral-500 disabled:bg-neutral-100
     cursor-pointer disabled:cursor-default;
 }
+
+.card {
+  @apply rounded-lg font-medium uppercase;
+}
