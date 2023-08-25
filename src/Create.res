@@ -1,11 +1,5 @@
 %%raw(`import './App.css'`)
 
-let toCards = (values: array<array<string>>): Puzzle.cards => {
-  Belt.Array.zip(Group.rainbow, values)->Belt.Array.flatMap(((group, row)) =>
-    row->Belt.Array.map(value => {Puzzle.group, value: Js.String.trim(value)})
-  )
-}
-
 module CardInput = {
   @react.component
   let make = (~group: Group.t, ~value: string, ~onInput: string => unit) => {
@@ -43,9 +37,25 @@ module ClearButton = {
   }
 }
 
+let blankRow = Belt.Array.make(4, "")
+let blankValues = Belt.Array.make(4, blankRow)
+
+let sampleValues = [
+  ["Hi", "There", "This", "is"],
+  ["a", "test", "run", "of"],
+  ["the", "game", "you", "can"],
+  ["now", "continue", "on", "thanks"],
+]
+
+let toCards = (values: array<array<string>>): Puzzle.cards => {
+  Belt.Array.zip(Group.rainbow, values)->Belt.Array.flatMap(((group, row)) =>
+    row->Belt.Array.map(value => {Puzzle.group, value: Js.String.trim(value)})
+  )
+}
+
 @react.component
 let make = (~onCreate: array<Puzzle.card> => unit) => {
-  let (values, setValues) = React.useState(() => Belt.Array.make(4, Belt.Array.make(4, "")))
+  let (values, setValues) = React.useState(() => blankValues)
 
   let setValue = (row, col, value) => {
     setValues(values => {
@@ -53,9 +63,10 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
     })
   }
 
-  let clearRow = row => setValues(Utils.Array.setAt(_, row, Belt.Array.make(4, "")))
-
   let allValuesFilled = values->Belt.Array.every(Belt.Array.every(_, v => Js.String.trim(v) != ""))
+
+  let clearRow = row => setValues(Utils.Array.setAt(_, row, blankRow))
+  let clearAll = _ => setValues(_ => blankValues)
 
   <form
     className="m-8 space-y-6"
@@ -76,8 +87,16 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
       ->Belt.Array.concatMany
       ->React.array}
     </div>
-    <button type_="submit" className="action" disabled={!allValuesFilled}>
-      {React.string("Create")}
-    </button>
+    <div className="flex justify-start gap-3">
+      <button type_="submit" className="action" disabled={!allValuesFilled}>
+        {React.string("Create")}
+      </button>
+      <button type_="button" className="action" onClick={clearAll}>
+        {React.string("Clear All")}
+      </button>
+      <button type_="button" className="action" onClick={_ => setValues(_ => sampleValues)}>
+        {React.string("Fill (test)")}
+      </button>
+    </div>
   </form>
 }
