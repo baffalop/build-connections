@@ -13,6 +13,10 @@ button.action {
     cursor-pointer disabled:cursor-default;
 }
 
+button.primary:not(:disabled) {
+  @apply bg-neutral-700 text-white
+}
+
 .card {
   @apply rounded-lg font-medium uppercase;
 }

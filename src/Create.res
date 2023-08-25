@@ -88,7 +88,7 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
       ->React.array}
     </div>
     <div className="flex justify-start gap-3">
-      <button type_="submit" className="action" disabled={!allValuesFilled}>
+      <button type_="submit" className="action primary" disabled={!allValuesFilled}>
         {React.string("Create")}
       </button>
       <button type_="button" className="action" onClick={clearAll}>
