@@ -22,6 +22,13 @@ let make = (~cards: Puzzle.cards) => {
         disabled={!hasSelected}>
         {React.string("Deselect All")}
       </button>
+      <button
+        type_="submit"
+        className="action primary"
+        disabled={!hasFullSelection}
+        onClick={_ => Console.log("Submit")}>
+        {React.string("Submit")}
+      </button>
     </>}
     onSubmit={() => Console.log("Submit")}>
     <div className="grid grid-cols-[auto_auto_auto_auto] gap-3">
