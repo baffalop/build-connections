@@ -14,6 +14,17 @@ module Utils = {
   }
 }
 
+type card = {
+  group: Group.t,
+  value: string,
+}
+
+let toCards = (values: array<array<string>>): array<card> => {
+  Belt.Array.zip(Group.rainbow, values)->Belt.Array.flatMap(((group, row)) =>
+    row->Belt.Array.map(value => {group, value})
+  )
+}
+
 @react.component
 let make = () => {
   let (values, setValues) = React.useState(() =>
@@ -28,24 +39,34 @@ let make = () => {
 
   let clearRow = row => setValues(Utils.Array.setAt(_, row, Belt.Array.make(4, "")))
 
-  <div className="m-8 grid gap-3 grid-cols-[1fr_1fr_1fr_1fr_auto] max-w-sm">
-    {Belt.Array.zip(Group.rainbow, values)
-    ->Belt.Array.mapWithIndex((row, (group, groupValues)) => {
-      Belt.Array.mapWithIndex(groupValues, (col, value) => {
-        let key = `${Group.name(group)}-${Belt.Int.toString(col)}`
-        <CardInput key group value onInput={setValue(row, col, _)} />
-      })->Utils.Array.append(
-        <button
-          key={`clear-${Belt.Int.toString(row)}`}
-          type_="button"
-          className="rounded-full px-1.5 pb-0.5 leading-snug text-white font-bold bg-neutral-400 hover:bg-neutral-500 self-center justify-self-center"
-          title="Clear row"
-          onClick={_ => clearRow(row)}>
-          {React.string("×")}
-        </button>,
-      )
-    })
-    ->Belt.Array.concatMany
-    ->React.array}
-  </div>
+  let onCreate = Console.log2("Created", _)
+
+  let onSubmit = e => {
+    ReactEvent.Form.preventDefault(e)
+    values->toCards->onCreate
+  }
+
+  <form className="m-8 space-y-6" onSubmit>
+    <div className="grid gap-3 grid-cols-[1fr_1fr_1fr_1fr_auto] max-w-sm">
+      {Belt.Array.zip(Group.rainbow, values)
+      ->Belt.Array.mapWithIndex((row, (group, groupValues)) => {
+        Belt.Array.mapWithIndex(groupValues, (col, value) => {
+          let key = `${Group.name(group)}-${Belt.Int.toString(col)}`
+          <CardInput key group value onInput={setValue(row, col, _)} />
+        })->Utils.Array.append(
+          <button
+            key={`clear-${Belt.Int.toString(row)}`}
+            type_="button"
+            className="rounded-full px-1.5 pb-0.5 leading-snug text-white font-bold bg-neutral-400 hover:bg-neutral-500 self-center justify-self-center"
+            title="Clear row"
+            onClick={_ => clearRow(row)}>
+            {React.string("×")}
+          </button>,
+        )
+      })
+      ->Belt.Array.concatMany
+      ->React.array}
+    </div>
+    <button type_="submit" className="action"> {React.string("Create")} </button>
+  </form>
 }

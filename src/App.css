@@ -3,5 +3,10 @@ body, html {
 }
 
 body {
-  @apply bg-neutral-100;
+  @apply bg-neutral-100 text-neutral-800 text-sm;
+}
+
+button.action {
+  @apply rounded-full pt-1 pb-1.5 px-2.5 bg-white font-medium border border-neutral-700
+    hover:bg-neutral-200 active:bg-neutral-300 disabled:hover:bg-white disabled:text-neutral-500;
 }
