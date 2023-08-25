@@ -14,19 +14,14 @@ module Utils = {
   }
 }
 
-type card = {
-  group: Group.t,
-  value: string,
-}
-
-let toCards = (values: array<array<string>>): array<card> => {
+let toCards = (values: array<array<string>>): array<Puzzle.card> => {
   Belt.Array.zip(Group.rainbow, values)->Belt.Array.flatMap(((group, row)) =>
-    row->Belt.Array.map(value => {group, value: Js.String.trim(value)})
+    row->Belt.Array.map(value => {Puzzle.group, value: Js.String.trim(value)})
   )
 }
 
 @react.component
-let make = (~onCreate: array<card> => unit) => {
+let make = (~onCreate: array<Puzzle.card> => unit) => {
   let (values, setValues) = React.useState(() => Belt.Array.make(4, Belt.Array.make(4, "")))
 
   let setValue = (row, col, value) => {
