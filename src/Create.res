@@ -74,7 +74,7 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
       ReactEvent.Form.preventDefault(e)
       values->toCards->onCreate
     }}>
-    <div className="grid gap-3 grid-cols-[1fr_1fr_1fr_1fr_auto] max-w-sm">
+    <div className="grid gap-3 grid-cols-[auto_auto_auto_auto_auto] max-w-max">
       {Belt.Array.zip(Group.rainbow, values)
       ->Belt.Array.mapWithIndex((row, (group, groupValues)) => {
         Belt.Array.mapWithIndex(groupValues, (col, value) => {
