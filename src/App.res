@@ -36,8 +36,9 @@ let make = () => {
         <CardInput key group value onInput={setValue(row, col, _)} />
       })->Utils.Array.append(
         <button
+          key={`clear-${Belt.Int.toString(row)}`}
           type_="button"
-          className="rounded-full px-1.5 leading-snug text-white font-bold bg-neutral-400 hover:bg-neutral-500 self-center justify-self-center"
+          className="rounded-full px-1.5 pb-0.5 leading-snug text-white font-bold bg-neutral-400 hover:bg-neutral-500 self-center justify-self-center"
           title="Clear row"
           onClick={_ => clearRow(row)}>
           {React.string("×")}
