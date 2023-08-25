@@ -1,5 +1,13 @@
 %%raw(`import './App.css'`)
 
+let arraySetAt = (ar, i, v) => {
+  Belt.Array.concatMany([
+    Belt.Array.slice(ar, ~offset=0, ~len=i),
+    [v],
+    Belt.Array.sliceToEnd(ar, i + 1),
+  ])
+}
+
 @react.component
 let make = () => {
   let (values, setValues) = React.useState(() =>
@@ -8,18 +16,7 @@ let make = () => {
 
   let setValue = (row, col, value) => {
     setValues(values => {
-      let rowValue = Belt.Array.getExn(values, row)
-      Belt.Array.concatMany([
-        Belt.Array.slice(values, ~offset=0, ~len=row),
-        [
-          Belt.Array.concatMany([
-            Belt.Array.slice(rowValue, ~offset=0, ~len=col),
-            [value],
-            Belt.Array.sliceToEnd(rowValue, col + 1),
-          ]),
-        ],
-        Belt.Array.sliceToEnd(values, row + 1),
-      ])
+      arraySetAt(values, row, Belt.Array.getExn(values, row)->arraySetAt(col, value))
     })
   }
 
