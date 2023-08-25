@@ -49,7 +49,7 @@ let sampleValues = [
 
 let toCards = (values: array<array<string>>): Puzzle.cards => {
   Belt.Array.zip(Group.rainbow, values)->Belt.Array.flatMap(((group, row)) =>
-    row->Belt.Array.map(value => {Puzzle.group, value: Js.String.trim(value)})
+    row->Belt.Array.mapWithIndex((i, value) => {Puzzle.group, key: i, value: Js.String.trim(value)})
   )
 }
 
