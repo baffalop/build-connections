@@ -27,9 +27,7 @@ let toCards = (values: array<array<string>>): array<card> => {
 
 @react.component
 let make = () => {
-  let (values, setValues) = React.useState(() =>
-    Belt.Array.range(0, 3)->Belt.Array.map(_ => Belt.Array.make(4, ""))
-  )
+  let (values, setValues) = React.useState(() => Belt.Array.make(4, Belt.Array.make(4, "")))
 
   let setValue = (row, col, value) => {
     setValues(values => {
