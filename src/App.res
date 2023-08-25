@@ -28,7 +28,7 @@ let make = () => {
 
   let clearRow = row => setValues(Utils.Array.setAt(_, row, Belt.Array.make(4, "")))
 
-  <div className="m-8 grid gap-4 grid-cols-[1fr_1fr_1fr_1fr_auto] max-w-lg">
+  <div className="m-8 grid gap-3 grid-cols-[1fr_1fr_1fr_1fr_auto] max-w-sm">
     {Belt.Array.zip(Group.rainbow, values)
     ->Belt.Array.mapWithIndex((row, (group, groupValues)) => {
       Belt.Array.mapWithIndex(groupValues, (col, value) => {

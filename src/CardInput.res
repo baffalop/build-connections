@@ -13,7 +13,7 @@ let make = (~group: Group.t, ~value: string, ~onInput: string => unit) => {
       type_="text"
       value
       onInput={e => ReactEvent.Form.currentTarget(e)["value"]->onInput}
-      className={`p-4 rounded-md bg-transparent font-medium flex justify-center appearance-none outline-none uppercase
+      className={`p-4 rounded-md w-28 bg-transparent font-medium flex justify-center appearance-none outline-none uppercase
         border border-dashed border-transparent ${border}`}
     />
   </div>
