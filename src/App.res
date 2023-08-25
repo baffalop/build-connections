@@ -9,6 +9,8 @@ module Utils = {
         Belt.Array.sliceToEnd(ar, i + 1),
       ])
     }
+
+    let append = (ar, a) => Belt.Array.concat(ar, [a])
   }
 }
 
@@ -32,14 +34,14 @@ let make = () => {
       Belt.Array.mapWithIndex(groupValues, (col, value) => {
         let key = `${Group.name(group)}-${Belt.Int.toString(col)}`
         <CardInput key group value onInput={setValue(row, col, _)} />
-      })->Belt.Array.concat([
+      })->Utils.Array.append(
         <button
           type_="button"
           className="rounded-full px-1.5 text-white font-bold bg-neutral-400 hover:bg-neutral-500 self-center justify-self-center"
           onClick={_ => clearRow(row)}>
           {React.string("×")}
         </button>,
-      ])
+      )
     })
     ->Belt.Array.concatMany
     ->React.array}
