@@ -20,6 +20,20 @@ let toCards = (values: array<array<string>>): array<Puzzle.card> => {
   )
 }
 
+module ClearButton = {
+  @react.component
+  let make = (~onClick) => {
+    <button
+      type_="button"
+      className="rounded-full px-1.5 pb-0.5 leading-snug text-white font-bold bg-neutral-400 hover:bg-neutral-500 self-center justify-self-center"
+      title="Clear row"
+      tabIndex={-1}
+      onClick>
+      {React.string("×")}
+    </button>
+  }
+}
+
 @react.component
 let make = (~onCreate: array<Puzzle.card> => unit) => {
   let (values, setValues) = React.useState(() => Belt.Array.make(4, Belt.Array.make(4, "")))
@@ -47,14 +61,7 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
           let key = `${Group.name(group)}-${Belt.Int.toString(col)}`
           <CardInput key group value onInput={setValue(row, col, _)} />
         })->Utils.Array.append(
-          <button
-            key={`clear-${Belt.Int.toString(row)}`}
-            type_="button"
-            className="rounded-full px-1.5 pb-0.5 leading-snug text-white font-bold bg-neutral-400 hover:bg-neutral-500 self-center justify-self-center"
-            title="Clear row"
-            onClick={_ => clearRow(row)}>
-            {React.string("×")}
-          </button>,
+          <ClearButton key={`clear-${Belt.Int.toString(row)}`} onClick={_ => clearRow(row)} />,
         )
       })
       ->Belt.Array.concatMany
