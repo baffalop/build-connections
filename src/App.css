@@ -3,7 +3,7 @@ body, html {
 }
 
 body {
-  @apply bg-neutral-100 text-neutral-800 text-sm;
+  @apply bg-neutral-100 text-neutral-800 text-sm flex items-center justify-center;
 }
 
 button.action {
