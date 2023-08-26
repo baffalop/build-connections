@@ -5,7 +5,7 @@ let make = (~connections: Puzzle.connections) => {
   )
   let (selection, setSelection) = React.useState((): array<Puzzle.cardId> => [])
   let (solved, setSolved) = React.useState((): array<Puzzle.solved> => [])
-  let (lives, setLives) = React.useState(() => 4)
+  let (lives, setLives) = React.useState(() => 2)
 
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
@@ -86,7 +86,9 @@ let make = (~connections: Puzzle.connections) => {
         <button
           type_="button"
           key={Puzzle.cardKey(id)}
-          className={`card py-6 px-1 cursor-pointer disabled:cursor-default ${selectedStyle}`}
+          className={`card py-6 px-1 cursor-pointer ${selectedStyle}
+            disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
+          disabled={!hasLives}
           onClick={_ => id->(selected ? deselect : select)}>
           {React.string(value)}
         </button>
