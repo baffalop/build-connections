@@ -27,6 +27,7 @@ let make = (~cards: Puzzle.cards) => {
               {group, cards: selectedCards->Belt.Array.map(({value}) => value)},
             ),
           )
+          deselectAll()
         }
       | None => deselectAll()
       }
