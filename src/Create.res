@@ -35,7 +35,7 @@ module CardInput = {
 let blankRow = Belt.Array.make(4, "")
 let blankValues = Belt.Array.make(4, blankRow)
 
-let sampleValues: Puzzle.rows =
+let sampleValues: Puzzle.connections =
   [
     ("things we need for our bathroom", ["yellow", "cabinet", "ivan", "tiles"]),
     ("kitchen _", ["sink", "porter", "scissors", "appliance"]),
