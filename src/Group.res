@@ -11,7 +11,8 @@ let name = group =>
   }
 
 let bgColor = group => {
-  let toBg = color => `bg-${color}-400`
+  let toBg = color => (`bg-${color}-400`, `bg-${color}-300`)
+
   switch group {
   | Yellow => toBg("yellow")
   | Green => toBg("green")

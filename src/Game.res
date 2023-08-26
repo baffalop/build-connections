@@ -51,9 +51,10 @@ let make = (~cards: Puzzle.cards) => {
     <div className="grid grid-cols-4 gap-3">
       {solved
       ->Belt.Array.map(({group, cards}) => {
+        let (bg, _) = Group.bgColor(group)
         <div
           key={`solved-${Group.name(group)}`}
-          className={`card p-6 ${Group.bgColor(group)} col-span-full text-center`}>
+          className={`card p-6 ${bg} col-span-full text-center`}>
           {cards->Belt.Array.joinWith(", ", v => v)->React.string}
         </div>
       })

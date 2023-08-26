@@ -3,7 +3,11 @@
 module CardInput = {
   @react.component
   let make = (~group: Group.t, ~value: string, ~onInput: string => unit) => {
-    let toBg = color => `${Group.bgColor(group)} focus-within:bg-${color}-300`
+    let toBg = color => {
+      let (bg, _) = Group.bgColor(group)
+      `${bg} focus-within:bg-${color}-300`
+    }
+
     let (bg, border) = switch group {
     | Yellow => (toBg("yellow"), "focus:border-yellow-600")
     | Green => (toBg("green"), "focus:border-green-600")
