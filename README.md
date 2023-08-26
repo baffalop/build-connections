@@ -7,7 +7,7 @@ Built with [ReScript](https://rescript-lang.org/) + React.
 ## Scripts
 
 ```sh
-pnpm i # install
+pnpm i
 pnpm dev
 pnpm build
 pnpm preview
