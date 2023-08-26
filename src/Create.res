@@ -41,10 +41,10 @@ let blankRow = Belt.Array.make(4, "")
 let blankValues = Belt.Array.make(4, blankRow)
 
 let sampleValues = [
-  ["Hi", "There", "This", "is"],
-  ["a", "test", "run", "of"],
-  ["the", "game", "you", "can"],
-  ["now", "continue", "on", "thanks"],
+  ["yellow", "cabinet", "ivan", "tiles"],
+  ["sink", "porter", "scissors", "appliance"],
+  ["golden", "seargeant", "hey", "eleanor"],
+  ["n + 1", "tribune", "jacobin", "lrb"],
 ]
 
 @react.component
