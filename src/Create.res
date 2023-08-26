@@ -3,19 +3,14 @@
 module CardInput = {
   @react.component
   let make = (~group: Group.t, ~value: string, ~onInput: string => unit) => {
-    let toBg = color => {
-      let (bg, _) = Group.bgColor(group)
-      `${bg} focus-within:bg-${color}-300`
+    let border = switch group {
+    | Yellow => "focus:border-yellow-600"
+    | Green => "focus:border-green-600"
+    | Blue => "focus:border-blue-600"
+    | Purple => "focus:border-purple-600"
     }
 
-    let (bg, border) = switch group {
-    | Yellow => (toBg("yellow"), "focus:border-yellow-600")
-    | Green => (toBg("green"), "focus:border-green-600")
-    | Blue => (toBg("blue"), "focus:border-blue-600")
-    | Purple => (toBg("purple"), "focus:border-purple-600")
-    }
-
-    <div className={`p-2 rounded-lg ${bg}`}>
+    <div className={`p-2 rounded-lg ${Group.bgColorLight(group)}`}>
       <input
         type_="text"
         value
@@ -79,17 +74,16 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
       </button>
     </>}
     onSubmit={() => values->Puzzle.makeCards->onCreate}>
-    <div className="grid gap-3 grid-cols-[auto_auto_auto_auto_auto]">
+    <div className="flex flex-col items-stretch justify-start gap-3">
       {Belt.Array.zip(Group.rainbow, values)
       ->Belt.Array.mapWithIndex((row, (group, groupValues)) => {
-        Belt.Array.mapWithIndex(groupValues, (col, value) => {
-          let key = `${Group.name(group)}-${Belt.Int.toString(col)}`
-          <CardInput key group value onInput={setValue(row, col, _)} />
-        })->Utils.Array.append(
-          <ClearButton key={`clear-${Belt.Int.toString(row)}`} onClick={_ => clearRow(row)} />,
-        )
+        <section className={`card p-4 ${Group.bgColor(group)} flex gap-3 justify-stretch`}>
+          {Belt.Array.mapWithIndex(groupValues, (col, value) => {
+            let key = `${Group.name(group)}-${Belt.Int.toString(col)}`
+            <CardInput key group value onInput={setValue(row, col, _)} />
+          })->React.array}
+        </section>
       })
-      ->Belt.Array.concatMany
       ->React.array}
     </div>
   </Form>
