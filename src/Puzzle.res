@@ -17,21 +17,16 @@ let makeCards = (values: array<array<string>>): cards => {
 
 let cardKey = (CardId(group, i)) => `${Group.name(group)}-${Belt.Int.toString(i)}`
 
-type match =
-  | Unknown
-  | NoMatch
-  | Match(Group.t)
-
 let matchingGroup = (cards: cards): option<Group.t> => {
-  let match = cards->Belt.Array.reduce(Unknown, (match, {group}) =>
+  let match = cards->Belt.Array.reduce(#unknown, (match, {group}) =>
     switch match {
-    | Unknown => Match(group)
-    | NoMatch => NoMatch
-    | Match(matched) => matched == group ? match : NoMatch
+    | #unknown => #match(group)
+    | #noMatch => #noMatch
+    | #match(matched) => matched == group ? match : #noMatch
     }
   )
   switch match {
-  | Match(group) => Some(group)
+  | #match(group) => Some(group)
   | _ => None
   }
 }
