@@ -5,7 +5,7 @@ let make = (~connections: Puzzle.connections) => {
   )
   let (selection, setSelection) = React.useState((): array<Puzzle.cardId> => [])
   let (solved, setSolved) = React.useState((): array<Puzzle.solved> => [])
-  let (lives, setLives) = React.useState(() => 2)
+  let (lives, setLives) = React.useState(() => 4)
 
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
