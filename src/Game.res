@@ -67,7 +67,7 @@ let make = (~cards: Puzzle.cards) => {
         <button
           type_="button"
           key={Puzzle.cardKey(id)}
-          className={`card p-6 w-32 cursor-pointer ${selectedStyle}`}
+          className={`card p-6 w-24 cursor-pointer ${selectedStyle}`}
           onClick={_ => id->(selected ? deselect : select)}>
           {React.string(value)}
         </button>
