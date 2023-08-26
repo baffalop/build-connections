@@ -63,9 +63,9 @@ let make = (~connections: Puzzle.connections) => {
         {React.string("Submit")}
       </button>
     </>}
-    message={<div className="flex items-center justify-center gap-3">
+    message={<div className="flex items-center justify-center gap-2">
       <span className="font-medium"> {React.string(`Mistakes remaining:`)} </span>
-      <span className="font-bold"> {React.int(lives)} </span>
+      {Belt.Array.make(lives, <div className="bg-neutral-500 rounded-full w-3 h-3" />)->React.array}
     </div>}
     onSubmit={solve}>
     <div className="grid grid-cols-4 gap-3">
