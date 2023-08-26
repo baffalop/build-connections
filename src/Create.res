@@ -2,7 +2,7 @@
 
 module CardInput = {
   @react.component
-  let make = (~group: Group.t, ~value: string, ~onInput: string => unit) => {
+  let make = (~group: Group.t, ~value: string, ~onInput: string => unit, ~className: string="") => {
     let border = switch group {
     | Yellow => "focus:border-yellow-600"
     | Green => "focus:border-green-600"
@@ -10,7 +10,7 @@ module CardInput = {
     | Purple => "focus:border-purple-600"
     }
 
-    <div className={`p-2 rounded-lg ${Group.bgColorLight(group)}`}>
+    <div className={`p-2 rounded-lg ${Group.bgColorLight(group)} ${className}`}>
       <input
         type_="text"
         value
@@ -19,20 +19,6 @@ module CardInput = {
         border border-dashed border-transparent ${border}`}
       />
     </div>
-  }
-}
-
-module ClearButton = {
-  @react.component
-  let make = (~onClick) => {
-    <button
-      type_="button"
-      className="rounded-full px-1.5 pb-0.5 leading-snug text-white font-bold bg-neutral-400 hover:bg-neutral-500 self-center justify-self-center"
-      title="Clear row"
-      tabIndex={-1}
-      onClick>
-      {React.string("×")}
-    </button>
   }
 }
 
@@ -77,11 +63,23 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
     <div className="flex flex-col items-stretch justify-start gap-3">
       {Belt.Array.zip(Group.rainbow, values)
       ->Belt.Array.mapWithIndex((row, (group, groupValues)) => {
-        <section className={`card p-4 ${Group.bgColor(group)} flex gap-3 justify-stretch`}>
-          {Belt.Array.mapWithIndex(groupValues, (col, value) => {
-            let key = `${Group.name(group)}-${Belt.Int.toString(col)}`
-            <CardInput key group value onInput={setValue(row, col, _)} />
-          })->React.array}
+        <section key={Group.name(group)} className={`card p-4 ${Group.bgColor(group)} space-y-3`}>
+          <div className="flex gap-3 items-center">
+            <CardInput group value="" onInput={_ => ()} className="w-full" />
+            <button
+              type_="button"
+              tabIndex={-1}
+              className="action flex-shrink-0"
+              onClick={_ => clearRow(row)}>
+              {React.string("Clear Row")}
+            </button>
+          </div>
+          <div className="flex gap-3 justify-stretch">
+            {Belt.Array.mapWithIndex(groupValues, (col, value) => {
+              let key = `${Group.name(group)}-${Belt.Int.toString(col)}`
+              <CardInput key group value onInput={setValue(row, col, _)} />
+            })->React.array}
+          </div>
         </section>
       })
       ->React.array}
