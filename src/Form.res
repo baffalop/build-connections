@@ -1,5 +1,10 @@
 @react.component
-let make = (~children: React.element, ~buttons: React.element, ~onSubmit: unit => unit) => {
+let make = (
+  ~children: React.element,
+  ~buttons: React.element,
+  ~message: React.element=<> </>,
+  ~onSubmit: unit => unit,
+) => {
   <form
     className="space-y-6"
     onSubmit={e => {
@@ -7,6 +12,7 @@ let make = (~children: React.element, ~buttons: React.element, ~onSubmit: unit =
       onSubmit()
     }}>
     {children}
+    {message}
     <div className="flex justify-center gap-4"> {buttons} </div>
   </form>
 }

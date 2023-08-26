@@ -52,7 +52,6 @@ let make = (~connections: Puzzle.connections) => {
 
   <Form
     buttons={<>
-      <span> {React.string(`${Belt.Int.toString(lives)} ${lives == 1 ? "life" : "lives"}`)} </span>
       <button type_="button" className="action" onClick={_ => setUnsolved(Belt.Array.shuffle)}>
         {React.string("Shuffle")}
       </button>
@@ -64,6 +63,10 @@ let make = (~connections: Puzzle.connections) => {
         {React.string("Submit")}
       </button>
     </>}
+    message={<div className="flex items-center justify-center gap-3">
+      <span className="font-medium"> {React.string(`Mistakes remaining:`)} </span>
+      <span className="font-bold"> {React.int(lives)} </span>
+    </div>}
     onSubmit={solve}>
     <div className="grid grid-cols-4 gap-3">
       {solved
