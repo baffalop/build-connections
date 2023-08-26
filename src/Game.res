@@ -59,9 +59,9 @@ let make = (~connections: Puzzle.connections) => {
       ->Belt.Array.map(({group, title, values}) => {
         <div
           key={`solved-${Group.name(group)}`}
-          className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-3`}>
-          <h4 className="text-bold uppercase"> {React.string(title)} </h4>
-          <p> {values->Belt.Array.joinWith(", ", v => v)->React.string} </p>
+          className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-2`}>
+          <h4 className="font-bold uppercase"> {React.string(title)} </h4>
+          <p className="font-normal"> {values->Belt.Array.joinWith(", ", v => v)->React.string} </p>
         </div>
       })
       ->React.array}

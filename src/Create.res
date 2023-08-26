@@ -16,8 +16,8 @@ module CardInput = {
     }
 
     let (containerRole, inputRole) = switch role {
-    | #card => ("", "p-4 font-medium")
     | #title => ("w-full", "px-4 py-1.5 font-bold")
+    | #card => ("", "p-4 font-medium")
     }
 
     <div className={`p-2 rounded-lg ${Group.bgColorLight(group)} ${containerRole}`}>
@@ -25,8 +25,9 @@ module CardInput = {
         type_="text"
         value
         onInput={e => ReactEvent.Form.currentTarget(e)["value"]->onInput}
-        className={`${inputRole} rounded-md w-full bg-transparent font-medium flex justify-center appearance-none outline-none
-        border border-dashed border-transparent ${border}`}
+        className={`${inputRole} rounded-md w-full bg-transparent uppercase
+          flex justify-center appearance-none outline-none
+          border border-dashed border-transparent ${border}`}
       />
     </div>
   }
