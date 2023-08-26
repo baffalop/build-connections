@@ -2,7 +2,12 @@
 
 module CardInput = {
   @react.component
-  let make = (~group: Group.t, ~value: string, ~onInput: string => unit, ~className: string="") => {
+  let make = (
+    ~group: Group.t,
+    ~value: string,
+    ~onInput: string => unit,
+    ~role: [#card | #title]=#card,
+  ) => {
     let border = switch group {
     | Yellow => "focus:border-yellow-600"
     | Green => "focus:border-green-600"
@@ -10,12 +15,17 @@ module CardInput = {
     | Purple => "focus:border-purple-600"
     }
 
-    <div className={`p-2 rounded-lg ${Group.bgColorLight(group)} ${className}`}>
+    let (containerRole, inputRole) = switch role {
+    | #card => ("", "p-4 font-medium")
+    | #title => ("w-full", "px-4 py-1.5 font-bold")
+    }
+
+    <div className={`p-2 rounded-lg ${Group.bgColorLight(group)} ${containerRole}`}>
       <input
         type_="text"
         value
         onInput={e => ReactEvent.Form.currentTarget(e)["value"]->onInput}
-        className={`p-4 rounded-md w-full bg-transparent font-medium flex justify-center appearance-none outline-none uppercase
+        className={`${inputRole} rounded-md w-full bg-transparent font-medium flex justify-center appearance-none outline-none
         border border-dashed border-transparent ${border}`}
       />
     </div>
@@ -63,9 +73,9 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
     <div className="flex flex-col items-stretch justify-start gap-3">
       {Belt.Array.zip(Group.rainbow, values)
       ->Belt.Array.mapWithIndex((row, (group, groupValues)) => {
-        <section key={Group.name(group)} className={`card p-4 ${Group.bgColor(group)} space-y-3`}>
+        <section key={Group.name(group)} className={`card p-4 ${Group.bgColor(group)} space-y-4`}>
           <div className="flex gap-3 items-center">
-            <CardInput group value="" onInput={_ => ()} className="w-full" />
+            <CardInput group value="" onInput={_ => ()} role={#title} />
             <button
               type_="button"
               tabIndex={-1}
