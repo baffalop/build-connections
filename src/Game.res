@@ -5,9 +5,11 @@ let make = (~connections: Puzzle.connections) => {
   )
   let (selection, setSelection) = React.useState((): array<Puzzle.cardId> => [])
   let (solved, setSolved) = React.useState((): array<Puzzle.solved> => [])
+  let (lives, setLives) = React.useState(() => 4)
 
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
+  let hasLives = lives > 0
 
   let isSelected = id => Belt.Array.some(selection, s => s == id)
   let select = (id: Puzzle.cardId) =>
@@ -16,6 +18,11 @@ let make = (~connections: Puzzle.connections) => {
     }
   let deselect = (id: Puzzle.cardId) => setSelection(Belt.Array.keep(_, s => s != id))
   let deselectAll = () => setSelection(_ => [])
+
+  let loseLife = () =>
+    if hasLives {
+      setLives(l => l - 1)
+    }
 
   let solve = () => {
     if hasFullSelection {
@@ -35,13 +42,17 @@ let make = (~connections: Puzzle.connections) => {
           )
           deselectAll()
         }
-      | None => deselectAll()
+      | None => {
+          loseLife()
+          deselectAll()
+        }
       }
     }
   }
 
   <Form
     buttons={<>
+      <span> {React.string(`${Belt.Int.toString(lives)} ${lives == 1 ? "life" : "lives"}`)} </span>
       <button type_="button" className="action" onClick={_ => setUnsolved(Belt.Array.shuffle)}>
         {React.string("Shuffle")}
       </button>
@@ -75,7 +86,7 @@ let make = (~connections: Puzzle.connections) => {
         <button
           type_="button"
           key={Puzzle.cardKey(id)}
-          className={`card py-6 px-1 cursor-pointer ${selectedStyle}`}
+          className={`card py-6 px-1 cursor-pointer disabled:cursor-default ${selectedStyle}`}
           onClick={_ => id->(selected ? deselect : select)}>
           {React.string(value)}
         </button>
