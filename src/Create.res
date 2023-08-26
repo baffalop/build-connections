@@ -16,7 +16,7 @@ module CardInput = {
     }
 
     let (containerRole, inputRole) = switch role {
-    | #title => ("w-full", "px-4 py-1.5 font-bold")
+    | #title => ("w-full", "px-4 py-1 font-bold")
     | #card => ("", "p-4 font-medium")
     }
 
