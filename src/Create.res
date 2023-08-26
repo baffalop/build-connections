@@ -47,7 +47,7 @@ let sampleValues: Puzzle.connections =
   ->List.map((((title, values), group)) => (group, {Puzzle.title, values}))
 
 @react.component
-let make = (~onCreate: array<Puzzle.card> => unit) => {
+let make = (~onCreate: Puzzle.connections => unit) => {
   let (rows, setRows) = React.useState(() => Puzzle.blankRows)
   let setValue = (group: Group.t, col: int, value: string) =>
     setRows(Puzzle.setValue(_, group, col, value))
@@ -71,7 +71,7 @@ let make = (~onCreate: array<Puzzle.card> => unit) => {
         {React.string("Create")}
       </button>
     </>}
-    onSubmit={() => rows->Puzzle.makeCards->onCreate}>
+    onSubmit={() => onCreate(rows)}>
     <div className="flex flex-col items-stretch justify-start gap-3">
       {rows
       ->List.map(((group, {title, values})) => {

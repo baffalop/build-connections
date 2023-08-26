@@ -25,7 +25,7 @@ type cardId = CardId(Group.t, int)
 type card = {group: Group.t, id: cardId, value: string}
 type cards = array<card>
 
-type solved = {group: Group.t, cards: array<string>}
+type solved = {group: Group.t, title: string, values: array<string>}
 
 let makeCards = (rows: connections): cards => {
   List.toArray(rows)->Belt.Array.flatMap(((group, {values})) =>

@@ -1,6 +1,6 @@
 type step =
   | Create
-  | Game(Puzzle.cards)
+  | Game(Puzzle.connections)
 
 @react.component
 let make = () => {
@@ -8,8 +8,8 @@ let make = () => {
 
   <div className="p-3 w-screen max-w-screen-sm">
     {switch step {
-    | Create => <Create onCreate={cards => setStep(_ => Game(cards))} />
-    | Game(cards) => <Game cards />
+    | Create => <Create onCreate={connections => setStep(_ => Game(connections))} />
+    | Game(connections) => <Game connections />
     }}
   </div>
 }

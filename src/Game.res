@@ -1,6 +1,8 @@
 @react.component
-let make = (~cards: Puzzle.cards) => {
-  let (unsolved, setUnsolved) = React.useState(() => Belt.Array.shuffle(cards))
+let make = (~connections: Puzzle.connections) => {
+  let (unsolved, setUnsolved) = React.useState(() =>
+    connections->Puzzle.makeCards->Belt.Array.shuffle
+  )
   let (selection, setSelection) = React.useState((): array<Puzzle.cardId> => [])
   let (solved, setSolved) = React.useState((): array<Puzzle.solved> => [])
 
@@ -24,7 +26,11 @@ let make = (~cards: Puzzle.cards) => {
           setSolved(
             Utils.Array.append(
               _,
-              {group, cards: selectedCards->Belt.Array.map(({value}) => value)},
+              {
+                group,
+                title: Puzzle.getRow(connections, group).title,
+                values: selectedCards->Belt.Array.map(({value}) => value),
+              },
             ),
           )
           deselectAll()
@@ -50,11 +56,12 @@ let make = (~cards: Puzzle.cards) => {
     onSubmit={solve}>
     <div className="grid grid-cols-4 gap-3">
       {solved
-      ->Belt.Array.map(({group, cards}) => {
+      ->Belt.Array.map(({group, title, values}) => {
         <div
           key={`solved-${Group.name(group)}`}
-          className={`card p-6 ${Group.bgColor(group)} col-span-full text-center`}>
-          {cards->Belt.Array.joinWith(", ", v => v)->React.string}
+          className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-3`}>
+          <h4 className="text-bold uppercase"> {React.string(title)} </h4>
+          <p> {values->Belt.Array.joinWith(", ", v => v)->React.string} </p>
         </div>
       })
       ->React.array}
