@@ -50,6 +50,23 @@ let make = (~connections: Puzzle.connections) => {
     }
   }
 
+  let solveAll = () => {
+    setSolved(Belt.Array.concat(_, Puzzle.solveAll(unsolved, connections)))
+    setUnsolved(_ => [])
+    deselectAll()
+  }
+
+  React.useEffect1(() => Some(
+    () => {
+      Console.log2("checking lives", lives)
+
+      // why do I see the _old_ value of lives here??
+      if lives == 1 {
+        solveAll()
+      }
+    },
+  ), [lives])
+
   <Form
     buttons={<>
       <button type_="button" className="action" onClick={_ => setUnsolved(Belt.Array.shuffle)}>
