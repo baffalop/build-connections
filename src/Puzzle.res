@@ -25,7 +25,8 @@ type cardId = CardId(Group.t, int)
 type card = {group: Group.t, id: cardId, value: string}
 type cards = array<card>
 
-type solved = {group: Group.t, title: string, values: array<string>}
+type solution = {group: Group.t, title: string, values: array<string>}
+type solved = array<solution>
 
 let makeCards = (rows: connections): cards => {
   List.toArray(rows)->Belt.Array.flatMap(((group, {values})) =>
@@ -53,7 +54,7 @@ let matchingGroup = (cards: cards): option<Group.t> => {
   }
 }
 
-let solveAll = (cards: cards, connections: connections): array<solved> => {
+let solveAll = (cards: cards, connections: connections): array<solution> => {
   List.toArray(connections)->Belt.Array.keepMap(((group, {title})) => {
     let values = Belt.Array.keepMap(cards, ({group: g, value}) => {
       if group == g {
