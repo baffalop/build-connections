@@ -34,15 +34,12 @@ module CardInput = {
 }
 
 let sampleValues: Puzzle.connections =
-  [
+  list{
     ("things we need for our bathroom", ["yellow", "cabinet", "ivan", "tiles"]),
     ("kitchen _", ["sink", "porter", "scissors", "appliance"]),
     ("beatles titles first words", ["golden", "seargeant", "hey", "eleanor"]),
     ("magazines", ["n + 1", "tribune", "jacobin", "lrb"]),
-  ]
-  ->Belt.Array.zip(Group.rainbow)
-  ->List.fromArray
-  ->List.map((((title, values), group)) => (group, {Puzzle.title, values}))
+  }->List.zipBy(Group.rainbow, ((title, values), group) => (group, {Puzzle.title, values}))
 
 @react.component
 let make = (~onCreate: Puzzle.connections => unit) => {

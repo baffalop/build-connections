@@ -2,7 +2,7 @@ type connection = {title: string, values: array<string>}
 type connections = list<(Group.t, connection)>
 
 let blankRow = {title: "", values: Belt.Array.make(4, "")}
-let blankRows = Group.rainbow->List.fromArray->List.map(group => (group, blankRow))
+let blankRows = Group.rainbow->List.map(group => (group, blankRow))
 
 let eq = (a, b) => a == b
 let getRow = (rows: connections, group: Group.t): connection =>

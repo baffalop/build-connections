@@ -1,6 +1,6 @@
 type t = Yellow | Green | Blue | Purple
 
-let rainbow = [Yellow, Green, Blue, Purple]
+let rainbow = list{Yellow, Green, Blue, Purple}
 
 let name = group =>
   switch group {
