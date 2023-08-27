@@ -19,9 +19,20 @@ let make = (~connections: Puzzle.connections) => {
   let deselect = (id: Puzzle.cardId) => setSelection(Belt.Array.keep(_, s => s != id))
   let deselectAll = () => setSelection(_ => [])
 
+  let revealAll = () => {
+    setSolved(Belt.Array.concat(_, Puzzle.solveAll(unsolved, connections)))
+    setUnsolved(_ => [])
+    deselectAll()
+  }
+
   let loseLife = () =>
     if hasLives {
       setLives(l => l - 1)
+
+      // we won't see the effect of setLives yet here so check for == 1
+      if lives == 1 {
+        revealAll()
+      }
     }
 
   let solve = () => {
@@ -51,23 +62,6 @@ let make = (~connections: Puzzle.connections) => {
       }
     }
   }
-
-  let solveAll = () => {
-    setSolved(Belt.Array.concat(_, Puzzle.solveAll(unsolved, connections)))
-    setUnsolved(_ => [])
-    deselectAll()
-  }
-
-  React.useEffect1(() => Some(
-    () => {
-      Console.log2("checking lives", lives)
-
-      // why do I see the _old_ value of lives here??
-      if lives == 1 {
-        solveAll()
-      }
-    },
-  ), [lives])
 
   <Form
     buttons={<>
