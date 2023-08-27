@@ -1,3 +1,12 @@
+module Solution = {
+  @react.component
+  let make = (~group, ~title, ~values) =>
+    <div className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-2`}>
+      <h4 className="font-bold uppercase"> {React.string(title)} </h4>
+      <p className="font-normal"> {values->Belt.Array.joinWith(", ", v => v)->React.string} </p>
+    </div>
+}
+
 @react.component
 let make = (~connections: Puzzle.connections) => {
   let (unsolved, setUnsolved) = React.useState(() =>
@@ -19,20 +28,9 @@ let make = (~connections: Puzzle.connections) => {
   let deselect = (id: Puzzle.cardId) => setSelection(Belt.Array.keep(_, s => s != id))
   let deselectAll = () => setSelection(_ => [])
 
-  let revealAll = () => {
-    setSolved(Belt.Array.concat(_, Puzzle.solveAll(unsolved, connections)))
-    setUnsolved(_ => [])
-    deselectAll()
-  }
-
   let loseLife = () =>
     if hasLives {
       setLives(l => l - 1)
-
-      // we won't see the effect of setLives yet here so check for == 1
-      if lives == 1 {
-        revealAll()
-      }
     }
 
   let solve = () => {
@@ -76,44 +74,58 @@ let make = (~connections: Puzzle.connections) => {
         {React.string("Submit")}
       </button>
     </>}
-    message={<div className="flex items-center justify-center gap-2">
-      <span className="font-medium"> {React.string(`Mistakes remaining:`)} </span>
-      {Belt.Array.range(1, lives)
-      ->Belt.Array.map(i =>
-        <div key={Belt.Int.toString(i)} className="bg-neutral-500 rounded-full w-3 h-3" />
-      )
-      ->React.array}
+    message={<div className="flex items-center justify-center gap-2 font-medium">
+      {switch (lives, unsolved) {
+      | (0, _) => React.string("Game over!")
+      | (_, []) => React.string("Well done!")
+      | (_, _) =>
+        <>
+          <span className="font-medium"> {React.string(`Mistakes remaining:`)} </span>
+          {Belt.Array.range(1, lives)
+          ->Belt.Array.map(i =>
+            <div key={Belt.Int.toString(i)} className="bg-neutral-500 rounded-full w-3 h-3" />
+          )
+          ->React.array}
+        </>
+      }}
     </div>}
     onSubmit={solve}>
     <div className="grid grid-cols-4 gap-3">
       {solved
-      ->Belt.Array.map(({group, title, values}) => {
-        <div
-          key={`solved-${Group.name(group)}`}
-          className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-2`}>
-          <h4 className="font-bold uppercase"> {React.string(title)} </h4>
-          <p className="font-normal"> {values->Belt.Array.joinWith(", ", v => v)->React.string} </p>
-        </div>
-      })
+      ->Belt.Array.map(({group, title, values}) =>
+        <Solution key={`solved-${Group.name(group)}`} group title values />
+      )
       ->React.array}
-      {unsolved
-      ->Belt.Array.map(({id, value}) => {
-        let selected = isSelected(id)
-        let selectedStyle = selected
-          ? "bg-neutral-600 text-white"
-          : "bg-neutral-200 hover:bg-neutral-300"
+      {if lives > 0 {
+        unsolved
+        ->Belt.Array.map(({id, value}) => {
+          let selected = isSelected(id)
+          let selectedStyle = selected
+            ? "bg-neutral-600 text-white"
+            : "bg-neutral-200 hover:bg-neutral-300"
 
-        <button
-          type_="button"
-          key={Puzzle.cardKey(id)}
-          className={`card py-6 px-1 cursor-pointer ${selectedStyle}
+          <button
+            type_="button"
+            key={Puzzle.cardKey(id)}
+            className={`card py-6 px-1 cursor-pointer ${selectedStyle}
             disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
-          disabled={!hasLives}
-          onClick={_ => id->(selected ? deselect : select)}>
-          {React.string(value)}
-        </button>
-      })
-      ->React.array}
+            disabled={!hasLives}
+            onClick={_ => id->(selected ? deselect : select)}>
+            {React.string(value)}
+          </button>
+        })
+        ->React.array
+      } else {
+        List.toArray(connections)
+        ->Belt.Array.keepMap(((group, {title, values})) =>
+          if Belt.Array.some(solved, ({group: solvedGroup}) => group == solvedGroup) {
+            None
+          } else {
+            Some(<Solution key={`revealed-${Group.name(group)}`} group title values />)
+          }
+        )
+        ->React.array
+      }}
     </div>
   </Form>
 }

@@ -53,21 +53,3 @@ let matchingGroup = (cards: cards): option<Group.t> => {
   | _ => None
   }
 }
-
-let solveAll = (cards: cards, connections: connections): array<solution> => {
-  List.toArray(connections)->Belt.Array.keepMap(((group, {title})) => {
-    let values = Belt.Array.keepMap(cards, ({group: g, value}) => {
-      if group == g {
-        Some(value)
-      } else {
-        None
-      }
-    })
-
-    if values == [] {
-      None
-    } else {
-      Some({group, title, values})
-    }
-  })
-}
