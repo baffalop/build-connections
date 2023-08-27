@@ -97,6 +97,7 @@ let make = (~connections: Puzzle.connections) => {
       )
       ->React.array}
       {if lives > 0 {
+        // cards
         unsolved
         ->Belt.Array.map(({id, value}) => {
           let selected = isSelected(id)
@@ -116,6 +117,7 @@ let make = (~connections: Puzzle.connections) => {
         })
         ->React.array
       } else {
+        // revealed connections
         List.toArray(connections)
         ->Belt.Array.keepMap(((group, {title, values})) =>
           if Belt.Array.some(solved, ({group: solvedGroup}) => group == solvedGroup) {
