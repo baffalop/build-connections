@@ -26,7 +26,9 @@ let make = (~connections: Puzzle.connections) => {
 
   let solve = () => {
     if hasFullSelection {
-      let selectedCards = unsolved->Belt.Array.keep(({id}) => isSelected(id))
+      let selectedCards =
+        selection->Belt.Array.keepMap(id => Belt.Array.getBy(unsolved, ({id: card}) => id == card))
+
       switch Puzzle.matchingGroup(selectedCards) {
       | Some(group) => {
           setUnsolved(Belt.Array.keep(_, ({id}) => !isSelected(id)))
