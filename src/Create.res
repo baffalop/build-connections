@@ -42,7 +42,9 @@ let sampleValues: Puzzle.connections =
   }->List.zipBy(Group.rainbow, ((title, values), group) => (group, {Puzzle.title, values}))
 
 @react.component
-let make = (~onCreate: Puzzle.connections => unit) => {
+let make = () => {
+  let onCreate = _ => ()
+
   let (rows, setRows) = React.useState(() => Puzzle.blankRows)
   let setValue = (group: Group.t, col: int, value: string) =>
     setRows(Puzzle.setValue(_, group, col, value))

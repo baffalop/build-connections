@@ -7,8 +7,10 @@ module Solution = {
     </div>
 }
 
+let {sampleValues: connections} = module(Create)
+
 @react.component
-let make = (~connections: Puzzle.connections) => {
+let make = () => {
   let (unsolved, setUnsolved) = React.useState(() =>
     connections->Puzzle.makeCards->Belt.Array.shuffle
   )
