@@ -13,7 +13,9 @@ specifiers:
   postcss: ^8.4.25
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-router-dom: ^6.15.0
   rescript: ^10.1.4
+  rescript-react-router-dom: ^1.0.8
   rescript-vitest: ^1.2.0
   rescript-webapi: ^0.8.0
   tailwindcss: ^3.3.2
@@ -26,6 +28,8 @@ dependencies:
   gh-pages: 6.0.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-router-dom: 6.15.0_biqbaboplfbrettd7655fr4n2y
+  rescript-react-router-dom: 1.0.8
   rescript-webapi: 0.8.0
 
 devDependencies:
@@ -572,6 +576,11 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
     dev: true
+
+  /@remix-run/router/1.8.0:
+    resolution: {integrity: sha512-mrfKqIHnSZRyIzBcanNJmVQELTnX+qagEDlcKO90RgRBVOZGSGvZKeDihTRfWcqoDn5N/NkUcwWTccnpN18Tfg==}
+    engines: {node: '>=14.0.0'}
+    dev: false
 
   /@rescript/core/0.3.1_rescript@10.1.4:
     resolution: {integrity: sha512-H6KgYKCpaWQEyhl/r3HuTxY0y1pvQziMXbZnwHVsykNkJvxpROMOrAX2CkIJ5lIar3zDH33cPpwTsIxANTFcvQ==}
@@ -2352,6 +2361,29 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /react-router-dom/6.15.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-aR42t0fs7brintwBGAv2+mGlCtgtFQeOzK0BM1/OiqEzRejOZtpMZepvgkscpMUnKb8YO84G7s3LsHnnDNonbQ==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.8.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router: 6.15.0_react@18.2.0
+    dev: false
+
+  /react-router/6.15.0_react@18.2.0:
+    resolution: {integrity: sha512-NIytlzvzLwJkCQj2HLefmeakxxWHWAP+02EGqWEZy+DgfHHKQMUoBBjUQLOtFInBMhWtb3hiUy6MfFgwLjXhqg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.8.0
+      react: 18.2.0
+    dev: false
+
   /react/18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
     engines: {node: '>=0.10.0'}
@@ -2395,6 +2427,15 @@ packages:
   /requires-port/1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
     dev: true
+
+  /rescript-react-router-dom/1.0.8:
+    resolution: {integrity: sha512-YsCike1JrL/FnDXRdCZAVsRCNUkNkM9prl6DN7PgOrKFwRSVYISxTfboF1wOzPA5MhUeQt8/k8OnBN0shl1HSw==}
+    dependencies:
+      '@rescript/react': 0.11.0_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router-dom: 6.15.0_biqbaboplfbrettd7655fr4n2y
+    dev: false
 
   /rescript-vitest/1.2.0_a2rd5uxjnkiazlsjauiqwjiwsy:
     resolution: {integrity: sha512-5riclcmS2Kqd/MS9rzdaQ9+eBpPayjX3aAasnighpxbDEKctTBIKnkGO2wvMrtPTe0PLwD89hxwe2hkPHr7APw==}

@@ -25,6 +25,7 @@
   "bs-dependencies": [
     "@rescript/react",
     "@rescript/core",
+    "rescript-react-router-dom",
     "rescript-webapi"
   ],
   "bs-dev-dependencies": [

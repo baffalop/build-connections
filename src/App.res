@@ -4,6 +4,8 @@ type step =
 
 @react.component
 let make = () => {
+  open RescriptReactRouterDom.ReactRouterDOM
+
   let (step, setStep) = React.useState(() => Create)
 
   <div
