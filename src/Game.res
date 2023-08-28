@@ -101,14 +101,12 @@ let make = (~connections: Puzzle.connections) => {
         unsolved
         ->Belt.Array.map(({id, value}) => {
           let selected = isSelected(id)
-          let selectedStyle = selected
-            ? "bg-neutral-600 text-white"
-            : "bg-neutral-200 hover:bg-neutral-300"
 
           <button
             type_="button"
             key={Puzzle.cardKey(id)}
-            className={`card py-6 px-1 cursor-pointer ${selectedStyle}
+            className={`card py-6 px-1 cursor-pointer
+            ${selected ? "bg-neutral-600 text-white" : "bg-neutral-200 hover:bg-neutral-300"}
             disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
             disabled={!hasLives}
             onClick={_ => id->(selected ? deselect : select)}>
