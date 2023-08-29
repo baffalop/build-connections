@@ -11,6 +11,20 @@ type location = {
 
 type params = {slug: option<string>}
 
+type router = Router
+type route = Route
+
+@module("react-router-dom")
+external createHashRouter: array<route> => router = "createHashRouter"
+
+@module("react-router-dom")
+external createRoutesFromElements: React.element => array<route> = "createRoutesFromElements"
+
+module RouterProvider = {
+  @react.component @module("react-router-dom")
+  external make: (~router: router) => React.element = "RouterProvider"
+}
+
 module HashRouter = {
   @react.component @module("react-router-dom")
   external make: (~children: React.element) => React.element = "HashRouter"
