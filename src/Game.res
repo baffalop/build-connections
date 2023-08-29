@@ -1,7 +1,7 @@
 module Solution = {
   @react.component
   let make = (~group, ~title, ~values) =>
-    <div className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-2`}>
+    <div className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-1`}>
       <h4 className="font-bold uppercase"> {React.string(title)} </h4>
       <p className="font-normal"> {values->Belt.Array.joinWith(", ", v => v)->React.string} </p>
     </div>
@@ -90,7 +90,7 @@ let make = (~connections: Puzzle.connections) => {
       }}
     </div>}
     onSubmit={solve}>
-    <div className="grid grid-cols-4 gap-3">
+    <div className="grid grid-cols-4 gap-2 sm:gap-3">
       {solved
       ->Belt.Array.map(({group, title, values}) =>
         <Solution key={`solved-${Group.name(group)}`} group title values />
@@ -105,7 +105,7 @@ let make = (~connections: Puzzle.connections) => {
           <button
             type_="button"
             key={Puzzle.cardKey(id)}
-            className={`card py-6 px-1 cursor-pointer
+            className={`card py-6 sm:py-8 px-1 cursor-pointer
             ${selected ? "bg-neutral-600 text-white" : "bg-neutral-200 hover:bg-neutral-300"}
             disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
             disabled={!hasLives}
