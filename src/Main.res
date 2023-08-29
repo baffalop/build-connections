@@ -5,7 +5,13 @@ open ReactRouter
 let router =
   <>
     <Route path="/" element={<Create />} />
-    <Route path=":puzzle" element={<Game />} />
+    <Route
+      path=":slug"
+      element={<Game />}
+      loader={({params}: loaderParams<{"slug": string}>) => {
+        params["slug"]
+      }}
+    />
   </>
   ->createRoutesFromElements
   ->createHashRouter

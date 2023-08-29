@@ -10,6 +10,7 @@ type location = {
 }
 
 type params = {slug: option<string>}
+type loaderParams<'a> = {params: 'a}
 
 type router = Router
 type route = Route
@@ -42,7 +43,11 @@ module Routes = {
 
 module Route = {
   @react.component @module("react-router-dom")
-  external make: (~path: string, ~element: React.element) => React.element = "Route"
+  external make: (
+    ~path: string,
+    ~element: React.element,
+    ~loader: loaderParams<'a> => 'b=?,
+  ) => React.element = "Route"
 }
 
 module Internal = {
@@ -72,3 +77,6 @@ external useParams: unit => params = "useParams"
 type navigate = (string, option<string>) => unit
 @module("react-router-dom")
 external useNavigate: unit => navigate = "useNavigate"
+
+@module("react-router-dom")
+external useLoaderData: unit => 'a = "useLoaderData"
