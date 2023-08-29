@@ -8,6 +8,7 @@ Built with [ReScript](https://rescript-lang.org/) + React.
 
 - [x] Set cards
 - [x] Set connection titles
+- [ ] Mobile-friendly layout
 - [ ] Draggable connections/cards
 - [x] Play game, solve connections
 - [x] Mistakes remaining
