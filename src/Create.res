@@ -16,11 +16,11 @@ module CardInput = {
     }
 
     let (containerRole, inputRole) = switch role {
-    | #title => ("w-full", "px-4 py-1 font-bold")
-    | #card => ("", "p-4 font-medium")
+    | #title => ("w-full", "px-2 py-1 sm:py-1.5 font-bold")
+    | #card => ("", "px-2 py-3 font-medium")
     }
 
-    <div className={`p-2 rounded-lg ${Group.bgColorLight(group)} ${containerRole}`}>
+    <div className={`p-1 rounded-lg ${Group.bgColorLight(group)} ${containerRole}`}>
       <input
         type_="text"
         value
@@ -70,8 +70,8 @@ let make = (~onCreate: Puzzle.connections => unit) => {
     <div className="flex flex-col items-stretch justify-start gap-3">
       {rows
       ->List.map(((group, {title, values})) => {
-        <section key={Group.name(group)} className={`card p-4 ${Group.bgColor(group)} space-y-4`}>
-          <div className="flex gap-3 items-center">
+        <section key={Group.name(group)} className={`card p-3 ${Group.bgColor(group)} space-y-3`}>
+          <div className="flex gap-2 sm:gap-3 items-center">
             <CardInput group role={#title} value={title} onInput={setTitle(group, _)} />
             <button
               type_="button"
@@ -81,7 +81,7 @@ let make = (~onCreate: Puzzle.connections => unit) => {
               {React.string("Clear Row")}
             </button>
           </div>
-          <div className="flex gap-3 justify-stretch">
+          <div className="grid gap-3 grid-cols-2 sm:grid-cols-4 justify-stretch">
             {values
             ->Belt.Array.mapWithIndex((col, value) => {
               let key = `${Group.name(group)}-${Belt.Int.toString(col)}`
