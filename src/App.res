@@ -1,6 +1,6 @@
 @react.component
 let make = () => {
-  open RescriptReactRouterDom.ReactRouterDOM
+  open Router
 
   <div className="p-3 w-screen max-w-screen-sm">
     <HashRouter>
