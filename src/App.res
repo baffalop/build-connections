@@ -6,7 +6,8 @@ type step =
 let make = () => {
   let (step, setStep) = React.useState(() => Create)
 
-  <div className="p-3 w-screen max-w-screen-sm">
+  <div
+    className="p-3 min-h-screen w-screen max-w-screen-sm mx-auto flex flex-col items-center justify-center">
     {switch step {
     | Create => <Create onCreate={connections => setStep(_ => Game(connections))} />
     | Game(connections) => <Game connections />
