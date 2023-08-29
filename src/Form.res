@@ -13,6 +13,6 @@ let make = (
     }}>
     {children}
     {message}
-    <div className="flex justify-center gap-4"> {buttons} </div>
+    <div className="flex justify-center gap-3"> {buttons} </div>
   </form>
 }
