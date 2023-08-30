@@ -1,3 +1,5 @@
+type gameState = Playing | Solved | Lost
+
 module Solution = {
   @react.component
   let make = (~group, ~title, ~values) =>
@@ -22,7 +24,11 @@ let make = () => {
 
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
-  let hasLives = lives > 0
+  let gameState = switch (lives, unsolved) {
+  | (0, _) => Lost
+  | (_, []) => Solved
+  | _ => Playing
+  }
 
   let isSelected = id => Belt.Array.some(selection, s => s == id)
   let select = (id: Puzzle.cardId) =>
@@ -33,7 +39,7 @@ let make = () => {
   let deselectAll = () => setSelection(_ => [])
 
   let loseLife = () =>
-    if hasLives {
+    if gameState == Playing {
       setLives(l => l - 1)
     }
 
@@ -65,24 +71,33 @@ let make = () => {
     }
   }
 
+  let copyResults = () => Console.log("copy")
+
   <Form
-    buttons={<>
-      <button type_="button" className="action" onClick={_ => setUnsolved(Belt.Array.shuffle)}>
-        {React.string("Shuffle")}
+    buttons={switch gameState {
+    | Playing =>
+      <>
+        <button type_="button" className="action" onClick={_ => setUnsolved(Belt.Array.shuffle)}>
+          {React.string("Shuffle")}
+        </button>
+        <button
+          type_="button" className="action" onClick={_ => deselectAll()} disabled={!hasSelection}>
+          {React.string("Deselect All")}
+        </button>
+        <button type_="submit" className="action primary" disabled={!hasFullSelection}>
+          {React.string("Submit")}
+        </button>
+      </>
+    | _ =>
+      <button type_="button" className="action" onClick={_ => copyResults()}>
+        {React.string("Copy Results")}
       </button>
-      <button
-        type_="button" className="action" onClick={_ => deselectAll()} disabled={!hasSelection}>
-        {React.string("Deselect All")}
-      </button>
-      <button type_="submit" className="action primary" disabled={!hasFullSelection}>
-        {React.string("Submit")}
-      </button>
-    </>}
+    }}
     message={<div className="flex items-center justify-center gap-2 font-medium">
-      {switch (lives, unsolved) {
-      | (0, _) => React.string("Game over!")
-      | (_, []) => React.string("Well done!")
-      | (_, _) =>
+      {switch gameState {
+      | Lost => React.string("Game over!")
+      | Solved => React.string("Well done!")
+      | Playing =>
         <>
           <span className="font-medium"> {React.string(`Mistakes remaining:`)} </span>
           {Belt.Array.range(1, lives)
@@ -100,7 +115,7 @@ let make = () => {
         <Solution key={`solved-${Group.name(group)}`} group title values />
       )
       ->React.array}
-      {if lives > 0 {
+      {if gameState == Playing {
         // cards
         unsolved
         ->Belt.Array.map(({id, value}) => {
@@ -112,7 +127,6 @@ let make = () => {
             className={`card py-6 sm:py-8 px-1 cursor-pointer
             ${selected ? "bg-neutral-600 text-white" : "bg-neutral-200 hover:bg-neutral-300"}
             disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
-            disabled={!hasLives}
             onClick={_ => id->(selected ? deselect : select)}>
             {React.string(value)}
           </button>
