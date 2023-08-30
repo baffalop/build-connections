@@ -54,19 +54,38 @@ let matchingGroup = (cards: cards): option<Group.t> => {
   }
 }
 
-let decode: string => result<connections, Funicular.Decode.jsonParseError> = slug => {
+type decodeError =
+  | JsonParseError(Funicular.Decode.jsonParseError)
+  | Base64ParseError
+  | Not4Connections
+
+let decode: string => result<connections, decodeError> = slug => {
   open Funicular.Decode
 
-  parse(slug, value => {
-    array(value => {
-      let o = value->object_
-      let title = o->field("t", string)
-      let values = o->field("v", array(string, _))
+  slug
+  ->Base64.decode
+  ->Utils.Result.fromOption(Base64ParseError)
+  ->Result.flatMap(slug => {
+    parse(slug, value => {
+      array(
+        value => {
+          let o = value->object_
+          let title = o->field("t", string)
+          let values = o->field("v", array(string, _))
 
-      rmap((title, values) => {title, values})->v(title)->v(values)
-    }, value)
-  })->Result.map(connections => {
-    connections->List.fromArray->List.zip(Group.rainbow, _)
+          rmap((title, values) => {title, values})->v(title)->v(values)
+        },
+        value,
+      )
+    })->Utils.Result.mapError(e => JsonParseError(e))
+  })
+  ->Result.flatMap(connectionsArray => {
+    let connections = List.fromArray(connectionsArray)
+    if List.length(connections) != 4 {
+      Error(Not4Connections)
+    } else {
+      connections->List.zip(Group.rainbow, _)->Ok
+    }
   })
 }
 
@@ -76,4 +95,6 @@ let encode = (connections: connections) => {
   connections
   ->List.toArray
   ->array(((_, {title, values})) => object_([("t", string(title)), ("v", array(values, string))]))
+  ->Js.Json.stringify
+  ->Base64.encode
 }

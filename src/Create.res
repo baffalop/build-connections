@@ -56,8 +56,7 @@ let make = () => {
 
   let create = () => {
     if allValuesFilled {
-      let slug = rows->Puzzle.encode->Js.Json.stringify
-      navigate(slug, None)
+      Puzzle.encode(rows)->navigate(_, None)
     }
   }
 
