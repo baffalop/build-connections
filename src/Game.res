@@ -20,8 +20,9 @@ let make = () => {
   )
   let (selection, setSelection) = React.useState((): array<Puzzle.cardId> => [])
   let (solved, setSolved) = React.useState((): Puzzle.solved => [])
-  let (lives, setLives) = React.useState(() => 4)
+  let (guesses, setGuesses) = React.useState((): array<array<Puzzle.cardId>> => [])
 
+  let lives = 4 - Array.length(guesses)
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
   let gameState = switch (lives, unsolved) {
@@ -37,11 +38,6 @@ let make = () => {
     }
   let deselect = (id: Puzzle.cardId) => setSelection(Belt.Array.keep(_, s => s != id))
   let deselectAll = () => setSelection(_ => [])
-
-  let loseLife = () =>
-    if gameState == Playing {
-      setLives(l => l - 1)
-    }
 
   let solve = () => {
     if hasFullSelection {
@@ -64,7 +60,7 @@ let make = () => {
           deselectAll()
         }
       | None => {
-          loseLife()
+          setGuesses(Utils.Array.append(_, selection))
           deselectAll()
         }
       }
