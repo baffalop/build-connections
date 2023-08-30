@@ -1,4 +1,5 @@
 %%raw("import './tailwind.css'")
+%%raw(`import './App.css'`)
 
 open ReactRouter
 

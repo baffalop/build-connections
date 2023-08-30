@@ -1,5 +1,3 @@
-%%raw(`import './App.css'`)
-
 module CardInput = {
   @react.component
   let make = (
