@@ -39,8 +39,15 @@ let makeCards = (rows: connections): cards => {
 }
 
 let cardKey = (CardId(group, i)) => `${Group.name(group)}-${Belt.Int.toString(i)}`
+let groupFromId = (CardId(group, _)) => group
 
-let idGroup = (CardId(group, _)) => group
+let findSolution = (guess: array<cardId>, connections: connections) => {
+  guess
+  ->Utils.Array.matchBy(groupFromId)
+  ->Option.flatMap(group => {
+    connections->List.getAssoc(group, eq)->Option.map(({title, values}) => {group, title, values})
+  })
+}
 
 module Decode = {
   open Funicular.Decode
@@ -50,7 +57,7 @@ module Decode = {
     | Base64ParseError
     | Not4Connections
 
-  let json = (value: string): result<connections, decodeError> => {
+  let connections = (value: string): result<connections, decodeError> => {
     parse(value, value => {
       array(value => {
         let o = value->object_
@@ -72,7 +79,7 @@ module Decode = {
   }
 
   let slug: string => result<connections, decodeError> = slug => {
-    slug->Base64.decode->Utils.Result.fromOption(Base64ParseError)->Result.flatMap(json)
+    slug->Base64.decode->Utils.Result.fromOption(Base64ParseError)->Result.flatMap(connections)
   }
 }
 

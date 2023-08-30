@@ -18,9 +18,10 @@ let make = () => {
   let (unsolved, setUnsolved) = React.useState(() =>
     connections->Puzzle.makeCards->Belt.Array.shuffle
   )
+  let (guesses, setGuesses) = React.useState((): array<array<Puzzle.cardId>> => [])
+
   let (selection, setSelection) = React.useState((): array<Puzzle.cardId> => [])
   let (solved, setSolved) = React.useState((): Puzzle.solved => [])
-  let (guesses, setGuesses) = React.useState((): array<array<Puzzle.cardId>> => [])
 
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
@@ -34,7 +35,7 @@ let make = () => {
   let deselectAll = () => setSelection(_ => [])
 
   let wrongGuesses = React.useMemo1(() => {
-    guesses->Belt.Array.keep(guess => guess->Utils.Array.matchBy(Puzzle.idGroup)->Option.isNone)
+    guesses->Belt.Array.keep(guess => guess->Utils.Array.matchBy(Puzzle.groupFromId)->Option.isNone)
   }, [guesses])
 
   let lives = 4 - Array.length(wrongGuesses)
@@ -46,25 +47,10 @@ let make = () => {
 
   let guess = () => {
     if hasFullSelection {
-      switch selection->Utils.Array.matchBy(Puzzle.idGroup) {
-      | Some(group) => {
-          let cards =
-            selection->Belt.Array.keepMap(id =>
-              Belt.Array.getBy(unsolved, ({id: card}) => id == card)
-            )
-
+      switch selection->Puzzle.findSolution(connections) {
+      | Some(solution) => {
           setUnsolved(Belt.Array.keep(_, ({id}) => !isSelected(id)))
-          setSolved(
-            Utils.Array.append(
-              _,
-              {
-                group,
-                title: Puzzle.getRow(connections, group).title,
-                values: cards->Belt.Array.map(({value}) => value),
-              },
-            ),
-          )
-          deselectAll()
+          setSolved(Utils.Array.append(_, solution))
         }
       | None => ()
       }
