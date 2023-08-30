@@ -8,7 +8,7 @@ Built with [ReScript](https://rescript-lang.org/) + React.
 
 - [x] Set cards
 - [x] Set connection titles
-- [ ] Mobile-friendly layout
+- [x] Mobile-friendly layout
 - [ ] Draggable connections/cards
 - [x] Play game, solve connections
 - [x] Mistakes remaining
@@ -16,9 +16,9 @@ Built with [ReScript](https://rescript-lang.org/) + React.
 - [ ] Remember past guesses, don't allow repeat mistakes
 - [ ] Toasts: 1 away, already guessed
 - [ ] Show results
-- [ ] Share results
+- [x] Share results
 - [ ] Cache puzzle build, game state in localStorage
-- [ ] Sharable puzzle link: client-side encoding
+- [x] Sharable puzzle link: client-side encoding
 - [ ] Sharable puzzle link: key-value store
 - [ ] Animations
 
