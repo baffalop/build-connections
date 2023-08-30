@@ -22,7 +22,7 @@ let make = () => {
   let (solved, setSolved) = React.useState((): Puzzle.solved => [])
   let (guesses, setGuesses) = React.useState((): array<array<Puzzle.cardId>> => [])
 
-  let lives = 4 - Array.length(guesses)
+  let lives = 2 - Array.length(guesses)
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
   let gameState = switch (lives, unsolved) {
@@ -67,7 +67,15 @@ let make = () => {
     }
   }
 
-  let copyResults = () => Console.log("copy")
+  let copyResults = () => {
+    let grid =
+      guesses->Belt.Array.joinWith(
+        "\n",
+        Belt.Array.joinWith(_, "", (Puzzle.CardId(group, _)) => Group.swatch(group)),
+      )
+
+    Console.log(grid)
+  }
 
   <Form
     buttons={switch gameState {

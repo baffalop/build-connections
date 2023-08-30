@@ -10,6 +10,14 @@ let name = group =>
   | Purple => "purple"
   }
 
+let swatch = group =>
+  switch group {
+  | Yellow => "🟨"
+  | Green => "🟩"
+  | Blue => "🟦"
+  | Purple => "🟪"
+  }
+
 let bgColor = group => {
   let toBg = color => `bg-${color}-400`
 
