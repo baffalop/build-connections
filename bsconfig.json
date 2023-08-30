@@ -25,6 +25,7 @@
   "bs-dependencies": [
     "@rescript/react",
     "@rescript/core",
+    "rescript-funicular",
     "rescript-webapi"
   ],
   "bs-dev-dependencies": [

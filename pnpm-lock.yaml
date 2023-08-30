@@ -15,6 +15,7 @@ specifiers:
   react-dom: ^18.2.0
   react-router-dom: ^6.15.0
   rescript: ^10.1.4
+  rescript-funicular: 1.0.0-alpha.5
   rescript-vitest: ^1.2.0
   rescript-webapi: ^0.8.0
   tailwindcss: ^3.3.2
@@ -28,6 +29,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-router-dom: 6.15.0_biqbaboplfbrettd7655fr4n2y
+  rescript-funicular: 1.0.0-alpha.5
   rescript-webapi: 0.8.0
 
 devDependencies:
@@ -2425,6 +2427,10 @@ packages:
   /requires-port/1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
     dev: true
+
+  /rescript-funicular/1.0.0-alpha.5:
+    resolution: {integrity: sha512-GR+j5Gqx97opfmfebyRGO/UpQXZZGzUfP86GG6xripX1KKaHttOfHK5RbIXRAxvSp/8HMAdWwtGw/n3e7OUUiQ==}
+    dev: false
 
   /rescript-vitest/1.2.0_a2rd5uxjnkiazlsjauiqwjiwsy:
     resolution: {integrity: sha512-5riclcmS2Kqd/MS9rzdaQ9+eBpPayjX3aAasnighpxbDEKctTBIKnkGO2wvMrtPTe0PLwD89hxwe2hkPHr7APw==}

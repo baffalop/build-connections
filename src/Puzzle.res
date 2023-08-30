@@ -53,3 +53,17 @@ let matchingGroup = (cards: cards): option<Group.t> => {
   | _ => None
   }
 }
+
+let decodeConnections: string => array<connection> = Funicular.Decode.parse(_, value => {
+  open Funicular.Decode
+
+  let connection: t<connection> = value => {
+    let o = value->object_
+    let title = o->field("t", string)
+    let values = o->field("v", array(_, string))
+
+    rmap((title, values) => {title, values})->v(title)->v(values)
+  }
+
+  value->array(connection)
+})
