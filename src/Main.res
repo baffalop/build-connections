@@ -10,10 +10,17 @@ let router =
       path=":slug"
       element={<Game />}
       loader={({params}: loaderParams<{"slug": string}>) => {
-        switch Puzzle.decode(params["slug"]) {
+        open Puzzle.Codec
+
+        switch decode(params["slug"]) {
         | Ok(connections) => connections
         | Error(e) => {
-            Console.log2("Error decoding slug", e)
+            switch e {
+            | Not4Connections => "Wrong number of connections"
+            | Base64ParseError => "Base64 parse error"
+            | JsonParseError(_) => "Json parse error"
+            }->Console.log2("Failed to decode slug:", _)
+
             list{}
           }
         }
