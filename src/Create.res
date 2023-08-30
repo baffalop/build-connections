@@ -56,7 +56,7 @@ let make = () => {
 
   let create = () => {
     if allValuesFilled {
-      Puzzle.Codec.encode(rows)->navigate(_, None)
+      Puzzle.Encode.slug(rows)->navigate(_, None)
     }
   }
 

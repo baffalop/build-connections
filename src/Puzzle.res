@@ -42,32 +42,25 @@ let cardKey = (CardId(group, i)) => `${Group.name(group)}-${Belt.Int.toString(i)
 
 let idGroup = (CardId(group, _)) => group
 
-module Codec = {
+module Decode = {
+  open Funicular.Decode
+
   type decodeError =
-    | JsonParseError(Funicular.Decode.jsonParseError)
+    | JsonParseError(jsonParseError)
     | Base64ParseError
     | Not4Connections
 
-  let decode: string => result<connections, decodeError> = slug => {
-    open Funicular.Decode
+  let json = (value: string): result<connections, decodeError> => {
+    parse(value, value => {
+      array(value => {
+        let o = value->object_
+        let title = o->field("t", string)
+        let values = o->field("v", array(string, _))
 
-    slug
-    ->Base64.decode
-    ->Utils.Result.fromOption(Base64ParseError)
-    ->Result.flatMap(slug => {
-      parse(slug, value => {
-        array(
-          value => {
-            let o = value->object_
-            let title = o->field("t", string)
-            let values = o->field("v", array(string, _))
-
-            rmap((title, values) => {title, values})->v(title)->v(values)
-          },
-          value,
-        )
-      })->Utils.Result.mapError(e => JsonParseError(e))
+        rmap((title, values) => {title, values})->v(title)->v(values)
+      }, value)
     })
+    ->Utils.Result.mapError(e => JsonParseError(e))
     ->Result.flatMap(connectionsArray => {
       let connections = List.fromArray(connectionsArray)
       if List.length(connections) != 4 {
@@ -78,13 +71,20 @@ module Codec = {
     })
   }
 
-  let encode = (connections: connections) => {
-    open Funicular.Encode
+  let slug: string => result<connections, decodeError> = slug => {
+    slug->Base64.decode->Utils.Result.fromOption(Base64ParseError)->Result.flatMap(json)
+  }
+}
 
+module Encode = {
+  open Funicular.Encode
+
+  let json = (connections: connections) =>
     connections
     ->List.toArray
     ->array(((_, {title, values})) => object_([("t", string(title)), ("v", array(values, string))]))
-    ->Js.Json.stringify
-    ->Base64.encode
+
+  let slug = (connections: connections) => {
+    connections->json->Js.Json.stringify->Base64.encode
   }
 }

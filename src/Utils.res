@@ -33,6 +33,12 @@ module Result = {
     }
   }
 
+  let toOption: result<'a, 'e> => option<'a> = res =>
+    switch res {
+    | Ok(v) => Some(v)
+    | Error(_) => None
+    }
+
   let mapError: (result<'a, 'e1>, 'e1 => 'e2) => result<'a, 'e2> = (result, map) => {
     switch result {
     | Ok(v) => Ok(v)
