@@ -74,7 +74,7 @@ let make = () => {
     }
   }
 
-  let copyResults = () => {
+  let copyResults = async () => {
     let grid =
       guesses->Belt.Array.joinWith(
         "\n",
@@ -82,8 +82,9 @@ let make = () => {
       )
     let result = `Custom Connections\n\n${grid}`
 
-    Clipboard.writeText(result)
-    Console.log(result)
+    if !(await Clipboard.writeText(result)) {
+      Console.log(result)
+    }
   }
 
   <Form
@@ -102,7 +103,7 @@ let make = () => {
         </button>
       </>
     | _ =>
-      <button type_="button" className="action" onClick={_ => copyResults()}>
+      <button type_="button" className="action" onClick={_ => copyResults()->Promise.done}>
         {React.string("Copy Results")}
       </button>
     }}

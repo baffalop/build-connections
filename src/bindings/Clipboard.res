@@ -1,1 +1,1 @@
-@scope(("navigator", "clipboard")) external writeText: string => unit = "writeText"
+@scope(("navigator", "clipboard")) external writeText: string => promise<bool> = "writeText"
