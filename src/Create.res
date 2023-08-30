@@ -41,7 +41,7 @@ let sampleValues: Puzzle.connections =
 
 @react.component
 let make = () => {
-  let onCreate = _ => ()
+  let navigate = ReactRouter.useNavigate()
 
   let (rows, setRows) = React.useState(() => Puzzle.blankRows)
   let setValue = (group: Group.t, col: int, value: string) =>
@@ -53,6 +53,13 @@ let make = () => {
 
   let clearRow = group => setRows(Puzzle.setRow(_, group, Puzzle.blankRow))
   let clearAll = _ => setRows(_ => Puzzle.blankRows)
+
+  let create = () => {
+    if allValuesFilled {
+      let slug = rows->Puzzle.encode->Js.Json.stringify
+      navigate(slug, None)
+    }
+  }
 
   <Form
     buttons={<>
@@ -66,7 +73,7 @@ let make = () => {
         {React.string("Create")}
       </button>
     </>}
-    onSubmit={() => onCreate(rows)}>
+    onSubmit={create}>
     <div className="flex flex-col items-stretch justify-start gap-3">
       {rows
       ->List.map(((group, {title, values})) => {

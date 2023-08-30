@@ -11,12 +11,7 @@ let {sampleValues: connections} = module(Create)
 
 @react.component
 let make = () => {
-  let slug: string = ReactRouter.useLoaderData()
-
-  React.useEffect1(() => {
-    Console.log2("slug", slug)
-    None
-  }, [slug])
+  let connections: Puzzle.connections = ReactRouter.useLoaderData()
 
   let (unsolved, setUnsolved) = React.useState(() =>
     connections->Puzzle.makeCards->Belt.Array.shuffle

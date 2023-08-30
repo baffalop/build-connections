@@ -54,16 +54,26 @@ let matchingGroup = (cards: cards): option<Group.t> => {
   }
 }
 
-let decodeConnections: string => array<connection> = Funicular.Decode.parse(_, value => {
-  open Funicular.Decode
+let decode: string => result<connections, Funicular.Decode.jsonParseError> = slug => {
+  Funicular.Decode.parse(slug, value => {
+    open Funicular.Decode
 
-  let connection: t<connection> = value => {
-    let o = value->object_
-    let title = o->field("t", string)
-    let values = o->field("v", array(_, string))
+    array(value => {
+      let o = value->object_
+      let title = o->field("t", string)
+      let values = o->field("v", array(string, _))
 
-    rmap((title, values) => {title, values})->v(title)->v(values)
-  }
+      rmap((title, values) => {title, values})->v(title)->v(values)
+    }, value)
+  })->Result.map(connections => {
+    connections->List.fromArray->List.zip(Group.rainbow, _)
+  })
+}
 
-  value->array(connection)
-})
+let encode = (connections: connections) => {
+  open Funicular.Encode
+
+  connections
+  ->List.toArray
+  ->array(((_, {title, values})) => object_([("t", string(title)), ("v", array(values, string))]))
+}

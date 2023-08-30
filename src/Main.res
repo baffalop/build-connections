@@ -10,7 +10,13 @@ let router =
       path=":slug"
       element={<Game />}
       loader={({params}: loaderParams<{"slug": string}>) => {
-        params["slug"]
+        switch Puzzle.decode(params["slug"]) {
+        | Ok(connections) => connections
+        | Error(e) => {
+            Console.log2("Error decoding slug", e)
+            list{}
+          }
+        }
       }}
     />
   </>
