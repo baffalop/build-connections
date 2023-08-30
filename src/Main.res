@@ -14,12 +14,7 @@ let router =
         switch Puzzle.Decode.slug(slug) {
         | Ok(connections) => Data((connections, slug))
         | Error(e) => {
-            switch e {
-            | #Not4Connections => "Wrong number of connections"
-            | #Base64ParseError => "Base64 parse error"
-            | #...Funicular.Decode.jsonParseError => "Json parse error"
-            }->Console.log2("Failed to decode slug:", _)
-
+            Console.log2("Failed to decode slug:", e)
             ReactRouter.redirect("/")
           }
         }
