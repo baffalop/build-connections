@@ -52,20 +52,43 @@ let findSolution = (guess: array<cardId>, connections: connections) => {
 module Decode = {
   open Funicular.Decode
 
-  type decodeError = [
-    | jsonParseError
-    | #Base64ParseError
-    | #Not4Connections
-  ]
+  type decodeConnectionsError = [jsonParseError | #Base64ParseError | #Not4Connections]
+  type decodeIdError = [jsonParseError | #UnknownGroup]
 
-  let connections: parser<connections, decodeError> = value => {
-    array(value => {
-      let o = value->object_
+  let cardId: parser<cardId, decodeIdError> = value => {
+    let o = value->object_
+    let group =
+      o->field("t", v =>
+        v
+        ->string
+        ->Result.flatMap(g => g->Group.fromShortName->Utils.Result.fromOption(#UnknownGroup))
+      )
+    let index = o->field("i", integer)
+
+    rmap((g, i) => CardId(g, i))->v(group)->v(index)
+  }
+
+  let cardIds: parser<array<cardId>, decodeIdError> = array(cardId, _)
+  let guesses: parser<array<array<cardId>>, decodeIdError> = array(cardIds, _)
+
+  let cards: parser<array<card>, decodeIdError> = array(value => {
+    let o = value->object_
+    let id = o->field("id", cardId)
+    let name = o->field("v", string)
+
+    rmap((id, name) => {group: groupFromId(id), id, value: name})->v(id)->v(name)
+  }, _)
+
+  let connections: parser<connections, decodeConnectionsError> = value => {
+    value
+    ->array(item => {
+      let o = item->object_
       let title = o->field("t", string)
       let values = o->field("v", array(string, _))
 
       rmap((title, values) => {title, values})->v(title)->v(values)
-    }, value)->Result.flatMap(connections => {
+    }, _)
+    ->Result.flatMap(connections => {
       if Belt.Array.length(connections) != 4 {
         Error(#Not4Connections)
       } else {
@@ -74,7 +97,7 @@ module Decode = {
     })
   }
 
-  let slug: string => result<connections, decodeError> = slug => {
+  let slug: string => result<connections, decodeConnectionsError> = slug => {
     slug
     ->Base64.decode
     ->Utils.Result.fromOption(#Base64ParseError)
@@ -84,6 +107,12 @@ module Decode = {
 
 module Encode = {
   open Funicular.Encode
+
+  let cardId = (CardId(group, i)) =>
+    object_([("g", group->Group.shortName->string), ("i", integer(i))])
+  let cardIds = array(_, cardId)
+  let guesses = array(_, cardIds)
+  let cards = array(_, ({id, value}) => object_([("id", cardId(id)), ("v", string(value))]))
 
   let json = (connections: connections) =>
     connections

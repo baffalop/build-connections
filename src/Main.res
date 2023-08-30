@@ -10,13 +10,14 @@ let router =
       path=":slug"
       element={<Game />}
       loader={({params}: loaderParams<{"slug": string}>) => {
-        switch Puzzle.Decode.slug(params["slug"]) {
-        | Ok(connections) => Data(connections)
+        let slug = params["slug"]
+        switch Puzzle.Decode.slug(slug) {
+        | Ok(connections) => Data((connections, slug))
         | Error(e) => {
             switch e {
-            | Not4Connections => "Wrong number of connections"
-            | Base64ParseError => "Base64 parse error"
-            | JsonParseError(e) => `Json parse error: ${e->Funicular.Decode.jsonParseErrorToString}`
+            | #Not4Connections => "Wrong number of connections"
+            | #Base64ParseError => "Base64 parse error"
+            | #...Funicular.Decode.jsonParseError => "Json parse error"
             }->Console.log2("Failed to decode slug:", _)
 
             ReactRouter.redirect("/")

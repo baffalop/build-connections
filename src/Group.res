@@ -10,6 +10,17 @@ let name = group =>
   | Purple => "purple"
   }
 
+let shortName = group => group->name->String.charAt(0)
+
+let fromShortName = group =>
+  switch group {
+  | "y" => Some(Yellow)
+  | "g" => Some(Green)
+  | "b" => Some(Blue)
+  | "p" => Some(Purple)
+  | _ => None
+  }
+
 let swatch = group =>
   switch group {
   | Yellow => "🟨"

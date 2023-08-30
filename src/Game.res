@@ -13,15 +13,25 @@ let {sampleValues: connections} = module(Create)
 
 @react.component
 let make = () => {
-  let connections: Puzzle.connections = ReactRouter.useLoaderData()
+  let (connections, slug): (Puzzle.connections, string) = ReactRouter.useLoaderData()
 
-  let (unsolved, setUnsolved) = React.useState(() =>
-    connections->Puzzle.makeCards->Belt.Array.shuffle
+  let (unsolved, setUnsolved) = Hooks.useLocalStorage(
+    () => connections->Puzzle.makeCards->Belt.Array.shuffle,
+    `cards-${slug}`,
+    Puzzle.Decode.cards,
+    Puzzle.Encode.cards,
   )
-  let (guesses, setGuesses) = React.useState((): array<array<Puzzle.cardId>> => [])
+  let (guesses, setGuesses) = Hooks.useLocalStorage(
+    () => [],
+    `guesses-${slug}`,
+    Puzzle.Decode.guesses,
+    Puzzle.Encode.guesses,
+  )
 
+  let (solved, setSolved) = React.useState(() =>
+    guesses->Belt.Array.keepMap(Puzzle.findSolution(_, connections))
+  )
   let (selection, setSelection) = React.useState((): array<Puzzle.cardId> => [])
-  let (solved, setSolved) = React.useState((): Puzzle.solved => [])
 
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
