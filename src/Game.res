@@ -22,7 +22,7 @@ let make = () => {
   let (solved, setSolved) = React.useState((): Puzzle.solved => [])
   let (guesses, setGuesses) = React.useState((): array<array<Puzzle.cardId>> => [])
 
-  let lives = 2 - Array.length(guesses)
+  let lives = 4 - Array.length(guesses)
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
   let gameState = switch (lives, unsolved) {
