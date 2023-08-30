@@ -55,9 +55,9 @@ let matchingGroup = (cards: cards): option<Group.t> => {
 }
 
 let decode: string => result<connections, Funicular.Decode.jsonParseError> = slug => {
-  Funicular.Decode.parse(slug, value => {
-    open Funicular.Decode
+  open Funicular.Decode
 
+  parse(slug, value => {
     array(value => {
       let o = value->object_
       let title = o->field("t", string)
