@@ -17,7 +17,8 @@ Built with [ReScript](https://rescript-lang.org/) + React.
 - [ ] Toasts: 1 away, already guessed
 - [ ] Show results
 - [x] Share results
-- [ ] Cache puzzle build, game state in localStorage
+- [ ] Cache puzzle build in localStorage
+- [x] Cache game state in localStorage
 - [x] Sharable puzzle link: client-side encoding
 - [ ] Sharable puzzle link: key-value store
 - [ ] Animations
