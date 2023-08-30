@@ -58,7 +58,7 @@ module Decode = {
   let cardId: parser<cardId, decodeIdError> = value => {
     let o = value->object_
     let group =
-      o->field("t", v =>
+      o->field("g", v =>
         v
         ->string
         ->Result.flatMap(g => g->Group.fromShortName->Utils.Result.fromOption(#UnknownGroup))
