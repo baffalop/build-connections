@@ -52,34 +52,33 @@ let findSolution = (guess: array<cardId>, connections: connections) => {
 module Decode = {
   open Funicular.Decode
 
-  type decodeError =
-    | JsonParseError(jsonParseError)
-    | Base64ParseError
-    | Not4Connections
+  type decodeError = [
+    | jsonParseError
+    | #Base64ParseError
+    | #Not4Connections
+  ]
 
-  let connections = (value: string): result<connections, decodeError> => {
-    parse(value, value => {
-      array(value => {
-        let o = value->object_
-        let title = o->field("t", string)
-        let values = o->field("v", array(string, _))
+  let connections: parser<connections, decodeError> = value => {
+    array(value => {
+      let o = value->object_
+      let title = o->field("t", string)
+      let values = o->field("v", array(string, _))
 
-        rmap((title, values) => {title, values})->v(title)->v(values)
-      }, value)
-    })
-    ->Utils.Result.mapError(e => JsonParseError(e))
-    ->Result.flatMap(connectionsArray => {
-      let connections = List.fromArray(connectionsArray)
-      if List.length(connections) != 4 {
-        Error(Not4Connections)
+      rmap((title, values) => {title, values})->v(title)->v(values)
+    }, value)->Result.flatMap(connections => {
+      if Belt.Array.length(connections) != 4 {
+        Error(#Not4Connections)
       } else {
-        connections->List.zip(Group.rainbow, _)->Ok
+        connections->List.fromArray->List.zip(Group.rainbow, _)->Ok
       }
     })
   }
 
   let slug: string => result<connections, decodeError> = slug => {
-    slug->Base64.decode->Utils.Result.fromOption(Base64ParseError)->Result.flatMap(connections)
+    slug
+    ->Base64.decode
+    ->Utils.Result.fromOption(#Base64ParseError)
+    ->Result.flatMap(parse(_, connections))
   }
 }
 
