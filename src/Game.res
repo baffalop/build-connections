@@ -73,8 +73,10 @@ let make = () => {
         "\n",
         Belt.Array.joinWith(_, "", (Puzzle.CardId(group, _)) => Group.swatch(group)),
       )
+    let result = `Custom Connections\n\n${grid}`
 
-    Console.log(grid)
+    Clipboard.writeText(result)
+    Console.log(result)
   }
 
   <Form
