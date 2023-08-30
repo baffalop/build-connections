@@ -12,8 +12,9 @@ type location = {
 type params = {slug: option<string>}
 type loaderParams<'a> = {params: 'a}
 
-type router = Router
-type route = Route
+type router
+type route
+@unboxed type response<'a> = Data('a)
 
 @module("react-router-dom")
 external createHashRouter: array<route> => router = "createHashRouter"
@@ -46,7 +47,7 @@ module Route = {
   external make: (
     ~path: string,
     ~element: React.element,
-    ~loader: loaderParams<'a> => 'b=?,
+    ~loader: loaderParams<'a> => response<'b>=?,
   ) => React.element = "Route"
 }
 
@@ -67,6 +68,9 @@ module Link = {
     }
   }
 }
+
+@module("react-router-dom")
+external redirect: string => response<'a> = "redirect"
 
 @module("react-router-dom")
 external useLocation: unit => location = "useLocation"

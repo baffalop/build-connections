@@ -13,7 +13,7 @@ let router =
         open Puzzle.Codec
 
         switch decode(params["slug"]) {
-        | Ok(connections) => connections
+        | Ok(connections) => Data(connections)
         | Error(e) => {
             switch e {
             | Not4Connections => "Wrong number of connections"
@@ -21,7 +21,7 @@ let router =
             | JsonParseError(_) => "Json parse error"
             }->Console.log2("Failed to decode slug:", _)
 
-            list{}
+            ReactRouter.redirect("/")
           }
         }
       }}
