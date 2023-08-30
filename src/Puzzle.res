@@ -40,19 +40,7 @@ let makeCards = (rows: connections): cards => {
 
 let cardKey = (CardId(group, i)) => `${Group.name(group)}-${Belt.Int.toString(i)}`
 
-let matchingGroup = (cards: cards): option<Group.t> => {
-  let match = cards->Belt.Array.reduce(#unknown, (match, {group}) =>
-    switch match {
-    | #unknown => #match(group)
-    | #noMatch => #noMatch
-    | #match(matched) => matched == group ? match : #noMatch
-    }
-  )
-  switch match {
-  | #match(group) => Some(group)
-  | _ => None
-  }
-}
+let idGroup = (CardId(group, _)) => group
 
 module Codec = {
   type decodeError =

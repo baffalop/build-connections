@@ -22,14 +22,8 @@ let make = () => {
   let (solved, setSolved) = React.useState((): Puzzle.solved => [])
   let (guesses, setGuesses) = React.useState((): array<array<Puzzle.cardId>> => [])
 
-  let lives = 4 - Array.length(guesses)
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
-  let gameState = switch (lives, unsolved) {
-  | (0, _) => Lost
-  | (_, []) => Solved
-  | _ => Playing
-  }
 
   let isSelected = id => Belt.Array.some(selection, s => s == id)
   let select = (id: Puzzle.cardId) =>
@@ -39,13 +33,26 @@ let make = () => {
   let deselect = (id: Puzzle.cardId) => setSelection(Belt.Array.keep(_, s => s != id))
   let deselectAll = () => setSelection(_ => [])
 
-  let solve = () => {
-    if hasFullSelection {
-      let selectedCards =
-        selection->Belt.Array.keepMap(id => Belt.Array.getBy(unsolved, ({id: card}) => id == card))
+  let wrongGuesses = React.useMemo1(() => {
+    guesses->Belt.Array.keep(guess => guess->Utils.Array.matchBy(Puzzle.idGroup)->Option.isNone)
+  }, [guesses])
 
-      switch Puzzle.matchingGroup(selectedCards) {
+  let lives = 4 - Array.length(wrongGuesses)
+  let gameState = switch (lives, unsolved) {
+  | (0, _) => Lost
+  | (_, []) => Solved
+  | _ => Playing
+  }
+
+  let guess = () => {
+    if hasFullSelection {
+      switch selection->Utils.Array.matchBy(Puzzle.idGroup) {
       | Some(group) => {
+          let cards =
+            selection->Belt.Array.keepMap(id =>
+              Belt.Array.getBy(unsolved, ({id: card}) => id == card)
+            )
+
           setUnsolved(Belt.Array.keep(_, ({id}) => !isSelected(id)))
           setSolved(
             Utils.Array.append(
@@ -53,17 +60,17 @@ let make = () => {
               {
                 group,
                 title: Puzzle.getRow(connections, group).title,
-                values: selectedCards->Belt.Array.map(({value}) => value),
+                values: cards->Belt.Array.map(({value}) => value),
               },
             ),
           )
           deselectAll()
         }
-      | None => {
-          setGuesses(Utils.Array.append(_, selection))
-          deselectAll()
-        }
+      | None => ()
       }
+
+      deselectAll()
+      setGuesses(Utils.Array.append(_, selection))
     }
   }
 
@@ -114,7 +121,7 @@ let make = () => {
         </>
       }}
     </div>}
-    onSubmit={solve}>
+    onSubmit={guess}>
     <div className="grid grid-cols-4 gap-2 sm:gap-3">
       {solved
       ->Belt.Array.map(({group, title, values}) =>
