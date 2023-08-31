@@ -59,7 +59,7 @@ let make = (~showToast: string => unit) => {
   let guess = () => {
     if hasFullSelection {
       switch selection->Utils.Array.matchBy(Puzzle.groupFromId) {
-      | NoMatch => showToast(lives <= 1 ? "Unlucky!" : "Nope")
+      | NoMatch => ()
       | OneAway(_, _) => showToast("One away...")
       | Match(group) => {
           let solution =
