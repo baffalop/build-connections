@@ -14,13 +14,6 @@ let {sampleValues: connections} = module(Create)
 @react.component
 let make = () => {
   let (connections, slug): (Puzzle.connections, string) = ReactRouter.useLoaderData()
-
-  let (unsolved, setUnsolved) = Hooks.useLocalStorage(
-    () => connections->Puzzle.makeCards->Belt.Array.shuffle,
-    `cards-${slug}`,
-    Puzzle.Decode.cards,
-    Puzzle.Encode.cards,
-  )
   let (guesses, setGuesses) = Hooks.useLocalStorage(
     () => [],
     `guesses-${slug}`,
@@ -31,6 +24,12 @@ let make = () => {
   let (solved, setSolved) = React.useState(() =>
     guesses->Belt.Array.keepMap(Puzzle.findSolution(_, connections))
   )
+  let (unsolved, setUnsolved) = React.useState(() => {
+    connections
+    ->Puzzle.makeCards
+    ->Belt.Array.keep(({group}) => solved->Belt.Array.every(solved => solved.group != group))
+    ->Belt.Array.shuffle
+  })
   let (selection, setSelection) = React.useState((): array<Puzzle.cardId> => [])
 
   let hasSelection = Belt.Array.length(selection) > 0
