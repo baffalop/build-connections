@@ -14,7 +14,7 @@ let router =
         switch Puzzle.Decode.slug(slug) {
         | Ok(connections) => Data((connections, slug))
         | Error(e) => {
-            Console.log2("Failed to decode slug:", e)
+            Console.log3("Failed to decode slug: ", slug, e)
             ReactRouter.redirect("/")
           }
         }

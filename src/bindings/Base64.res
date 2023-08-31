@@ -1,12 +1,12 @@
-external encode: string => string = "btoa"
+@module("js-base64") external encode: (string, bool) => string = "encode"
 
 module Internal = {
-  external atob: string => string = "atob"
+  @module("js-base64") external decode: string => string = "decode"
 }
 
 let decode: string => option<string> = value => {
   try {
-    Some(Internal.atob(value))
+    Some(Internal.decode(value))
   } catch {
   | Js.Exn.Error(_) => None
   }

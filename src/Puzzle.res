@@ -120,6 +120,6 @@ module Encode = {
     ->array(((_, {title, values})) => object_([("t", string(title)), ("v", array(values, string))]))
 
   let slug = (connections: connections) => {
-    connections->json->Js.Json.stringify->Base64.encode
+    connections->json->Js.Json.stringify->Base64.encode(_, true)
   }
 }

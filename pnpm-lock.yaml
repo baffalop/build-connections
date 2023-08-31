@@ -9,6 +9,7 @@ specifiers:
   '@vitejs/plugin-react': ^4.0.2
   autoprefixer: ^10.4.14
   gh-pages: ^6.0.0
+  js-base64: ^3.7.5
   jsdom: ^22.1.0
   postcss: ^8.4.25
   react: ^18.2.0
@@ -26,6 +27,7 @@ dependencies:
   '@rescript/core': 0.3.1_rescript@10.1.4
   '@rescript/react': 0.11.0_biqbaboplfbrettd7655fr4n2y
   gh-pages: 6.0.0
+  js-base64: 3.7.5
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-router-dom: 6.15.0_biqbaboplfbrettd7655fr4n2y
@@ -1840,6 +1842,10 @@ packages:
     resolution: {integrity: sha512-5eEbBDQT/jF1xg6l36P+mWGGoH9Spuy0PCdSr2dtWRDGC6ph/w9ZCL4lmESW8f8F7MwT3XKescfP0wnZWAKL9w==}
     hasBin: true
     dev: true
+
+  /js-base64/3.7.5:
+    resolution: {integrity: sha512-3MEt5DTINKqfScXKfJFrRbxkrnk2AxPWGBL/ycjz4dK8iqiSJ06UxD8jh8xuh6p10TX4t2+7FsBYVxxQbMg+qA==}
+    dev: false
 
   /js-string-escape/1.0.1:
     resolution: {integrity: sha512-Smw4xcfIQ5LVjAOuJCvN/zIodzA/BBSsluuoSykP+lUvScIi4U6RJLfwHet5cxFnCswUjISV8oAXaqaJDY3chg==}
