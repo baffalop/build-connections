@@ -1,3 +1,7 @@
+module Id = {
+  let eq = (a, b) => a == b
+}
+
 module Array = {
   let setAt = (ar, i, v) => {
     Belt.Array.concatMany([
@@ -9,7 +13,32 @@ module Array = {
 
   let append = (ar, a) => Belt.Array.concat(ar, [a])
 
-  let matchBy = (ar: array<'a>, f: 'a => 'b): option<'b> => {
+  let last = ar => ar[Belt.Array.length(ar) - 1]
+
+  let groupBy = (ar: array<'a>, f: 'a => 'b): list<('b, array<'a>)> =>
+    ar->Belt.Array.reduce(list{}, (grouped, item) => {
+      let disc = f(item)
+      let group = grouped->List.getAssoc(disc, Id.eq)->Option.getWithDefault([])->append(item)
+      grouped->List.setAssoc(disc, group, Id.eq)
+    })
+
+  type match<'a> =
+    | Empty
+    | NoMatch
+    | OneAway('a, 'a)
+    | Match('a)
+
+  let matchBy = (ar: array<'a>, f: 'a => 'b): match<'b> =>
+    switch ar->groupBy(f) {
+    | list{} => Empty
+    | list{(matched, _)} => Match(matched)
+    | list{(outlier, [_]), (matched, _)}
+    | list{(matched, _), (outlier, [_])} =>
+      OneAway(matched, outlier)
+    | _ => NoMatch
+    }
+
+  let matchAllBy = (ar: array<'a>, f: 'a => 'b): option<'b> => {
     let match = ar->Belt.Array.reduce(#unknown, (match, item) =>
       switch match {
       | #unknown => #match(item->f)

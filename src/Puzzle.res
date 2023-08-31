@@ -4,11 +4,10 @@ type connections = list<(Group.t, connection)>
 let blankRow = {title: "", values: Belt.Array.make(4, "")}
 let blankRows = Group.rainbow->List.map(group => (group, blankRow))
 
-let eq = (a, b) => a == b
 let getRow = (rows: connections, group: Group.t): connection =>
-  List.getAssoc(rows, group, eq)->Option.getExn
+  List.getAssoc(rows, group, Utils.Id.eq)->Option.getExn
 let setRow = (rows: connections, group: Group.t, row: connection): connections =>
-  List.setAssoc(rows, group, row, eq)
+  List.setAssoc(rows, group, row, Utils.Id.eq)
 let mapRow = (rows: connections, group: Group.t, f: connection => connection) =>
   setRow(rows, group, getRow(rows, group)->f)
 
@@ -43,9 +42,11 @@ let groupFromId = (CardId(group, _)) => group
 
 let findSolution = (guess: array<cardId>, connections: connections) => {
   guess
-  ->Utils.Array.matchBy(groupFromId)
+  ->Utils.Array.matchAllBy(groupFromId)
   ->Option.flatMap(group => {
-    connections->List.getAssoc(group, eq)->Option.map(({title, values}) => {group, title, values})
+    connections
+    ->List.getAssoc(group, Utils.Id.eq)
+    ->Option.map(({title, values}) => {group, title, values})
   })
 }
 

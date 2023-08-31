@@ -44,7 +44,20 @@ let make = () => {
   let deselectAll = () => setSelection(_ => [])
 
   let wrongGuesses = React.useMemo1(() => {
-    guesses->Belt.Array.keep(guess => guess->Utils.Array.matchBy(Puzzle.groupFromId)->Option.isNone)
+    guesses->Belt.Array.keep(guess =>
+      guess->Utils.Array.matchAllBy(Puzzle.groupFromId)->Option.isNone
+    )
+  }, [guesses])
+
+  let lastMatchMessage = React.useMemo1(() => {
+    switch guesses
+    ->Utils.Array.last
+    ->Option.mapWithDefault(Utils.Array.Empty, Utils.Array.matchBy(_, Puzzle.groupFromId)) {
+    | Empty => None
+    | NoMatch => Some("Wrong")
+    | OneAway(_, _) => Some("One away")
+    | Match(_) => Some("Right")
+    }
   }, [guesses])
 
   let lives = 4 - Array.length(wrongGuesses)
@@ -108,7 +121,11 @@ let make = () => {
       | Solved => React.string("Well done!")
       | Playing =>
         <>
-          <span className="font-medium"> {React.string(`Mistakes remaining:`)} </span>
+          <span className="font-medium">
+            {React.string(
+              `${lastMatchMessage->Option.mapWithDefault("", m => `${m}! `)}Mistakes remaining:`,
+            )}
+          </span>
           {Belt.Array.range(1, lives)
           ->Belt.Array.map(i =>
             <div key={Belt.Int.toString(i)} className="bg-neutral-500 rounded-full w-3 h-3" />
