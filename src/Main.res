@@ -8,7 +8,7 @@ let router =
     <Route path="/" element={<Create />} />
     <Route
       path=":slug"
-      element={<Game />}
+      element={<Game showToast={Console.log} />}
       loader={({params}: loaderParams<{"slug": string}>) => {
         let slug = params["slug"]
         switch Puzzle.Decode.slug(slug) {

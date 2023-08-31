@@ -23,14 +23,12 @@ module Array = {
     })
 
   type match<'a> =
-    | Empty
     | NoMatch
     | OneAway('a, 'a)
     | Match('a)
 
   let matchBy = (ar: array<'a>, f: 'a => 'b): match<'b> =>
     switch ar->groupBy(f) {
-    | list{} => Empty
     | list{(matched, _)} => Match(matched)
     | list{(outlier, [_]), (matched, _)}
     | list{(matched, _), (outlier, [_])} =>

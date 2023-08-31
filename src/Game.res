@@ -12,7 +12,7 @@ module Solution = {
 let {sampleValues: connections} = module(Create)
 
 @react.component
-let make = () => {
+let make = (~showToast: string => unit) => {
   let (connections, slug): (Puzzle.connections, string) = ReactRouter.useLoaderData()
   let (guesses, setGuesses) = Hooks.useLocalStorage(
     () => [],
@@ -49,17 +49,6 @@ let make = () => {
     )
   }, [guesses])
 
-  let lastMatchMessage = React.useMemo1(() => {
-    switch guesses
-    ->Utils.Array.last
-    ->Option.mapWithDefault(Utils.Array.Empty, Utils.Array.matchBy(_, Puzzle.groupFromId)) {
-    | Empty => None
-    | NoMatch => Some("Wrong")
-    | OneAway(_, _) => Some("One away")
-    | Match(_) => Some("Right")
-    }
-  }, [guesses])
-
   let lives = 4 - Array.length(wrongGuesses)
   let gameState = switch (lives, unsolved) {
   | (0, _) => Lost
@@ -69,12 +58,19 @@ let make = () => {
 
   let guess = () => {
     if hasFullSelection {
-      switch selection->Puzzle.findSolution(connections) {
-      | Some(solution) => {
+      switch selection->Utils.Array.matchBy(Puzzle.groupFromId) {
+      | NoMatch => showToast(lives <= 1 ? "Unlucky!" : "Nope")
+      | OneAway(_, _) => showToast("One away...")
+      | Match(group) => {
+          let solution =
+            connections
+            ->List.getAssoc(group, Utils.Id.eq)
+            ->Option.map(({title, values}) => {Puzzle.group, title, values})
+            ->Option.getExn
+
           setUnsolved(Belt.Array.keep(_, ({id}) => !isSelected(id)))
           setSolved(Utils.Array.append(_, solution))
         }
-      | None => ()
       }
 
       deselectAll()
@@ -121,11 +117,7 @@ let make = () => {
       | Solved => React.string("Well done!")
       | Playing =>
         <>
-          <span className="font-medium">
-            {React.string(
-              `${lastMatchMessage->Option.mapWithDefault("", m => `${m}! `)}Mistakes remaining:`,
-            )}
-          </span>
+          <span className="font-medium"> {React.string("Mistakes remaining:")} </span>
           {Belt.Array.range(1, lives)
           ->Belt.Array.map(i =>
             <div key={Belt.Int.toString(i)} className="bg-neutral-500 rounded-full w-3 h-3" />
