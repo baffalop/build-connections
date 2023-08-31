@@ -127,7 +127,7 @@ let make = (~showToast: string => unit) => {
       }}
     </div>}
     onSubmit={guess}>
-    <div className="grid grid-cols-4 gap-2 sm:gap-3">
+    <div className="grid grid-cols-4 gap-1.5 sm:gap-2.5">
       {solved
       ->Belt.Array.map(({group, title, values}) =>
         <Solution key={`solved-${Group.name(group)}`} group title values />
