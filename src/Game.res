@@ -124,11 +124,20 @@ let make = () => {
         | Playing =>
           <>
             <span className="font-medium"> {React.string("Mistakes remaining:")} </span>
-            {Belt.Array.range(1, lives)
-            ->Belt.Array.map(i =>
-              <div key={Belt.Int.toString(i)} className="bg-neutral-500 rounded-full w-3 h-3" />
-            )
-            ->React.array}
+            <div className="flex gap-2 w-20">
+              <Motion.AnimatePresence>
+                {Belt.Array.range(1, lives)
+                ->Belt.Array.map(i =>
+                  <Motion.Div
+                    key={Belt.Int.toString(i)}
+                    className="bg-neutral-500 rounded-full w-3 h-3"
+                    animate={{"scale": 1}}
+                    exit={{"scale": 0}}
+                  />
+                )
+                ->React.array}
+              </Motion.AnimatePresence>
+            </div>
           </>
         }}
       </div>
