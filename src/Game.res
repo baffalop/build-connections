@@ -115,23 +115,25 @@ let make = () => {
         {React.string("Copy Results")}
       </button>
     }}
-    message={<div className="flex items-center justify-center gap-2 font-medium">
-      {switch gameState {
-      | Lost => React.string("Game over!")
-      | Solved => React.string("Well done!")
-      | Playing =>
-        <>
-          <span className="font-medium"> {React.string("Mistakes remaining:")} </span>
-          {Belt.Array.range(1, lives)
-          ->Belt.Array.map(i =>
-            <div key={Belt.Int.toString(i)} className="bg-neutral-500 rounded-full w-3 h-3" />
-          )
-          ->React.array}
-        </>
-      }}
-    </div>}
+    message={<>
+      <Toast message={toastMessage} clear={clearToast} />
+      <div className="flex items-center justify-center gap-2 font-medium">
+        {switch gameState {
+        | Lost => React.string("Game over!")
+        | Solved => React.string("Well done!")
+        | Playing =>
+          <>
+            <span className="font-medium"> {React.string("Mistakes remaining:")} </span>
+            {Belt.Array.range(1, lives)
+            ->Belt.Array.map(i =>
+              <div key={Belt.Int.toString(i)} className="bg-neutral-500 rounded-full w-3 h-3" />
+            )
+            ->React.array}
+          </>
+        }}
+      </div>
+    </>}
     onSubmit={guess}>
-    <Toast message={toastMessage} clear={clearToast} />
     <div className="grid grid-cols-4 gap-1.5 sm:gap-2.5">
       {solved
       ->Belt.Array.map(({group, title, values}) =>
