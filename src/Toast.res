@@ -12,7 +12,9 @@ let make = (~message: option<string>, ~clear: unit => unit) => {
     })
   }, [message])
 
-  <Motion.AnimatePresence>
+  open FramerMotion
+
+  <AnimatePresence>
     {switch message {
     | None => React.null
     | Some(message) =>
@@ -24,5 +26,5 @@ let make = (~message: option<string>, ~clear: unit => unit) => {
         <div className="px-3 py-2.5 min-w-max"> {React.string(message)} </div>
       </Motion.Div>
     }}
-  </Motion.AnimatePresence>
+  </AnimatePresence>
 }

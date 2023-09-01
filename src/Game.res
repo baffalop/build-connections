@@ -99,6 +99,8 @@ let make = () => {
     }
   }
 
+  open FramerMotion
+
   <Form
     buttons={switch gameState {
     | Playing =>
@@ -129,7 +131,7 @@ let make = () => {
           <>
             <span className="font-medium"> {React.string("Mistakes remaining:")} </span>
             <div className="flex gap-2 w-20">
-              <Motion.AnimatePresence>
+              <AnimatePresence>
                 {Belt.Array.range(1, lives)
                 ->Belt.Array.map(i =>
                   <Motion.Div
@@ -140,7 +142,7 @@ let make = () => {
                   />
                 )
                 ->React.array}
-              </Motion.AnimatePresence>
+              </AnimatePresence>
             </div>
           </>
         }}
