@@ -13,7 +13,7 @@ Built with [ReScript](https://rescript-lang.org/) + React.
 - [x] Play game, solve connections
 - [x] Mistakes remaining
 - [x] Reveal remaining connections when lost
-- [ ] Remember past guesses, don't allow repeat mistakes
+- [x] Remember past guesses, don't allow repeat mistakes
 - [x] Toasts: 1 away, already guessed
 - [ ] Show results
 - [x] Share results
