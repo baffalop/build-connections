@@ -9,8 +9,6 @@ module Solution = {
     </div>
 }
 
-let {sampleValues: connections} = module(Create)
-
 @react.component
 let make = () => {
   let (connections, slug): (Puzzle.connections, string) = ReactRouter.useLoaderData()
