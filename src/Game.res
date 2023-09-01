@@ -62,23 +62,27 @@ let make = () => {
 
   let guess = () => {
     if hasFullSelection {
-      switch selection->Utils.Array.matchBy(Puzzle.groupFromId) {
-      | NoMatch => ()
-      | OneAway(_, _) => showToast("One away...")
-      | Match(group) => {
-          let solution =
-            connections
-            ->List.getAssoc(group, Utils.Id.eq)
-            ->Option.map(({title, values}) => {Puzzle.group, title, values})
-            ->Option.getExn
+      if guesses->Belt.Array.some(Utils.Array.eqSets(_, selection)) {
+        showToast("Already guessed")
+      } else {
+        switch selection->Utils.Array.matchBy(Puzzle.groupFromId) {
+        | NoMatch => ()
+        | OneAway(_, _) => showToast("One away...")
+        | Match(group) => {
+            let solution =
+              connections
+              ->List.getAssoc(group, Utils.Id.eq)
+              ->Option.map(({title, values}) => {Puzzle.group, title, values})
+              ->Option.getExn
 
-          setUnsolved(Belt.Array.keep(_, ({id}) => !isSelected(id)))
-          setSolved(Utils.Array.append(_, solution))
+            setUnsolved(Belt.Array.keep(_, ({id}) => !isSelected(id)))
+            setSolved(Utils.Array.append(_, solution))
+          }
         }
-      }
 
-      deselectAll()
-      setGuesses(Utils.Array.append(_, selection))
+        deselectAll()
+        setGuesses(Utils.Array.append(_, selection))
+      }
     }
   }
 

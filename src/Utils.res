@@ -50,6 +50,10 @@ module Array = {
     | _ => None
     }
   }
+
+  let eqSets = (a1: array<'a>, a2: array<'a>): bool => {
+    a1->Belt.Array.every(x1 => a2->Belt.Array.some(x2 => x1 == x2))
+  }
 }
 
 module Result = {
