@@ -12,7 +12,7 @@ module Solution = {
 let {sampleValues: connections} = module(Create)
 
 @react.component
-let make = (~showToast: string => unit) => {
+let make = () => {
   let (connections, slug): (Puzzle.connections, string) = ReactRouter.useLoaderData()
   let (guesses, setGuesses) = Hooks.useLocalStorage(
     () => [],
@@ -31,6 +31,10 @@ let make = (~showToast: string => unit) => {
     ->Belt.Array.shuffle
   })
   let (selection, setSelection) = React.useState((): array<Puzzle.cardId> => [])
+
+  let (toastMessage, setToastMessage) = React.useState((): option<string> => None)
+  let showToast = message => setToastMessage(_ => Some(message))
+  let clearToast = () => setToastMessage(_ => None)
 
   let hasSelection = Belt.Array.length(selection) > 0
   let hasFullSelection = Belt.Array.length(selection) >= 4
@@ -127,6 +131,7 @@ let make = (~showToast: string => unit) => {
       }}
     </div>}
     onSubmit={guess}>
+    <Toast message={toastMessage} clear={clearToast} />
     <div className="grid grid-cols-4 gap-1.5 sm:gap-2.5">
       {solved
       ->Belt.Array.map(({group, title, values}) =>
