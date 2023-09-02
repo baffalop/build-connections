@@ -2,6 +2,11 @@ module Id = {
   let eq = (a, b) => a == b
 }
 
+module Tuple = {
+  let fst = ((a, _)) => a
+  let snd = ((_, b)) => b
+}
+
 module Array = {
   let setAt = (ar, i, v) => {
     Belt.Array.concatMany([

@@ -1,23 +1,30 @@
 type connection = {title: string, values: array<string>}
 type connections = list<(Group.t, connection)>
 
-let blankRow = {title: "", values: Belt.Array.make(4, "")}
-let blankRows = Group.rainbow->List.map(group => (group, blankRow))
+type rowId = RowId(int)
+let rowKey = (RowId(int)) => Int.toString(int)
+type rows = list<(rowId, connection)>
 
-let getRow = (rows: connections, group: Group.t): connection =>
-  List.getAssoc(rows, group, Utils.Id.eq)->Option.getExn
-let setRow = (rows: connections, group: Group.t, row: connection): connections =>
-  List.setAssoc(rows, group, row, Utils.Id.eq)
-let mapRow = (rows: connections, group: Group.t, f: connection => connection) =>
-  setRow(rows, group, getRow(rows, group)->f)
+let blankRow: connection = {title: "", values: Belt.Array.make(4, "")}
+let blankRows: rows = List.makeBy(4, i => (RowId(i), blankRow))
 
-let setValue = (rows: connections, group: Group.t, col: int, value: string) =>
-  mapRow(rows, group, row => {
+let getRow = (rows: rows, id: rowId): connection =>
+  List.getAssoc(rows, id, Utils.Id.eq)->Option.getExn
+let setRow = (rows: rows, id: rowId, row: connection): rows =>
+  List.setAssoc(rows, id, row, Utils.Id.eq)
+let mapRow = (rows: rows, id: rowId, f: connection => connection): rows =>
+  setRow(rows, id, getRow(rows, id)->f)
+
+let setValue = (rows: rows, id: rowId, col: int, value: string): rows =>
+  mapRow(rows, id, row => {
     ...row,
     values: Utils.Array.setAt(row.values, col, value),
   })
-let setTitle = (rows: connections, group: Group.t, title: string) =>
-  mapRow(rows, group, row => {...row, title})
+let setTitle = (rows: rows, id: rowId, title: string): rows =>
+  mapRow(rows, id, row => {...row, title})
+
+let toConnections = (rows: rows): connections =>
+  Group.rainbow->List.zip(rows->List.unzip->Utils.Tuple.snd)
 
 type cardId = CardId(Group.t, int)
 

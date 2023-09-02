@@ -31,22 +31,22 @@ module CardInput = {
   }
 }
 
-let sampleValues: Puzzle.connections =
+let sampleValues: Puzzle.rows =
   list{
     ("things we need for our bathroom", ["yellow", "cabinet", "ivan", "tiles"]),
     ("kitchen _", ["sink", "porter", "scissors", "appliance"]),
     ("beatles titles first words", ["golden", "seargeant", "hey", "eleanor"]),
     ("magazines", ["n + 1", "tribune", "jacobin", "lrb"]),
-  }->List.zipBy(Group.rainbow, ((title, values), group) => (group, {Puzzle.title, values}))
+  }->List.mapWithIndex((i, (title, values)) => (Puzzle.RowId(i), {Puzzle.title, values}))
 
 @react.component
 let make = () => {
   let navigate = ReactRouter.useNavigate()
 
   let (rows, setRows) = React.useState(() => Puzzle.blankRows)
-  let setValue = (group: Group.t, col: int, value: string) =>
-    setRows(Puzzle.setValue(_, group, col, value))
-  let setTitle = (group: Group.t, title: string) => setRows(Puzzle.setTitle(_, group, title))
+  let setValue = (id: Puzzle.rowId, col: int, value: string) =>
+    setRows(Puzzle.setValue(_, id, col, value))
+  let setTitle = (id: Puzzle.rowId, title: string) => setRows(Puzzle.setTitle(_, id, title))
 
   let allValuesFilled =
     rows->List.every(((_, {values})) => Belt.Array.every(values, v => Js.String.trim(v) != ""))
@@ -54,11 +54,17 @@ let make = () => {
   let clearRow = group => setRows(Puzzle.setRow(_, group, Puzzle.blankRow))
   let clearAll = _ => setRows(_ => Puzzle.blankRows)
 
+  let onReorder = ids => {
+    setRows(rows => ids->List.fromArray->List.map(id => (id, rows->Puzzle.getRow(id))))
+  }
+
   let create = () => {
     if allValuesFilled {
-      Puzzle.Encode.slug(rows)->navigate(_, None)
+      rows->Puzzle.toConnections->Puzzle.Encode.slug->navigate(None)
     }
   }
+
+  open FramerMotion
 
   <Form
     buttons={<>
@@ -73,17 +79,26 @@ let make = () => {
       </button>
     </>}
     onSubmit={create}>
-    <div className="flex flex-col items-stretch justify-start gap-3">
+    <Reorder.Group
+      \"as"="div"
+      axis={#y}
+      values={rows->List.unzip->Utils.Tuple.fst->List.toArray}
+      onReorder
+      className="flex flex-col items-stretch justify-start gap-3">
       {rows
-      ->List.map(((group, {title, values})) => {
-        <section key={Group.name(group)} className={`card p-3 ${Group.bgColor(group)} space-y-3`}>
+      ->List.zipBy(Group.rainbow, ((id, {title, values}), group) => {
+        <Reorder.Item
+          \"as"="section"
+          key={Puzzle.rowKey(id)}
+          value={id}
+          className={`card p-3 ${Group.bgColor(group)} space-y-3 cursor-grab`}>
           <div className="flex gap-2 sm:gap-3 items-center">
-            <CardInput group role={#title} value={title} onInput={setTitle(group, _)} />
+            <CardInput group role={#title} value={title} onInput={setTitle(id, _)} />
             <button
               type_="button"
               tabIndex={-1}
               className="action flex-shrink-0"
-              onClick={_ => clearRow(group)}>
+              onClick={_ => clearRow(id)}>
               {React.string("Clear Row")}
             </button>
           </div>
@@ -91,14 +106,14 @@ let make = () => {
             {values
             ->Belt.Array.mapWithIndex((col, value) => {
               let key = `${Group.name(group)}-${Belt.Int.toString(col)}`
-              <CardInput key group value onInput={setValue(group, col, _)} />
+              <CardInput key group value onInput={setValue(id, col, _)} />
             })
             ->React.array}
           </div>
-        </section>
+        </Reorder.Item>
       })
       ->List.toArray
       ->React.array}
-    </div>
+    </Reorder.Group>
   </Form>
 }
