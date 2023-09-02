@@ -12,6 +12,7 @@ module Motion = {
       ~initial: {..}=?,
       ~animate: {..}=?,
       ~exit: {..}=?,
+      ~transition: {..}=?,
     ) => React.element = "div"
   }
 }
