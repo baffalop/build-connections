@@ -12,16 +12,6 @@ let getRow = (rows: rows, id: rowId): connection =>
   List.getAssoc(rows, id, Utils.Id.eq)->Option.getExn
 let setRow = (rows: rows, id: rowId, row: connection): rows =>
   List.setAssoc(rows, id, row, Utils.Id.eq)
-let mapRow = (rows: rows, id: rowId, f: connection => connection): rows =>
-  setRow(rows, id, getRow(rows, id)->f)
-
-let setValue = (rows: rows, id: rowId, col: int, value: string): rows =>
-  mapRow(rows, id, row => {
-    ...row,
-    values: Utils.Array.setAt(row.values, col, value),
-  })
-let setTitle = (rows: rows, id: rowId, title: string): rows =>
-  mapRow(rows, id, row => {...row, title})
 
 let toConnections = (rows: rows): connections =>
   Group.rainbow->List.zip(rows->List.unzip->Utils.Tuple.snd)
