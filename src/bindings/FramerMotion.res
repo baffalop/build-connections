@@ -25,6 +25,7 @@ module Reorder = {
       ~axis: [#y | #x],
       ~values: array<'a>,
       ~onReorder: array<'a> => unit,
+      ~transition: {..}=?,
       ~className: string=?,
     ) => React.element = "Group"
   }

@@ -9,7 +9,7 @@ Built with [ReScript](https://rescript-lang.org/) + React.
 - [x] Set cards
 - [x] Set connection titles
 - [x] Mobile-friendly layout
-- [ ] Draggable connections/cards
+- [x] Draggable connections/cards
 - [x] Play game, solve connections
 - [x] Mistakes remaining
 - [x] Reveal remaining connections when lost
