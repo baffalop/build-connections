@@ -9,6 +9,20 @@ module Solution = {
     </div>
 }
 
+module Card = {
+  @react.component
+  let make = (~children: string, ~selected: bool, ~onClick: unit => unit) => {
+    <button
+      type_="button"
+      className={`card py-6 sm:py-8 px-1 cursor-pointer
+            ${selected ? "bg-neutral-600 text-white" : "bg-neutral-200 hover:bg-neutral-300"}
+            disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
+      onClick={_ => onClick()}>
+      {React.string(children)}
+    </button>
+  }
+}
+
 @react.component
 let make = () => {
   let (connections, slug): (Puzzle.connections, string) = ReactRouter.useLoaderData()
@@ -172,15 +186,10 @@ let make = () => {
         ->Belt.Array.map(({id, value}) => {
           let selected = isSelected(id)
 
-          <button
-            type_="button"
-            key={Puzzle.cardKey(id)}
-            className={`card py-6 sm:py-8 px-1 cursor-pointer
-            ${selected ? "bg-neutral-600 text-white" : "bg-neutral-200 hover:bg-neutral-300"}
-            disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
-            onClick={_ => id->(selected ? deselect : select)}>
-            {React.string(value)}
-          </button>
+          <Card
+            key={Puzzle.cardKey(id)} selected onClick={() => id->(selected ? select : deselect)}>
+            {value}
+          </Card>
         })
         ->React.array
       } else {
