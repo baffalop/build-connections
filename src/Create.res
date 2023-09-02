@@ -55,8 +55,12 @@ module InputSection = {
       <div className="flex gap-2 sm:gap-3 items-center">
         <CardInput group role={#title} value={title} onInput={setTitle} />
         <button
-          type_="button" tabIndex={-1} className="action flex-shrink-0" onClick={_ => clearRow(id)}>
-          {React.string("Clear Row")}
+          type_="button"
+          title="Clear row"
+          tabIndex={-1}
+          className="text-2xl font-bold text-black/20 hover:text-black/40 cursor-pointer flex-shrink-0"
+          onClick={_ => clearRow(id)}>
+          {React.string("×")}
         </button>
       </div>
       <div className="grid gap-3 grid-cols-2 sm:grid-cols-4 justify-stretch">
