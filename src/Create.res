@@ -104,7 +104,9 @@ let make = () => {
     title="Build Connections"
     description={<>
       {"Build your own "->React.string}
-      <a href="https://www.nytimes.com/games/connections"> {"Connections"->React.string} </a>
+      <a target="_blank" href="https://www.nytimes.com/games/connections">
+        {"Connections"->React.string}
+      </a>
       {" puzzle: create 4 groups of 4 cards, each connected in some way. "->React.string}
     </>}
     buttons={<>
