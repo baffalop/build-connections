@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start": "vite --host",
     "build": "vite build",
     "clean": "rescript clean -with-deps",
     "format": "rescript format -all",
-    "serve": "vite preview",
-    "start": "vite --host",
+    "preview": "pnpm build && vite preview",
     "test": "vitest",
     "pages": "pnpm build && gh-pages -d dist"
   },
