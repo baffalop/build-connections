@@ -49,11 +49,10 @@ module InputSection = {
     let clearRow = id => setRow(id, Puzzle.blankRow)
 
     <Reorder.Item
-      \"as"="section" value={id} className={`card p-3 ${Group.bgColor(group)} space-y-3`}>
+      \"as"="section"
+      value={id}
+      className={`card p-3 ${Group.bgColor(group)} space-y-3 cursor-grab`}>
       <div className="flex gap-2 sm:gap-3 items-center">
-        <div
-          className="reorder-handle cursor-grab w-5 self-stretch rounded-sm border border-neutral-700"
-        />
         <CardInput group role={#title} value={title} onInput={setTitle} />
         <button
           type_="button" tabIndex={-1} className="action flex-shrink-0" onClick={_ => clearRow(id)}>
