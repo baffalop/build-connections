@@ -91,7 +91,6 @@ let make = () => {
     rows->List.every(((_, {values})) => Belt.Array.every(values, v => Js.String.trim(v) != ""))
 
   let onReorder = ids => {
-    Console.log2("reorder", ids)
     setRows(rows => ids->List.fromArray->List.map(id => (id, rows->Puzzle.getRow(id))))
   }
 
