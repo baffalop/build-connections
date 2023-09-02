@@ -1,3 +1,17 @@
+let description =
+  <>
+    <p>
+      {"Connections is a "->React.string}
+      <a href="https://www.nytimes.com/games/connections"> {"NYT puzzle game"->React.string} </a>
+      {" based on the show "->React.string}
+      <a href="https://www.bbc.co.uk/programmes/b00lskhg"> {"Only Connect"->React.string} </a>
+      {"."->React.string}
+    </p>
+    <p>
+      {"Build your own Connections puzzle: create 4 groups of 4 cards, each connected in some way."->React.string}
+    </p>
+  </>
+
 module CardInput = {
   @react.component
   let make = (
@@ -101,6 +115,8 @@ let make = () => {
   }
 
   <Form
+    title="Build Connections"
+    description
     buttons={<>
       <button type_="button" className="action" onClick={clearAll}>
         {React.string("Clear All")}
