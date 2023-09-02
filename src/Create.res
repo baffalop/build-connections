@@ -41,6 +41,8 @@ module InputSection = {
   ) => {
     open FramerMotion
 
+    let dragControls = Reorder.useDragControls()
+
     let {title, values} = row
 
     let setValue = (col: int, value: string) =>
@@ -51,8 +53,14 @@ module InputSection = {
     <Reorder.Item
       \"as"="section"
       value={id}
-      className={`card p-3 ${Group.bgColor(group)} space-y-3 cursor-grab`}>
+      dragListener={false}
+      dragControls
+      className={`card p-3 ${Group.bgColor(group)} space-y-3`}>
       <div className="flex gap-2 sm:gap-3 items-center">
+        <div
+          className="reorder-handle cursor-grab w-5 self-stretch rounded-sm border border-neutral-700"
+          onPointerDown={e => {dragControls.start(e)}}
+        />
         <CardInput group role={#title} value={title} onInput={setTitle} />
         <button
           type_="button"
