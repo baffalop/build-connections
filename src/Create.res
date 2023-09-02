@@ -102,11 +102,11 @@ let make = () => {
 
   <Form
     title="Build Connections"
-    description={<p>
+    description={<>
       {"Build your own "->React.string}
-      {<a href="https://www.nytimes.com/games/connections"> {"Connections"->React.string} </a>}
-      {" puzzle: create 4 groups of 4 cards, each connected in some way."->React.string}
-    </p>}
+      <a href="https://www.nytimes.com/games/connections"> {"Connections"->React.string} </a>
+      {" puzzle: create 4 groups of 4 cards, each connected in some way. "->React.string}
+    </>}
     buttons={<>
       <button type_="button" className="action" onClick={clearAll}>
         {React.string("Clear All")}
