@@ -100,6 +100,19 @@ let make = () => {
   open FramerMotion
 
   <Form
+    title="Custom Connections"
+    description={<>
+      <p>
+        {"Create four groups of four! A custom "->React.string}
+        <a target="_blank" href="https://www.nytimes.com/games/connections">
+          {"Connections"->React.string}
+        </a>
+        {" puzzle. "->React.string}
+      </p>
+      <p>
+        <ReactRouter.Link href="/"> {"Build your own"->React.string} </ReactRouter.Link>
+      </p>
+    </>}
     buttons={switch gameState {
     | Playing =>
       <>

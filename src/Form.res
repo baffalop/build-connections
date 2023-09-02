@@ -17,7 +17,7 @@ let make = (
       <h1 className="text-lg font-bold text-center !mb-5"> {React.string(title)} </h1>
     )}
     {description->Option.mapWithDefault(React.null, description =>
-      <p className="text-base space-y-1.5 !mb-8 max-w-xl mx-auto"> {description} </p>
+      <div className="text-base space-y-1.5 !mb-8 max-w-xl mx-auto"> {description} </div>
     )}
     {children}
     {message}
