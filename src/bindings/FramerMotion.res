@@ -17,6 +17,8 @@ module Motion = {
 }
 
 module Reorder = {
+  type dragControls = {start: JsxEvent.Pointer.t => unit}
+
   module Group = {
     @react.component @module("framer-motion") @scope("Reorder")
     external make: (
@@ -37,7 +39,12 @@ module Reorder = {
       ~\"as": string=?,
       ~key: string,
       ~value: 'a,
+      ~dragListener: bool=?,
+      ~dragControls: dragControls=?,
       ~className: string=?,
     ) => React.element = "Item"
   }
+
+  @module("framer-motion")
+  external useDragControls: unit => dragControls = "useDragControls"
 }
