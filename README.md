@@ -15,7 +15,7 @@ Built with [ReScript](https://rescript-lang.org/) + React.
 - [x] Reveal remaining connections when lost
 - [x] Remember past guesses, don't allow repeat mistakes
 - [x] Toasts: 1 away, already guessed
-- [ ] Shrink text to fit cards
+- [x] Shrink text to fit cards
 - [ ] Show results
 - [x] Share results
 - [ ] Cache puzzle build in localStorage
