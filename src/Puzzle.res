@@ -1,6 +1,7 @@
 type connection = {title: string, values: array<string>}
 type connections = list<(Group.t, connection)>
 
+@unboxed
 type rowId = RowId(int)
 let rowKey = (RowId(int)) => Int.toString(int)
 type rows = list<(rowId, connection)>

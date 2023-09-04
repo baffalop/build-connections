@@ -6,6 +6,7 @@ specifiers:
   '@rescript/react': ^0.11.0
   '@testing-library/jest-dom': ^5.16.5
   '@testing-library/react': ^14.0.0
+  '@uidotdev/usehooks': ^2.2.0
   '@vitejs/plugin-react': ^4.0.2
   autoprefixer: ^10.4.14
   framer-motion: ^10.16.2
@@ -27,6 +28,7 @@ specifiers:
 dependencies:
   '@rescript/core': 0.3.1_rescript@10.1.4
   '@rescript/react': 0.11.0_biqbaboplfbrettd7655fr4n2y
+  '@uidotdev/usehooks': 2.2.0_biqbaboplfbrettd7655fr4n2y
   framer-motion: 10.16.2_biqbaboplfbrettd7655fr4n2y
   gh-pages: 6.0.0
   js-base64: 3.7.5
@@ -751,6 +753,17 @@ packages:
     dependencies:
       '@types/yargs-parser': 21.0.0
     dev: true
+
+  /@uidotdev/usehooks/2.2.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-K4tirEf3lvEgi/Z6Pv2aNR8r6YCobfg0N5AOkn3hhuWtGS8n7mMSL7RGFpE2Bj56oeLGGZXrVKteEwg4vGitGA==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
 
   /@vitejs/plugin-react/4.0.4_vite@4.4.9:
     resolution: {integrity: sha512-7wU921ABnNYkETiMaZy7XqpueMnpu5VxvVps13MjmCo+utBdD79sZzrApHawHtVX66cCJQQTXFcjH0y9dSUK8g==}

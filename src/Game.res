@@ -12,13 +12,38 @@ module Solution = {
 module Card = {
   @react.component
   let make = (~children: string, ~selected: bool, ~onClick: unit => unit) => {
+    let (buttonRef, {UseHooks.width: buttonWidth}) = UseHooks.useMeasure()
+    let (textRef, {UseHooks.width: textWidth}) = UseHooks.useMeasure()
+    let (textIntrinsicWidth, setTextIntrinsicWidth) = React.useState((): option<float> => None)
+
+    React.useEffect1(() => {
+      switch (textIntrinsicWidth, textWidth->Js.Nullable.toOption) {
+      | (None, Some(width)) => setTextIntrinsicWidth(_ => Some(width))
+      | _ => ()
+      }
+      None
+    }, [textWidth])
+
+    let scale: float = React.useMemo2(() =>
+      switch (textIntrinsicWidth, buttonWidth->Js.Nullable.toOption) {
+      | (Some(text), Some(button)) => min(button /. text, 1.0)
+      | _ => 1.0
+      }
+    , (textIntrinsicWidth, buttonWidth))
+
     <button
+      ref={buttonRef}
       type_="button"
-      className={`card py-6 sm:py-8 px-1 cursor-pointer
+      className={`card py-6 sm:py-8 px-1 cursor-pointer flex justify-center items-center
             ${selected ? "bg-neutral-600 text-white" : "bg-neutral-200 hover:bg-neutral-300"}
             disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
       onClick={_ => onClick()}>
-      {React.string(children)}
+      <div
+        ref={textRef}
+        className="min-w-min max-w-max"
+        style={{transform: `scale(${scale->Float.toString})`}}>
+        {React.string(children)}
+      </div>
     </button>
   }
 }
