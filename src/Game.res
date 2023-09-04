@@ -212,7 +212,7 @@ let make = () => {
           let selected = isSelected(id)
 
           <Card
-            key={Puzzle.cardKey(id)} selected onClick={() => id->(selected ? select : deselect)}>
+            key={Puzzle.cardKey(id)} selected onClick={() => id->(selected ? deselect : select)}>
             {value}
           </Card>
         })

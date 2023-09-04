@@ -14,7 +14,7 @@ let make = (
       onSubmit()
     }}>
     {title->Option.mapWithDefault(React.null, title =>
-      <h1 className="text-lg font-bold text-center !mb-5"> {React.string(title)} </h1>
+      <h1 className="text-xl font-bold text-center !mb-5"> {React.string(title)} </h1>
     )}
     {description->Option.mapWithDefault(React.null, description =>
       <div className="text-base space-y-1.5 !mb-8 max-w-xl mx-auto"> {description} </div>
