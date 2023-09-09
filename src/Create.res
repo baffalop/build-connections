@@ -56,11 +56,8 @@ module InputSection = {
       dragListener={false}
       dragControls
       className={`card p-3 ${Group.bgColor(group)} space-y-3`}>
-      <div className="flex gap-2 sm:gap-3 items-center">
-        <div
-          className="reorder-handle cursor-grab w-5 self-stretch rounded-sm border border-neutral-700"
-          onPointerDown={e => dragControls.start(. e)}
-        />
+      <div className="flex px-1 gap-2.5 items-center">
+        <DragHandle dragControls />
         <CardInput group role={#title} value={title} onInput={setTitle} />
         <button
           type_="button"
