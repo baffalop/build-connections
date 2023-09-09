@@ -3,26 +3,25 @@
 
 open ReactRouter
 
-let router =
-  <>
-    <Route path="/" element={<Create />} />
-    <Route
-      path=":slug"
-      element={<Game />}
-      loader={({params}: loaderParams<{"slug": string}>) => {
-        let slug = params["slug"]
-        switch Puzzle.Decode.slug(slug) {
-        | Ok(connections) => Data((connections, slug))
-        | Error(e) => {
-            Console.log3("Failed to decode slug: ", slug, e)
-            ReactRouter.redirect("/")
-          }
+let routes = createRoutesFromElements(<>
+  <Route path="/" element={<Create />} />
+  <Route
+    path=":slug"
+    element={<Game />}
+    loader={({params}: loaderParams<{"slug": string}>) => {
+      let slug = params["slug"]
+      switch Puzzle.Decode.slug(slug) {
+      | Ok(connections) => Data((connections, slug))
+      | Error(e) => {
+          Console.log3("Failed to decode slug: ", slug, e)
+          ReactRouter.redirect("/")
         }
-      }}
-    />
-  </>
-  ->createRoutesFromElements
-  ->createHashRouter
+      }
+    }}
+  />
+</>)
+
+let router = routes->createHashRouter
 
 ReactDOM.querySelector("#root")
 ->Option.getExn
