@@ -19,6 +19,14 @@ type route
 @module("react-router-dom")
 external createHashRouter: array<route> => router = "createHashRouter"
 
+type memoryRouterConfig = {
+  initialEntries: array<string>,
+  initialIndex: int,
+}
+
+@module("react-router-dom")
+external createMemoryRouter: (array<route>, memoryRouterConfig) => router = "createMemoryRouter"
+
 @module("react-router-dom")
 external createRoutesFromElements: React.element => array<route> = "createRoutesFromElements"
 
