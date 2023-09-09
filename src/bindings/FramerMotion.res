@@ -18,7 +18,7 @@ module Motion = {
 }
 
 module Reorder = {
-  type dragControls = {start: JsxEvent.Pointer.t => unit}
+  type dragControls = {start: (. JsxEvent.Pointer.t) => unit}
 
   module Group = {
     @react.component @module("framer-motion") @scope("Reorder")

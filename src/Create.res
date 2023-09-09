@@ -59,7 +59,7 @@ module InputSection = {
       <div className="flex gap-2 sm:gap-3 items-center">
         <div
           className="reorder-handle cursor-grab w-5 self-stretch rounded-sm border border-neutral-700"
-          onPointerDown={e => {dragControls.start(e)}}
+          onPointerDown={e => dragControls.start(. e)}
         />
         <CardInput group role={#title} value={title} onInput={setTitle} />
         <button
