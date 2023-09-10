@@ -38,6 +38,16 @@ let makeCards = (rows: connections): cards => {
 let cardKey = (CardId(group, i)) => `${Group.name(group)}-${Belt.Int.toString(i)}`
 let groupFromId = (CardId(group, _)) => group
 
+// sort by index within group, then by group
+let inCanonicalOrder = (cardIds: array<cardId>): array<cardId> => {
+  cardIds
+  ->List.fromArray
+  ->List.sort((CardId(group1, i1), CardId(group2, i2)) =>
+    i1 * 10 + Group.index(group1) - i2 * 10 + Group.index(group2)
+  )
+  ->List.toArray
+}
+
 let findSolution = (guess: array<cardId>, connections: connections) => {
   guess
   ->Utils.Array.matchAllBy(groupFromId)

@@ -50,3 +50,11 @@ let bgColorLight = group => {
   | Purple => toBg("purple")
   }
 }
+
+let index = group =>
+  switch group {
+  | Yellow => 0
+  | Green => 1
+  | Blue => 2
+  | Purple => 3
+  }
