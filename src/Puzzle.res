@@ -58,6 +58,14 @@ let findSolution = (guess: array<cardId>, connections: connections) => {
   })
 }
 
+let sampleValues = (): rows =>
+  list{
+    ("things we need for our bathroom", ["yellow", "cabinet", "ivan", "tiles"]),
+    ("kitchen _", ["sink", "porter", "scissors", "appliance"]),
+    ("beatles titles first words", ["golden", "seargeant", "hey", "eleanor"]),
+    ("magazines", ["n + 1", "tribune", "jacobin", "lrb"]),
+  }->List.mapWithIndex((i, (title, values)) => (RowId(i), {title, values}))
+
 module Decode = {
   open Funicular.Decode
 

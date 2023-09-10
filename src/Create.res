@@ -80,14 +80,6 @@ module InputSection = {
   }
 }
 
-let sampleValues: Puzzle.rows =
-  list{
-    ("things we need for our bathroom", ["yellow", "cabinet", "ivan", "tiles"]),
-    ("kitchen _", ["sink", "porter", "scissors", "appliance"]),
-    ("beatles titles first words", ["golden", "seargeant", "hey", "eleanor"]),
-    ("magazines", ["n + 1", "tribune", "jacobin", "lrb"]),
-  }->List.mapWithIndex((i, (title, values)) => (Puzzle.RowId(i), {Puzzle.title, values}))
-
 @react.component
 let make = () => {
   let navigate = ReactRouter.useNavigate()
@@ -122,7 +114,7 @@ let make = () => {
       <button type_="button" className="action" onClick={clearAll}>
         {React.string("Clear All")}
       </button>
-      <button type_="button" className="action" onClick={_ => setRows(_ => sampleValues)}>
+      <button type_="button" className="action" onClick={_ => setRows(_ => Puzzle.sampleValues())}>
         {React.string("Fill (test)")}
       </button>
       <button type_="submit" className="action primary" disabled={!allValuesFilled}>
