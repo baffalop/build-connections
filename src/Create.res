@@ -91,6 +91,8 @@ let make = () => {
   let allValuesFilled =
     rows->List.every(((_, {values})) => Belt.Array.every(values, v => Js.String.trim(v) != ""))
 
+  let ids = React.useMemo1(() => rows->List.unzip->Utils.Tuple.fst->List.toArray, [rows])
+
   let onReorder = ids => {
     setRows(rows => ids->List.fromArray->List.map(id => (id, rows->Puzzle.getRow(id))))
   }
@@ -125,7 +127,7 @@ let make = () => {
     <FramerMotion.Reorder.Group
       \"as"="div"
       axis={#y}
-      values={rows->List.unzip->Utils.Tuple.fst->List.toArray}
+      values={ids}
       onReorder
       className="flex flex-col items-stretch justify-start gap-3">
       {rows
