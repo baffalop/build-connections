@@ -1,4 +1,8 @@
-type t = Yellow | Green | Blue | Purple
+type t =
+  | @as("yellow") Yellow
+  | @as("green") Green
+  | @as("blue") Blue
+  | @as("purple") Purple
 
 let rainbow = list{Yellow, Green, Blue, Purple}
 
