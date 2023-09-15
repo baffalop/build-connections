@@ -38,14 +38,38 @@ let makeCards = (rows: connections): cards => {
 let cardKey = (CardId(group, i)) => `${Group.name(group)}-${Belt.Int.toString(i)}`
 let groupFromId = (CardId(group, _)) => group
 
-// sort by index within group, then by group
 let inCanonicalOrder = (cardIds: array<cardId>): array<cardId> => {
+  let fillGapsWith = (toFill, fillFrom) => {
+    let rec fill = (filled, toFill, fillFrom) => {
+      switch (Utils.Array.uncons(toFill), Utils.Array.uncons(fillFrom)) {
+      | (Some((nextFill, remFill)), Some((nextFrom, remFrom))) => {
+          let CardId(_, i) = nextFill
+          if filled->Belt.Array.length == i {
+            fill(filled->Belt.Array.concat([nextFill]), remFill, fillFrom)
+          } else {
+            fill(filled->Belt.Array.concat([nextFrom]), toFill, remFrom)
+          }
+        }
+      | _ => Belt.Array.concatMany([filled, toFill, fillFrom])
+      }
+    }
+
+    fill([], toFill, fillFrom)
+  }
+
   cardIds
-  ->List.fromArray
-  ->List.sort((CardId(group1, i1), CardId(group2, i2)) =>
-    i1 * 10 + Group.index(group1) - i2 * 10 + Group.index(group2)
+  ->Utils.Array.groupBy(groupFromId)
+  ->List.sort(((group1, ids1), (group2, ids2)) =>
+    Array.length(ids1) == Array.length(ids2)
+      ? Group.index(group1) - Group.index(group2)
+      : Array.length(ids2) - Array.length(ids1)
   )
-  ->List.toArray
+  ->List.reduce([], (result, (_, ids)) => {
+    let sortedIds =
+      ids->List.fromArray->List.sort((CardId(_, i1), CardId(_, i2)) => i1 - i2)->List.toArray
+
+    result->fillGapsWith(sortedIds)
+  })
 }
 
 let findSolution = (guess: array<cardId>, connections: connections) => {

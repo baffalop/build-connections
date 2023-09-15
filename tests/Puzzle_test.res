@@ -60,4 +60,22 @@ describe("inCanonicalOrder", () => {
         CardId(Group.Green, 3),
       ])
   })
+
+  test("one id of wrong group fills index position, when groups are reversed", _ => {
+    let _ =
+      [
+        CardId(Group.Green, 0),
+        CardId(Group.Purple, 2),
+        CardId(Group.Purple, 3),
+        CardId(Group.Purple, 0),
+      ]
+      ->inCanonicalOrder
+      ->expect
+      ->toEqual([
+        CardId(Group.Purple, 0),
+        CardId(Group.Green, 0),
+        CardId(Group.Purple, 2),
+        CardId(Group.Purple, 3),
+      ])
+  })
 })

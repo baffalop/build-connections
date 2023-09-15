@@ -20,6 +20,9 @@ module Array = {
 
   let last = ar => ar[Belt.Array.length(ar) - 1]
 
+  let uncons = (ar: array<'a>): option<('a, array<'a>)> =>
+    ar->Belt.Array.get(0)->Option.map(elem => (elem, ar->Belt.Array.sliceToEnd(1)))
+
   let groupBy = (ar: array<'a>, f: 'a => 'b): list<('b, array<'a>)> =>
     ar->Belt.Array.reduce(list{}, (grouped, item) => {
       let disc = f(item)
