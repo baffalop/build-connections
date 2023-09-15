@@ -96,4 +96,22 @@ describe("inCanonicalOrder", () => {
         CardId(Group.Yellow, 3),
       ])
   })
+
+  test("when there are 2 of one group, 2 of different groups, different groups fill places", _ => {
+    let _ =
+      [
+        CardId(Group.Blue, 1),
+        CardId(Group.Green, 1),
+        CardId(Group.Yellow, 3),
+        CardId(Group.Blue, 2),
+      ]
+      ->inCanonicalOrder
+      ->expect
+      ->toEqual([
+        CardId(Group.Yellow, 3),
+        CardId(Group.Blue, 1),
+        CardId(Group.Blue, 2),
+        CardId(Group.Green, 1),
+      ])
+  })
 })

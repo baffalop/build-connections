@@ -57,19 +57,24 @@ let inCanonicalOrder = (cardIds: array<cardId>): array<cardId> => {
     fill([], toFill, fillFrom)
   }
 
-  cardIds
-  ->Utils.Array.groupBy(groupFromId)
-  ->List.sort(((group1, ids1), (group2, ids2)) =>
-    Array.length(ids1) == Array.length(ids2)
-      ? Group.index(group1) - Group.index(group2)
-      : Array.length(ids2) - Array.length(ids1)
-  )
-  ->List.reduce([], (result, (_, ids)) => {
-    let sortedIds =
-      ids->List.fromArray->List.sort((CardId(_, i1), CardId(_, i2)) => i1 - i2)->List.toArray
+  let sortedGroups =
+    cardIds
+    ->Utils.Array.groupBy(groupFromId)
+    ->List.sort(((group1, ids1), (group2, ids2)) =>
+      Array.length(ids1) == Array.length(ids2)
+        ? Group.index(group1) - Group.index(group2)
+        : Array.length(ids2) - Array.length(ids1)
+    )
+    ->List.map(((group, ids)) => (
+      group,
+      ids->List.fromArray->List.sort((CardId(_, i1), CardId(_, i2)) => i1 - i2)->List.toArray,
+    ))
 
-    result->fillGapsWith(sortedIds)
-  })
+  switch sortedGroups {
+  | list{} => []
+  | list{(_, primary), ...groups} =>
+    primary->fillGapsWith(groups->List.toArray->Belt.Array.flatMap(Utils.Tuple.snd))
+  }
 }
 
 let findSolution = (guess: array<cardId>, connections: connections) => {
