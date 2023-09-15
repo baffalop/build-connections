@@ -41,13 +41,13 @@ let groupFromId = (CardId(group, _)) => group
 let inCanonicalOrder = (cardIds: array<cardId>): array<cardId> => {
   let fillGapsWith = (toFill, fillFrom) => {
     let rec fill = (filled, toFill, fillFrom) => {
-      switch (Utils.Array.uncons(toFill), Utils.Array.uncons(fillFrom)) {
-      | (Some((nextFill, remFill)), Some((nextFrom, remFrom))) => {
+      switch (toFill[0], fillFrom[0]) {
+      | (Some(nextFill), Some(nextFrom)) => {
           let CardId(_, i) = nextFill
-          if filled->Belt.Array.length == i {
-            fill(filled->Belt.Array.concat([nextFill]), remFill, fillFrom)
+          if Belt.Array.length(filled) == i {
+            filled->Belt.Array.concat([nextFill])->fill(toFill->Belt.Array.sliceToEnd(1), fillFrom)
           } else {
-            fill(filled->Belt.Array.concat([nextFrom]), toFill, remFrom)
+            filled->Belt.Array.concat([nextFrom])->fill(toFill, fillFrom->Belt.Array.sliceToEnd(1))
           }
         }
       | _ => Belt.Array.concatMany([filled, toFill, fillFrom])
