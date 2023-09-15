@@ -97,12 +97,14 @@ let make = () => {
   | _ => Playing
   }
 
-  let guess = () => {
+  let submitGuess = () => {
     if hasFullSelection {
-      if guesses->Belt.Array.some(Utils.Array.eqSets(_, selection)) {
+      let guess = selection->Puzzle.inCanonicalOrder
+
+      if guesses->Belt.Array.some(Belt.Array.eq(_, guess, Utils.Id.eq)) {
         showToast("Already guessed")
       } else {
-        switch selection->Utils.Array.matchBy(Puzzle.groupFromId) {
+        switch guess->Utils.Array.matchBy(Puzzle.groupFromId) {
         | NoMatch => ()
         | OneAway(_, _) => showToast("One away...")
         | Match(group) => {
@@ -118,7 +120,7 @@ let make = () => {
         }
 
         deselectAll()
-        setGuesses(Utils.Array.append(_, selection))
+        setGuesses(Utils.Array.append(_, guess))
       }
     }
   }
@@ -198,7 +200,7 @@ let make = () => {
         }}
       </div>
     </>}
-    onSubmit={guess}>
+    onSubmit={submitGuess}>
     <div className="grid grid-cols-4 gap-1.5 sm:gap-2.5">
       {solved
       ->Belt.Array.map(({group, title, values}) =>
