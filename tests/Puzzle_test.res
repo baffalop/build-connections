@@ -78,4 +78,22 @@ describe("inCanonicalOrder", () => {
         CardId(Group.Purple, 3),
       ])
   })
+
+  test("when there are 2 of each group, earlier group takes precedence", _ => {
+    let _ =
+      [
+        CardId(Group.Green, 1),
+        CardId(Group.Yellow, 1),
+        CardId(Group.Green, 0),
+        CardId(Group.Yellow, 3),
+      ]
+      ->inCanonicalOrder
+      ->expect
+      ->toEqual([
+        CardId(Group.Green, 0),
+        CardId(Group.Yellow, 1),
+        CardId(Group.Green, 1),
+        CardId(Group.Yellow, 3),
+      ])
+  })
 })
