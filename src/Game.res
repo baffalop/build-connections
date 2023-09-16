@@ -207,7 +207,8 @@ let make = () => {
         <Solution key={`solved-${Group.name(group)}`} group title values />
       )
       ->React.array}
-      {if gameState == Playing {
+      {switch gameState {
+      | Playing =>
         // cards
         unsolved
         ->Belt.Array.map(({id, value}) => {
@@ -219,7 +220,7 @@ let make = () => {
           </Card>
         })
         ->React.array
-      } else {
+      | Lost =>
         // revealed connections
         List.toArray(connections)
         ->Belt.Array.keepMap(((group, {title, values})) =>
@@ -230,6 +231,8 @@ let make = () => {
           }
         )
         ->React.array
+      | Solved => // nothing more to show
+        React.null
       }}
     </div>
   </Form>
