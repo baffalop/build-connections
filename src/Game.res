@@ -49,8 +49,7 @@ module Card = {
 }
 
 @react.component
-let make = () => {
-  let (connections, slug): (Puzzle.connections, string) = ReactRouter.useLoaderData()
+let make = (~connections: Puzzle.connections, ~slug: string) => {
   let (guesses, setGuesses) = Hooks.useLocalStorage(
     () => [],
     `guesses-${slug}`,

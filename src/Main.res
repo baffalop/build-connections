@@ -1,6 +1,14 @@
 %%raw("import './tailwind.css'")
 %%raw(`import './main.css'`)
 
+module GameLoader = {
+  @react.component
+  let make = () => {
+    let (connections, slug): (Puzzle.connections, string) = ReactRouter.useLoaderData()
+    <Game connections slug />
+  }
+}
+
 open ReactRouter
 
 let router =
@@ -8,7 +16,7 @@ let router =
     <Route path="/" element={<Create />} />
     <Route
       path=":slug"
-      element={<Game />}
+      element={<GameLoader />}
       loader={({params}: loaderParams<{"slug": string}>) => {
         let slug = params["slug"]
         switch Puzzle.Decode.slug(slug) {
