@@ -10,9 +10,9 @@ export default defineConfig({
   plugins: [createReactPlugin(), createReScriptPlugin()],
   base: './',
   test: {
-    include: ['tests/**/*_test.bs.js'],
+    include: ['test/**/*_test.bs.js'],
     globals: true,
     environment: 'jsdom',
-    setupFiles: './tests/setup.ts',
+    setupFiles: './test/setup.ts',
   },
 });
