@@ -18,7 +18,9 @@ specifiers:
   react-dom: ^18.2.0
   react-router-dom: ^6.15.0
   rescript: ^10.1.4
+  rescript-dom-testing-library: ^1.15.0
   rescript-funicular: 1.0.0-alpha.5
+  rescript-react-testing-library: ^1.3.0
   rescript-vitest: ^1.2.0
   rescript-webapi: ^0.8.0
   tailwindcss: ^3.3.2
@@ -47,6 +49,8 @@ devDependencies:
   jsdom: 22.1.0
   postcss: 8.4.28
   rescript: 10.1.4
+  rescript-dom-testing-library: 1.15.0
+  rescript-react-testing-library: 1.3.0
   rescript-vitest: 1.2.0_a2rd5uxjnkiazlsjauiqwjiwsy
   tailwindcss: 3.3.3
   vite: 4.4.9
@@ -623,6 +627,20 @@ packages:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: true
 
+  /@testing-library/dom/8.20.1:
+    resolution: {integrity: sha512-/DiOQ5xBxgdYRC8LNk7U+RWat0S3qRLeIw3ZIkMQ9kkVlRmwD/Eg8k8CqIpD6GW7u20JIUOfMKbxtiLutpjQ4g==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@babel/code-frame': 7.22.10
+      '@babel/runtime': 7.22.11
+      '@types/aria-query': 5.0.1
+      aria-query: 5.1.3
+      chalk: 4.1.2
+      dom-accessibility-api: 0.5.16
+      lz-string: 1.5.0
+      pretty-format: 27.5.1
+    dev: true
+
   /@testing-library/dom/9.3.1:
     resolution: {integrity: sha512-0DGPd9AR3+iDTjGoMpxIkAsUihHZ3Ai6CneU6bRRrffXMgzCdlNk43jTrD2/5LT6CBb3MWTP8v510JzYtahD2w==}
     engines: {node: '>=14'}
@@ -664,6 +682,16 @@ packages:
       '@types/react-dom': 18.2.7
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: true
+
+  /@testing-library/user-event/13.5.0_szfc7t2zqsdonxwckqxkjn2the:
+    resolution: {integrity: sha512-5Kwtbo3Y/NowpkbRuSepbyMFkZmHgD+vPzYB/RJ4oxt5Gj/avFFBYjhw27cqSVPVw/3a67NK1PbiIr9k4Gwmdg==}
+    engines: {node: '>=10', npm: '>=6'}
+    peerDependencies:
+      '@testing-library/dom': '>=7.21.4'
+    dependencies:
+      '@babel/runtime': 7.22.11
+      '@testing-library/dom': 8.20.1
     dev: true
 
   /@tootallnate/once/2.0.0:
@@ -2480,9 +2508,20 @@ packages:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
     dev: true
 
+  /rescript-dom-testing-library/1.15.0:
+    resolution: {integrity: sha512-ZEGe4NaNSAe6ufCP+ak3bNjYlxQR3fCbfwZC495gjDiIWPJ+QVIj9DW8am8p1puljf9dskYLdf9dYosUb758uw==}
+    dependencies:
+      '@testing-library/dom': 8.20.1
+      '@testing-library/user-event': 13.5.0_szfc7t2zqsdonxwckqxkjn2the
+    dev: true
+
   /rescript-funicular/1.0.0-alpha.5:
     resolution: {integrity: sha512-GR+j5Gqx97opfmfebyRGO/UpQXZZGzUfP86GG6xripX1KKaHttOfHK5RbIXRAxvSp/8HMAdWwtGw/n3e7OUUiQ==}
     dev: false
+
+  /rescript-react-testing-library/1.3.0:
+    resolution: {integrity: sha512-/hFUnCV5BqijPEtReQYzG6ZUM9YHaCjad5miH7Nj44IkmurldrKkYkDn1eElc1OAMqXANPyaEqBC5sQXjtc18w==}
+    dev: true
 
   /rescript-vitest/1.2.0_a2rd5uxjnkiazlsjauiqwjiwsy:
     resolution: {integrity: sha512-5riclcmS2Kqd/MS9rzdaQ9+eBpPayjX3aAasnighpxbDEKctTBIKnkGO2wvMrtPTe0PLwD89hxwe2hkPHr7APw==}

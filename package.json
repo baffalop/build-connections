@@ -33,6 +33,8 @@
     "jsdom": "^22.1.0",
     "postcss": "^8.4.25",
     "rescript": "^10.1.4",
+    "rescript-dom-testing-library": "^1.15.0",
+    "rescript-react-testing-library": "^1.3.0",
     "rescript-vitest": "^1.2.0",
     "tailwindcss": "^3.3.2",
     "vite": "^4.4.2",

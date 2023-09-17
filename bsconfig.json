@@ -29,7 +29,8 @@
     "rescript-webapi"
   ],
   "bs-dev-dependencies": [
-    "rescript-vitest"
+    "rescript-vitest",
+    "rescript-react-testing-library"
   ],
   "bsc-flags": [
     "-open RescriptCore"
