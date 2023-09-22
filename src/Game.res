@@ -98,8 +98,10 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
   | _ => Playing
   }
 
-  let shakeSelected = () =>
-    FramerMotion.animate(".card.selected", {"x": [0, -10, 10, -10, 0]}, {"duration": 0.3})
+  let shakeSelected = async () => {
+    await FramerMotion.animate(".card.selected", {"x": [0, -10, 10, -10, 0]}, {"duration": 0.3})
+    await AsyncTime.wait(300)
+  }
 
   let submitGuess = async () => {
     if hasFullSelection {
