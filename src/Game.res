@@ -31,22 +31,25 @@ module Card = {
       }
     , (textIntrinsicWidth, buttonWidth))
 
-    <button
+    open FramerMotion
+
+    <Motion.Button
       ref={buttonRef}
-      type_="button"
+      \"type"="button"
       className={`card py-6 sm:py-8 px-1.5 cursor-pointer flex justify-center items-center text-base !font-semibold
             ${selected
           ? "selected bg-neutral-600 text-white"
           : "bg-neutral-200 hover:bg-neutral-300"}
             disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
-      onClick={_ => onClick()}>
+      onClick={onClick}
+      layout={true}>
       <div
         ref={textRef}
         className="min-w-min max-w-max"
         style={{transform: `scale(${scale->Float.toString})`}}>
         {React.string(children)}
       </div>
-    </button>
+    </Motion.Button>
   }
 }
 
