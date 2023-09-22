@@ -145,6 +145,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
             )
 
             await AsyncTime.wait(500)
+            await FramerMotion.animate(".card.selected", {"scale": 0.9}, {"duration": 0.15})
 
             setUnsolved(_ => remainingUnsolved)
             setSolved(Utils.Array.append(_, solution))
