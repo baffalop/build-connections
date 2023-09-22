@@ -2,11 +2,20 @@ type gameState = Playing | Solved | Lost
 
 module Solution = {
   @react.component
-  let make = (~group, ~title, ~values) =>
-    <div className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-1`}>
-      <h4 className="font-bold uppercase"> {React.string(title)} </h4>
-      <p className="font-normal"> {values->Belt.Array.joinWith(", ", v => v)->React.string} </p>
-    </div>
+  let make = (~group, ~title, ~values) => {
+    open FramerMotion
+
+    <AnimatePresence>
+      <Motion.Div
+        className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-1`}
+        initial={{"scale": 0.9}}
+        animate={{"scale": 1}}
+        transition={{"type": #spring, "duration": 0.5, "bounce": 0.4}}>
+        <h4 className="font-bold uppercase"> {React.string(title)} </h4>
+        <p className="font-normal"> {values->Belt.Array.joinWith(", ", v => v)->React.string} </p>
+      </Motion.Div>
+    </AnimatePresence>
+  }
 }
 
 module Card = {
@@ -126,7 +135,18 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
               ->Option.map(({title, values}) => {Puzzle.group, title, values})
               ->Option.getExn
 
-            setUnsolved(Belt.Array.keep(_, ({id}) => !isSelected(id)))
+            let (selectedCards, remainingUnsolved) =
+              unsolved->Belt.Array.partition(({id}) => isSelected(id))
+
+            setUnsolved(_ =>
+              selectedCards
+              ->Utils.Array.sortBy(({id: Puzzle.CardId(_, i)}) => i)
+              ->Belt.Array.concat(remainingUnsolved)
+            )
+
+            await AsyncTime.wait(500)
+
+            setUnsolved(_ => remainingUnsolved)
             setSolved(Utils.Array.append(_, solution))
           }
         }

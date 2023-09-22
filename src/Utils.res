@@ -27,6 +27,9 @@ module Array = {
       grouped->List.setAssoc(disc, group, Id.eq)
     })
 
+  let sortBy = (ar: array<'a>, f: 'a => int): array<'a> =>
+    ar->List.fromArray->List.sort((a, b) => f(a) - f(b))->List.toArray
+
   type match<'a> =
     | NoMatch
     | OneAway('a, 'a)
