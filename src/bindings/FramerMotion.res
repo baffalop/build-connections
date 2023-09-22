@@ -49,3 +49,6 @@ module Reorder = {
   @module("framer-motion")
   external useDragControls: unit => dragControls = "useDragControls"
 }
+
+@module("framer-motion")
+external animate: (string, {..}, {..}) => promise<unit> = "animate"

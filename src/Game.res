@@ -35,7 +35,9 @@ module Card = {
       ref={buttonRef}
       type_="button"
       className={`card py-6 sm:py-8 px-1.5 cursor-pointer flex justify-center items-center text-base !font-semibold
-            ${selected ? "bg-neutral-600 text-white" : "bg-neutral-200 hover:bg-neutral-300"}
+            ${selected
+          ? "selected bg-neutral-600 text-white"
+          : "bg-neutral-200 hover:bg-neutral-300"}
             disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
       onClick={_ => onClick()}>
       <div
@@ -96,7 +98,10 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
   | _ => Playing
   }
 
-  let submitGuess = () => {
+  let shakeSelected = () =>
+    FramerMotion.animate(".card.selected", {"x": [0, -10, 10, -10, 0]}, {"duration": 0.3})
+
+  let submitGuess = async () => {
     if hasFullSelection {
       let guess = selection->Puzzle.inCanonicalOrder
 
@@ -104,8 +109,11 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
         showToast("Already guessed")
       } else {
         switch guess->Utils.Array.matchBy(Puzzle.groupFromId) {
-        | NoMatch => ()
-        | OneAway(_, _) => showToast("One away...")
+        | NoMatch => await shakeSelected()
+        | OneAway(_, _) => {
+            showToast("One away...")
+            await shakeSelected()
+          }
         | Match(group) => {
             let solution =
               connections
@@ -199,7 +207,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
         }}
       </div>
     </>}
-    onSubmit={submitGuess}>
+    onSubmit={() => submitGuess()->Promise.done}>
     <div className="grid grid-cols-4 gap-1.5 sm:gap-2.5">
       {solved
       ->Belt.Array.map(({group, title, values}) =>
