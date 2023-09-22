@@ -140,7 +140,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
 
             setUnsolved(_ =>
               selectedCards
-              ->Utils.Array.sortBy(({id: Puzzle.CardId(_, i)}) => i)
+              ->Utils.Array.sortBy(({id}) => Puzzle.indexFromId(id))
               ->Belt.Array.concat(remainingUnsolved)
             )
 

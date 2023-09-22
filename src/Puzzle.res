@@ -37,6 +37,7 @@ let makeCards = (rows: connections): cards => {
 
 let cardKey = (CardId(group, i)) => `${Group.name(group)}-${Belt.Int.toString(i)}`
 let groupFromId = (CardId(group, _)) => group
+let indexFromId = (CardId(_, i)) => i
 
 let inCanonicalOrder = (cardIds: array<cardId>): array<cardId> => {
   let fillGapsWith = (toFill, fillFrom) => {
