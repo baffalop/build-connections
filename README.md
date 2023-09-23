@@ -22,7 +22,7 @@ Built with [ReScript](https://rescript-lang.org/) + React.
 - [x] Cache game state in localStorage
 - [x] Sharable puzzle link: client-side encoding
 - [ ] Sharable puzzle link: key-value store
-- [ ] Animations
+- [x] Animations
 
 ## Scripts
 
