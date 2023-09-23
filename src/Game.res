@@ -152,7 +152,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
       await FramerMotion.animate(
         ".card.selected",
         {"y": [0, -10, 0]},
-        {"duration": 0.25, "delay": FramerMotion.stagger(0.15)},
+        {"duration": 0.25, "delay": FramerMotion.stagger(0.1)},
       )
       await AsyncTime.wait(300)
 
