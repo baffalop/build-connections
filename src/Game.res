@@ -1,7 +1,5 @@
 type gameState = Playing | Solved | Lost
 
-let maxGuesses = 2
-
 module Solution = {
   @react.component
   let make = (~group, ~title, ~values) => {
@@ -78,7 +76,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
       guess->Utils.Array.matchAllBy(Puzzle.groupFromId)->Option.isNone
     )
   }, [guesses])
-  let lives = maxGuesses - Array.length(wrongGuesses)
+  let lives = 4 - Array.length(wrongGuesses)
 
   let (solved, setSolved) = React.useState(() => {
     let solved = guesses->Belt.Array.keepMap(Puzzle.findSolution(_, connections))
