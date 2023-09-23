@@ -64,6 +64,15 @@ module Array = {
   }
 }
 
+module List = {
+  let sequence = (ls: list<'a>, f: 'a => promise<unit>): promise<unit> => {
+    ls->List.reduce(Promise.resolve(), async (previous, x) => {
+      await previous
+      await f(x)
+    })
+  }
+}
+
 module Result = {
   let fromOption: (option<'a>, 'e) => result<'a, 'e> = (option, error) => {
     switch option {

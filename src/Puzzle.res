@@ -39,6 +39,8 @@ let cardKey = (CardId(group, i)) => `${Group.name(group)}-${Belt.Int.toString(i)
 let groupFromId = (CardId(group, _)) => group
 let indexFromId = (CardId(_, i)) => i
 
+let cardInGroup = ({group}: card, g) => group == g
+
 let inCanonicalOrder = (cardIds: array<cardId>): array<cardId> => {
   let fillGapsWith = (toFill, fillFrom) => {
     let rec fill = (filled, toFill, fillFrom) => {
