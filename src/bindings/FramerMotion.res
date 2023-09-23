@@ -69,3 +69,8 @@ module Reorder = {
 
 @module("framer-motion")
 external animate: (string, {..}, {..}) => promise<unit> = "animate"
+
+type delay
+
+@module("framer-motion")
+external stagger: float => delay = "stagger"

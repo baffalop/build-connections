@@ -149,6 +149,13 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
     if hasFullSelection {
       let guess = selection->Puzzle.inCanonicalOrder
 
+      await FramerMotion.animate(
+        ".card.selected",
+        {"y": [0, -10, 0]},
+        {"duration": 0.25, "delay": FramerMotion.stagger(0.15)},
+      )
+      await AsyncTime.wait(300)
+
       if guesses->Belt.Array.some(Belt.Array.eq(_, guess, Utils.Id.eq)) {
         showToast("Already guessed")
       } else {
