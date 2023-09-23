@@ -113,7 +113,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
 
   let shakeSelected = async () => {
     await FramerMotion.animate(".card.selected", {"x": [0, -10, 10, -10, 0]}, {"duration": 0.3})
-    await AsyncTime.wait(300)
+    await Utils.Time.wait(300)
   }
 
   let revealSolution = async (group: Group.t) => {
@@ -137,8 +137,8 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
       }
     })
 
-    await AsyncTime.wait(10) // allows waitTime to update
-    await AsyncTime.wait(waitTime.contents)
+    await Utils.Time.wait(10) // allows waitTime to update
+    await Utils.Time.wait(waitTime.contents)
     await FramerMotion.animate(".card.selected", {"scale": 0.9}, {"duration": 0.15})
 
     setUnsolved(Belt.Array.keep(_, card => !Puzzle.cardInGroup(card, group)))
@@ -154,7 +154,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
         {"y": [0, -10, 0]},
         {"duration": 0.25, "delay": FramerMotion.stagger(0.1)},
       )
-      await AsyncTime.wait(300)
+      await Utils.Time.wait(300)
 
       if guesses->Belt.Array.some(Belt.Array.eq(_, guess, Utils.Id.eq)) {
         showToast("Already guessed")
@@ -179,7 +179,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
       connections
       ->Puzzle.remainingSolutions(solved)
       ->Utils.Array.sequence(async ({group}) => {
-        await AsyncTime.wait(500)
+        await Utils.Time.wait(500)
         setSelection(
           _ =>
             unsolved->Belt.Array.keepMap(
