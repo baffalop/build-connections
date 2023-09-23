@@ -1,5 +1,7 @@
 type gameState = Playing | Solved | Lost
 
+let maxGuesses = 2
+
 module Solution = {
   @react.component
   let make = (~group, ~title, ~values) => {
@@ -71,9 +73,17 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
     Puzzle.Encode.guesses,
   )
 
-  let (solved, setSolved) = React.useState(() =>
-    guesses->Belt.Array.keepMap(Puzzle.findSolution(_, connections))
-  )
+  let wrongGuesses = React.useMemo1(() => {
+    guesses->Belt.Array.keep(guess =>
+      guess->Utils.Array.matchAllBy(Puzzle.groupFromId)->Option.isNone
+    )
+  }, [guesses])
+  let lives = maxGuesses - Array.length(wrongGuesses)
+
+  let (solved, setSolved) = React.useState(() => {
+    let solved = guesses->Belt.Array.keepMap(Puzzle.findSolution(_, connections))
+    lives > 0 ? solved : solved->Belt.Array.concat(connections->Puzzle.remainingSolutions(solved))
+  })
   let (unsolved, setUnsolved) = React.useState(() => {
     connections
     ->Puzzle.makeCards
@@ -97,13 +107,6 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
   let deselect = (id: Puzzle.cardId) => setSelection(Belt.Array.keep(_, s => s != id))
   let deselectAll = () => setSelection(_ => [])
 
-  let wrongGuesses = React.useMemo1(() => {
-    guesses->Belt.Array.keep(guess =>
-      guess->Utils.Array.matchAllBy(Puzzle.groupFromId)->Option.isNone
-    )
-  }, [guesses])
-
-  let lives = 2 - Array.length(wrongGuesses)
   let gameState = switch (lives, unsolved) {
   | (0, _) => Lost
   | (_, []) => Solved
@@ -119,7 +122,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
     let solution =
       connections
       ->List.getAssoc(group, Utils.Id.eq)
-      ->Option.map(({title, values}) => {Puzzle.group, title, values})
+      ->Option.map(Puzzle.makeSolution(group, _))
       ->Option.getExn
 
     setUnsolved(unsolved => {
@@ -159,18 +162,17 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
   React.useEffect1(() => {
     if gameState == Lost {
       connections
-      ->Utils.List.sequence(async ((group, _)) => {
-        if solved->Belt.Array.every(({group: g}) => group != g) {
-          await AsyncTime.wait(500)
-          setSelection(
-            _ =>
-              unsolved->Belt.Array.keepMap(
-                card => card->Puzzle.cardInGroup(group) ? Some(card.id) : None,
-              ),
-          )
-          await revealSolution(group)
-          deselectAll()
-        }
+      ->Puzzle.remainingSolutions(solved)
+      ->Utils.Array.sequence(async ({group}) => {
+        await AsyncTime.wait(500)
+        setSelection(
+          _ =>
+            unsolved->Belt.Array.keepMap(
+              card => card->Puzzle.cardInGroup(group) ? Some(card.id) : None,
+            ),
+        )
+        await revealSolution(group)
+        deselectAll()
       })
       ->Promise.done
     }

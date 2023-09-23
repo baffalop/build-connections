@@ -62,11 +62,9 @@ module Array = {
   let eqSets = (a1: array<'a>, a2: array<'a>): bool => {
     a1->Belt.Array.every(x1 => a2->Belt.Array.some(x2 => x1 == x2))
   }
-}
 
-module List = {
-  let sequence = (ls: list<'a>, f: 'a => promise<unit>): promise<unit> => {
-    ls->List.reduce(Promise.resolve(), async (previous, x) => {
+  let sequence = (ar: array<'a>, f: 'a => promise<unit>): promise<unit> => {
+    ar->Belt.Array.reduce(Promise.resolve(), async (previous, x) => {
       await previous
       await f(x)
     })
