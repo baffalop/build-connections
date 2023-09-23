@@ -13,7 +13,24 @@ module Motion = {
       ~animate: {..}=?,
       ~exit: {..}=?,
       ~transition: {..}=?,
+      ~layout: bool=?,
     ) => React.element = "div"
+  }
+
+  module Button = {
+    @react.component @module("framer-motion") @scope("motion")
+    external make: (
+      ~children: React.element=?,
+      ~className: string=?,
+      ~initial: {..}=?,
+      ~animate: {..}=?,
+      ~exit: {..}=?,
+      ~transition: {..}=?,
+      ~layout: bool=?,
+      ~\"type": string=?,
+      ~onClick: unit => unit=?,
+      ~ref: JsxDOM.domRef=?,
+    ) => React.element = "button"
   }
 }
 

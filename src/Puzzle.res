@@ -37,6 +37,9 @@ let makeCards = (rows: connections): cards => {
 
 let cardKey = (CardId(group, i)) => `${Group.name(group)}-${Belt.Int.toString(i)}`
 let groupFromId = (CardId(group, _)) => group
+let indexFromId = (CardId(_, i)) => i
+
+let cardInGroup = ({group}: card, g) => group == g
 
 let inCanonicalOrder = (cardIds: array<cardId>): array<cardId> => {
   let fillGapsWith = (toFill, fillFrom) => {
@@ -77,15 +80,24 @@ let inCanonicalOrder = (cardIds: array<cardId>): array<cardId> => {
   }
 }
 
+let makeSolution = (group: Group.t, {title, values}: connection): solution => {group, title, values}
+
 let findSolution = (guess: array<cardId>, connections: connections) => {
   guess
   ->Utils.Array.matchAllBy(groupFromId)
   ->Option.flatMap(group => {
-    connections
-    ->List.getAssoc(group, Utils.Id.eq)
-    ->Option.map(({title, values}) => {group, title, values})
+    connections->List.getAssoc(group, Utils.Id.eq)->Option.map(makeSolution(group, _))
   })
 }
+
+let remainingSolutions = (connections: connections, solved: array<solution>): array<solution> =>
+  connections
+  ->List.toArray
+  ->Belt.Array.keepMap(((group, connection)) =>
+    solved->Belt.Array.every(({group: g}) => group != g)
+      ? Some(makeSolution(group, connection))
+      : None
+  )
 
 let sampleValues = (): rows =>
   list{

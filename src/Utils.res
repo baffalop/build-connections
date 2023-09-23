@@ -27,6 +27,9 @@ module Array = {
       grouped->List.setAssoc(disc, group, Id.eq)
     })
 
+  let sortBy = (ar: array<'a>, f: 'a => int): array<'a> =>
+    ar->List.fromArray->List.sort((a, b) => f(a) - f(b))->List.toArray
+
   type match<'a> =
     | NoMatch
     | OneAway('a, 'a)
@@ -58,6 +61,13 @@ module Array = {
 
   let eqSets = (a1: array<'a>, a2: array<'a>): bool => {
     a1->Belt.Array.every(x1 => a2->Belt.Array.some(x2 => x1 == x2))
+  }
+
+  let sequence = (ar: array<'a>, f: 'a => promise<unit>): promise<unit> => {
+    ar->Belt.Array.reduce(Promise.resolve(), async (previous, x) => {
+      await previous
+      await f(x)
+    })
   }
 }
 

@@ -2,11 +2,20 @@ type gameState = Playing | Solved | Lost
 
 module Solution = {
   @react.component
-  let make = (~group, ~title, ~values) =>
-    <div className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-1`}>
-      <h4 className="font-bold uppercase"> {React.string(title)} </h4>
-      <p className="font-normal"> {values->Belt.Array.joinWith(", ", v => v)->React.string} </p>
-    </div>
+  let make = (~group, ~title, ~values) => {
+    open FramerMotion
+
+    <AnimatePresence>
+      <Motion.Div
+        className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-1`}
+        initial={{"scale": 0.9}}
+        animate={{"scale": 1}}
+        transition={{"type": #spring, "duration": 0.5, "bounce": 0.4}}>
+        <h4 className="font-bold uppercase"> {React.string(title)} </h4>
+        <p className="font-normal"> {values->Belt.Array.joinWith(", ", v => v)->React.string} </p>
+      </Motion.Div>
+    </AnimatePresence>
+  }
 }
 
 module Card = {
@@ -31,22 +40,25 @@ module Card = {
       }
     , (textIntrinsicWidth, buttonWidth))
 
-    <button
+    open FramerMotion
+
+    <Motion.Button
       ref={buttonRef}
-      type_="button"
+      \"type"="button"
       className={`card py-6 sm:py-8 px-1.5 cursor-pointer flex justify-center items-center text-base !font-semibold
             ${selected
           ? "selected bg-neutral-600 text-white"
           : "bg-neutral-200 hover:bg-neutral-300"}
             disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-600`}
-      onClick={_ => onClick()}>
+      onClick={onClick}
+      layout={true}>
       <div
         ref={textRef}
         className="min-w-min max-w-max"
         style={{transform: `scale(${scale->Float.toString})`}}>
         {React.string(children)}
       </div>
-    </button>
+    </Motion.Button>
   }
 }
 
@@ -59,9 +71,17 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
     Puzzle.Encode.guesses,
   )
 
-  let (solved, setSolved) = React.useState(() =>
-    guesses->Belt.Array.keepMap(Puzzle.findSolution(_, connections))
-  )
+  let wrongGuesses = React.useMemo1(() => {
+    guesses->Belt.Array.keep(guess =>
+      guess->Utils.Array.matchAllBy(Puzzle.groupFromId)->Option.isNone
+    )
+  }, [guesses])
+  let lives = 4 - Array.length(wrongGuesses)
+
+  let (solved, setSolved) = React.useState(() => {
+    let solved = guesses->Belt.Array.keepMap(Puzzle.findSolution(_, connections))
+    lives > 0 ? solved : solved->Belt.Array.concat(connections->Puzzle.remainingSolutions(solved))
+  })
   let (unsolved, setUnsolved) = React.useState(() => {
     connections
     ->Puzzle.makeCards
@@ -85,13 +105,6 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
   let deselect = (id: Puzzle.cardId) => setSelection(Belt.Array.keep(_, s => s != id))
   let deselectAll = () => setSelection(_ => [])
 
-  let wrongGuesses = React.useMemo1(() => {
-    guesses->Belt.Array.keep(guess =>
-      guess->Utils.Array.matchAllBy(Puzzle.groupFromId)->Option.isNone
-    )
-  }, [guesses])
-
-  let lives = 4 - Array.length(wrongGuesses)
   let gameState = switch (lives, unsolved) {
   | (0, _) => Lost
   | (_, []) => Solved
@@ -101,6 +114,35 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
   let shakeSelected = async () => {
     await FramerMotion.animate(".card.selected", {"x": [0, -10, 10, -10, 0]}, {"duration": 0.3})
     await AsyncTime.wait(300)
+  }
+
+  let revealSolution = async (group: Group.t) => {
+    let solution =
+      connections
+      ->List.getAssoc(group, Utils.Id.eq)
+      ->Option.map(Puzzle.makeSolution(group, _))
+      ->Option.getExn
+
+    let waitTime = ref(500)
+
+    // reorder cards first (they will animate)
+    setUnsolved(unsolved => {
+      let (solved, remaining) = unsolved->Belt.Array.partition(Puzzle.cardInGroup(_, group))
+      if remaining == [] {
+        // don't bother reordering if they're the only remaining cards
+        waitTime.contents = 200
+        solved
+      } else {
+        solved->Utils.Array.sortBy(({id}) => Puzzle.indexFromId(id))->Belt.Array.concat(remaining)
+      }
+    })
+
+    await AsyncTime.wait(10) // allows waitTime to update
+    await AsyncTime.wait(waitTime.contents)
+    await FramerMotion.animate(".card.selected", {"scale": 0.9}, {"duration": 0.15})
+
+    setUnsolved(Belt.Array.keep(_, card => !Puzzle.cardInGroup(card, group)))
+    setSolved(Utils.Array.append(_, solution))
   }
 
   let submitGuess = async () => {
@@ -116,16 +158,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
             showToast("One away...")
             await shakeSelected()
           }
-        | Match(group) => {
-            let solution =
-              connections
-              ->List.getAssoc(group, Utils.Id.eq)
-              ->Option.map(({title, values}) => {Puzzle.group, title, values})
-              ->Option.getExn
-
-            setUnsolved(Belt.Array.keep(_, ({id}) => !isSelected(id)))
-            setSolved(Utils.Array.append(_, solution))
-          }
+        | Match(group) => await revealSolution(group)
         }
 
         deselectAll()
@@ -133,6 +166,26 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
       }
     }
   }
+
+  React.useEffect1(() => {
+    if gameState == Lost {
+      connections
+      ->Puzzle.remainingSolutions(solved)
+      ->Utils.Array.sequence(async ({group}) => {
+        await AsyncTime.wait(500)
+        setSelection(
+          _ =>
+            unsolved->Belt.Array.keepMap(
+              card => card->Puzzle.cardInGroup(group) ? Some(card.id) : None,
+            ),
+        )
+        await revealSolution(group)
+        deselectAll()
+      })
+      ->Promise.done
+    }
+    None
+  }, [gameState])
 
   let copyResults = async () => {
     let grid =
@@ -216,33 +269,15 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
         <Solution key={`solved-${Group.name(group)}`} group title values />
       )
       ->React.array}
-      {switch gameState {
-      | Playing =>
-        // cards
-        unsolved
-        ->Belt.Array.map(({id, value}) => {
-          let selected = isSelected(id)
+      {unsolved
+      ->Belt.Array.map(({id, value}) => {
+        let selected = isSelected(id)
 
-          <Card
-            key={Puzzle.cardKey(id)} selected onClick={() => id->(selected ? deselect : select)}>
-            {value}
-          </Card>
-        })
-        ->React.array
-      | Lost =>
-        // revealed connections
-        List.toArray(connections)
-        ->Belt.Array.keepMap(((group, {title, values})) =>
-          if Belt.Array.some(solved, ({group: solvedGroup}) => group == solvedGroup) {
-            None
-          } else {
-            Some(<Solution key={`revealed-${Group.name(group)}`} group title values />)
-          }
-        )
-        ->React.array
-      | Solved => // nothing more to show
-        React.null
-      }}
+        <Card key={Puzzle.cardKey(id)} selected onClick={() => id->(selected ? deselect : select)}>
+          {value}
+        </Card>
+      })
+      ->React.array}
     </div>
   </Form>
 }
