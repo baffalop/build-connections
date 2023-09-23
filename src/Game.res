@@ -125,12 +125,22 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
       ->Option.map(Puzzle.makeSolution(group, _))
       ->Option.getExn
 
+    let waitTime = ref(500)
+
+    // reorder cards first (they will animate)
     setUnsolved(unsolved => {
       let (solved, remaining) = unsolved->Belt.Array.partition(Puzzle.cardInGroup(_, group))
-      solved->Utils.Array.sortBy(({id}) => Puzzle.indexFromId(id))->Belt.Array.concat(remaining)
+      if remaining == [] {
+        // don't bother reordering if they're the only remaining cards
+        waitTime.contents = 200
+        solved
+      } else {
+        solved->Utils.Array.sortBy(({id}) => Puzzle.indexFromId(id))->Belt.Array.concat(remaining)
+      }
     })
 
-    await AsyncTime.wait(500)
+    await AsyncTime.wait(10) // allows waitTime to update
+    await AsyncTime.wait(waitTime.contents)
     await FramerMotion.animate(".card.selected", {"scale": 0.9}, {"duration": 0.15})
 
     setUnsolved(Belt.Array.keep(_, card => !Puzzle.cardInGroup(card, group)))
