@@ -63,12 +63,13 @@ module Array = {
     a1->Belt.Array.every(x1 => a2->Belt.Array.some(x2 => x1 == x2))
   }
 
-  let sequence = (ar: array<'a>, f: 'a => promise<unit>): promise<unit> => {
-    ar->Belt.Array.reduce(Promise.resolve(), async (previous, x) => {
-      await previous
-      await f(x)
-    })
-  }
+  let chain = (ar: array<'a>, initial: 'b, f: ('b, 'a) => promise<'b>): promise<'b> =>
+    ar->Belt.Array.reduce(Promise.resolve(initial), async (previous, x) =>
+      await f(await previous, x)
+    )
+
+  let sequence = (ar: array<'a>, f: 'a => promise<unit>): promise<unit> =>
+    chain(ar, (), (_, x) => f(x))
 }
 
 module Result = {
