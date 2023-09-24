@@ -260,6 +260,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
                     className="bg-neutral-500 rounded-full w-3 h-3"
                     animate={{"scale": 1}}
                     exit={{"scale": 0}}
+                    transition={{"duration": 0.3}}
                   />
                 )
                 ->React.array}
