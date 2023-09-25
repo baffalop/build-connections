@@ -244,6 +244,10 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
     }}
     message={<>
       <Toast message={toastMessage} clear={clearToast} />
+      {switch gameState {
+      | Lost | Solved => <Results guesses />
+      | Playing => React.null
+      }}
       <div className="flex items-center justify-center gap-2 font-medium">
         {switch gameState {
         | Lost => React.string("Game over!")
