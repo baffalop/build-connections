@@ -105,6 +105,8 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
   let deselect = (id: Puzzle.cardId) => setSelection(Belt.Array.keep(_, s => s != id))
   let deselectAll = () => setSelection(_ => [])
 
+  let (showingResults, setShowResults) = React.useState(() => false)
+
   let gameState = switch (lives, unsolved) {
   | (0, _) => Lost
   | (_, []) => Solved
@@ -194,19 +196,6 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
     None
   }, [gameState])
 
-  let copyResults = async () => {
-    let grid =
-      guesses->Belt.Array.joinWith(
-        "\n",
-        Belt.Array.joinWith(_, "", (Puzzle.CardId(group, _)) => Group.swatch(group)),
-      )
-    let result = `Custom Connections\n\n${grid}`
-
-    if !(await Clipboard.writeText(result)) {
-      Console.log(result)
-    }
-  }
-
   open FramerMotion
 
   <Form
@@ -238,14 +227,15 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
         </button>
       </>
     | _ =>
-      <button type_="button" className="action" onClick={_ => copyResults()->Promise.done}>
-        {React.string("Copy Results")}
+      <button type_="button" className="action" onClick={_ => setShowResults(_ => true)}>
+        {React.string("Show Results")}
       </button>
     }}
     message={<>
       <Toast message={toastMessage} clear={clearToast} />
       {switch gameState {
-      | Lost | Solved => <Results guesses />
+      | Lost | Solved =>
+        showingResults ? <Results guesses close={() => setShowResults(_ => false)} /> : React.null
       | Playing => React.null
       }}
       <div className="flex items-center justify-center gap-2 font-medium">
