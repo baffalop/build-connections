@@ -235,7 +235,11 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
       <Toast message={toastMessage} clear={clearToast} />
       {switch gameState {
       | Lost | Solved =>
-        showingResults ? <Results guesses close={() => setShowResults(_ => false)} /> : React.null
+        <AnimatePresence>
+          {showingResults
+            ? <Results guesses close={() => setShowResults(_ => false)} />
+            : React.null}
+        </AnimatePresence>
       | Playing => React.null
       }}
       <div className="flex items-center justify-center gap-2 font-medium">
