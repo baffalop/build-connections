@@ -14,8 +14,8 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~close: unit => unit) => {
   }
 
   <div
-    className="fixed !m-auto inset-0 max-w-max max-h-max flex flex-col items-center gap-4
-      rounded-lg bg-neutral-50 border border-neutral-800 px-4 pt-3 pb-4">
+    className="fixed !m-auto inset-0 max-w-max max-h-max flex flex-col items-center gap-5
+      rounded-lg bg-neutral-50 border border-neutral-800 px-4 pt-4 pb-5">
     <button
       type_="button"
       className="text-2xl leading-none cursor-pointer self-end"
