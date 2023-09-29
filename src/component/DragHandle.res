@@ -6,6 +6,10 @@ let make = (~dragControls: FramerMotion.Reorder.dragControls) => {
       dragControls.start(. e)
       JsxEvent.Pointer.preventDefault(e)
     }}>
-    {Belt.Array.make(9, <div className="rounded-full w-1 h-1 bg-black/30" />)->React.array}
+    {Belt.Array.range(0, 8)
+    ->Belt.Array.map(i =>
+      <div key={Int.toString(i)} className="rounded-full w-1 h-1 bg-black/30" />
+    )
+    ->React.array}
   </div>
 }
