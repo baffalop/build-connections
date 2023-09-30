@@ -23,7 +23,7 @@ module CardInput = {
         type_="text"
         value
         onInput={e => ReactEvent.Form.currentTarget(e)["value"]->onInput}
-        className={`${inputRole} rounded-md w-full bg-transparent uppercase
+        className={`${inputRole} rounded-md w-full bg-transparent uppercase text-base
           flex justify-center appearance-none outline-none
           border border-dashed border-transparent ${border}`}
       />
