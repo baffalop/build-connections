@@ -167,7 +167,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
     title="Custom Connections"
     className="max-w-lg"
     description={<>
-      <p> {"Create four groups of four!"->React.string} </p>
+      <p> {"Find four groups of four!"->React.string} </p>
       <p>
         {"A custom "->React.string}
         <a target="_blank" href="https://www.nytimes.com/games/connections">
