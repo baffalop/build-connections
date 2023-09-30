@@ -93,9 +93,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
   })
   let (selection, setSelection) = React.useState((): array<Puzzle.cardId> => [])
 
-  let (toastMessage, setToastMessage) = React.useState((): option<string> => None)
-  let showToast = message => setToastMessage(_ => Some(message))
-  let clearToast = () => setToastMessage(_ => None)
+  let (showToast, toast) = Toast.useToast()
 
   let {revealSolution, revealAll, animating} = Animation.useReveal(
     ~connections,
@@ -198,7 +196,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
       </button>
     }}
     message={<>
-      <Toast message={toastMessage} clear={clearToast} />
+      {toast}
       {switch gameState {
       | Lost | Solved =>
         <AnimatePresence>
