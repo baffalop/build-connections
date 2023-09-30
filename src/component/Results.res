@@ -43,7 +43,7 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => 
       animate="open"
       exit="out"
       className="fixed inset-0 z-10 m-auto max-w-max max-h-max flex flex-col items-center gap-5
-    rounded-lg bg-neutral-50 border border-neutral-800 px-5 pt-4 pb-5">
+        rounded-lg bg-neutral-100 border border-neutral-800 px-5 pt-4 pb-5">
       <button
         type_="button"
         className="text-2xl leading-none cursor-pointer self-end"
