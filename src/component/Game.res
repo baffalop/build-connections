@@ -9,7 +9,7 @@ module Solution = {
       <Motion.Div
         className={`card px-4 py-2 ${Group.bgColor(
             group,
-          )} col-span-full flex flex-col items-center justify-center gap-1 sm:text-lg`}
+          )} col-span-full flex flex-col items-center justify-center sm:text-lg`}
         initial={{"scale": 0.9}}
         animate={{"scale": 1}}
         transition={{"type": #spring, "duration": 0.5, "bounce": 0.4}}>
