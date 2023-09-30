@@ -9,7 +9,7 @@ let make = (
   ~className: string="",
 ) => {
   <form
-    className={`space-y-6 text-center ${className}`}
+    className={`w-full space-y-6 text-center ${className}`}
     onSubmit={e => {
       ReactEvent.Form.preventDefault(e)
       onSubmit()
