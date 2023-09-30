@@ -237,7 +237,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
       | Lost | Solved =>
         <AnimatePresence>
           {showingResults
-            ? <Results guesses close={() => setShowResults(_ => false)} />
+            ? <Results guesses lives close={() => setShowResults(_ => false)} />
             : React.null}
         </AnimatePresence>
       | Playing => React.null
