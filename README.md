@@ -16,7 +16,7 @@ Built with [ReScript](https://rescript-lang.org/) + React.
 - [x] Remember past guesses, don't allow repeat mistakes
 - [x] Toasts: 1 away, already guessed
 - [x] Shrink text to fit cards
-- [ ] Show results
+- [x] Show results
 - [x] Share results
 - [ ] Cache puzzle build in localStorage
 - [x] Cache game state in localStorage
