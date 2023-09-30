@@ -13,13 +13,35 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => 
     }
   }
 
+  let popVariants = {
+    "in": {"opacity": 0, "scale": 0.9},
+    "open": {
+      "opacity": 1,
+      "scale": 1,
+      "transition": {
+        "duration": 0.1,
+        "scale": {
+          "type": #spring,
+          "duration": 0.3,
+          "bounce": 0.5,
+        },
+      },
+    },
+    "out": {
+      "opacity": 0,
+      "scale": 0.7,
+      "transition": {"duration": 0.1},
+    },
+  }
+
   open FramerMotion
 
   <div className="fixed inset-0 !m-0">
-    <Motion.Div
-      initial={{"scale": 0.9}}
-      animate={{"scale": 1}}
-      transition={{"type": #spring, "duration": 0.3, "bounce": 0.4}}
+    <Motion.Variant.Div
+      variants={popVariants}
+      initial="in"
+      animate="open"
+      exit="out"
       className="fixed inset-0 z-10 m-auto max-w-max max-h-max flex flex-col items-center gap-5
     rounded-lg bg-neutral-50 border border-neutral-800 px-5 pt-4 pb-5">
       <button
@@ -53,12 +75,12 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => 
       <button type_="button" className="action" onClick={_ => copyResults()->Promise.done}>
         {React.string("Copy Results")}
       </button>
-    </Motion.Div>
+    </Motion.Variant.Div>
     <Motion.Div
       initial={{"opacity": 0}}
       animate={{"opacity": 0.8}}
       exit={{"opacity": 0}}
-      transition={{"duration": 0.1}}
+      transition={{"duration": 0.15}}
       className="w-full h-full bg-neutral-900"
     />
   </div>

@@ -32,6 +32,37 @@ module Motion = {
       ~ref: JsxDOM.domRef=?,
     ) => React.element = "button"
   }
+
+  module Variant = {
+    module Div = {
+      @react.component @module("framer-motion") @scope("motion")
+      external make: (
+        ~children: React.element=?,
+        ~className: string=?,
+        ~variants: {..},
+        ~initial: string=?,
+        ~animate: string=?,
+        ~exit: string=?,
+        ~layout: bool=?,
+      ) => React.element = "div"
+    }
+
+    module Button = {
+      @react.component @module("framer-motion") @scope("motion")
+      external make: (
+        ~children: React.element=?,
+        ~className: string=?,
+        ~variants: {..},
+        ~initial: string=?,
+        ~animate: string=?,
+        ~exit: string=?,
+        ~layout: bool=?,
+        ~\"type": string=?,
+        ~onClick: unit => unit=?,
+        ~ref: JsxDOM.domRef=?,
+      ) => React.element = "button"
+    }
+  }
 }
 
 module Reorder = {
