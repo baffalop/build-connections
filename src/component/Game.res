@@ -7,7 +7,7 @@ module Solution = {
 
     <AnimatePresence>
       <Motion.Div
-        className={`card p-6 ${Group.bgColor(group)} col-span-full text-center space-y-1`}
+        className={`card px-4 py-2 ${Group.bgColor(group)} col-span-full text-center space-y-1`}
         initial={{"scale": 0.9}}
         animate={{"scale": 1}}
         transition={{"type": #spring, "duration": 0.5, "bounce": 0.4}}>
@@ -45,7 +45,7 @@ module Card = {
     <Motion.Button
       ref={buttonRef}
       \"type"="button"
-      className={`card py-6 sm:py-8 px-1.5 cursor-pointer flex justify-center items-center text-base !font-semibold
+      className={`card py-3 px-2 cursor-pointer flex justify-center items-center text-base !font-semibold
             ${selected
           ? "selected bg-neutral-600 text-white"
           : "bg-neutral-200 hover:bg-neutral-300"}
@@ -200,6 +200,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
 
   <Form
     title="Custom Connections"
+    className="max-w-lg"
     description={<>
       <p>
         {"Create four groups of four! A custom "->React.string}

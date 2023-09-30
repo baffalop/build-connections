@@ -6,9 +6,10 @@ let make = (
   ~message: React.element=<> </>,
   ~description: option<React.element>=?,
   ~onSubmit: unit => unit,
+  ~className: string="",
 ) => {
   <form
-    className="space-y-6 text-center"
+    className={`space-y-6 text-center ${className}`}
     onSubmit={e => {
       ReactEvent.Form.preventDefault(e)
       onSubmit()
