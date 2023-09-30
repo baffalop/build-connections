@@ -110,44 +110,12 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
 
   let (showingResults, setShowResults) = React.useState(() => false)
 
+  let {revealSolution} = Animation.useStateAnimations(~connections, ~setUnsolved, ~setSolved)
+
   let gameState = switch (lives, unsolved) {
   | (0, _) => Lost
   | (_, []) => Solved
   | _ => Playing
-  }
-
-  let shakeSelected = async () => {
-    await FramerMotion.animate(".card.selected", {"x": [0, -10, 10, -10, 0]}, {"duration": 0.3})
-    await Utils.Time.wait(300)
-  }
-
-  let revealSolution = async (group: Group.t) => {
-    let solution =
-      connections
-      ->List.getAssoc(group, Utils.Id.eq)
-      ->Option.map(Puzzle.makeSolution(group, _))
-      ->Option.getExn
-
-    let waitTime = ref(500)
-
-    // reorder cards first (they will animate)
-    setUnsolved(unsolved => {
-      let (solved, remaining) = unsolved->Belt.Array.partition(Puzzle.cardInGroup(_, group))
-      if remaining == [] {
-        // don't bother reordering if they're the only remaining cards
-        waitTime.contents = 200
-        solved
-      } else {
-        solved->Utils.Array.sortBy(({id}) => Puzzle.indexFromId(id))->Belt.Array.concat(remaining)
-      }
-    })
-
-    await Utils.Time.wait(10) // allows waitTime to update
-    await Utils.Time.wait(waitTime.contents)
-    await FramerMotion.animate(".card.selected", {"scale": 0.9}, {"duration": 0.15})
-
-    setUnsolved(Belt.Array.keep(_, card => !Puzzle.cardInGroup(card, group)))
-    setSolved(Utils.Array.append(_, solution))
   }
 
   let submitGuess = async () => {
@@ -165,10 +133,10 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
         await Utils.Time.wait(300)
 
         switch guess->Utils.Array.matchBy(Puzzle.groupFromId) {
-        | NoMatch => await shakeSelected()
+        | NoMatch => await Animation.shakeSelected()
         | OneAway(_, _) => {
             showToast("One away...")
-            await shakeSelected()
+            await Animation.shakeSelected()
           }
         | Match(group) => await revealSolution(group)
         }
