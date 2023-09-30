@@ -110,7 +110,14 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
 
   let (showingResults, setShowResults) = React.useState(() => false)
 
-  let {revealSolution} = Animation.useStateAnimations(~connections, ~setUnsolved, ~setSolved)
+  let {revealSolution, revealAll} = Animation.useReveal(
+    ~connections,
+    ~solved,
+    ~unsolved,
+    ~setUnsolved,
+    ~setSolved,
+    ~setSelection=s => setSelection(_ => s),
+  )
 
   let gameState = switch (lives, unsolved) {
   | (0, _) => Lost
@@ -149,20 +156,7 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
 
   React.useEffect1(() => {
     if gameState == Lost {
-      connections
-      ->Puzzle.remainingSolutions(solved)
-      ->Utils.Array.sequence(async ({group}) => {
-        await Utils.Time.wait(500)
-        setSelection(
-          _ =>
-            unsolved->Belt.Array.keepMap(
-              card => card->Puzzle.cardInGroup(group) ? Some(card.id) : None,
-            ),
-        )
-        await revealSolution(group)
-        deselectAll()
-      })
-      ->Promise.done
+      revealAll()->Promise.done
     }
     None
   }, [gameState])
