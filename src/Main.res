@@ -38,7 +38,7 @@ ReactDOM.querySelector("#root")
 ->ReactDOM.Client.Root.render(
   <React.StrictMode>
     <div
-      className="px-3 py-6 min-h-dscreen w-screen max-w-screen-sm mx-auto flex flex-col items-stretch justify-center">
+      className="px-3 py-6 min-h-dscreen w-screen max-w-screen-sm mx-auto flex flex-col items-center justify-center">
       <RouterProvider router />
     </div>
   </React.StrictMode>,
