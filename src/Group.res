@@ -55,6 +55,28 @@ let bgColorLight = group => {
   }
 }
 
+let bgColorDark = group => {
+  let toBg = color => `bg-${color}-600`
+
+  switch group {
+  | Yellow => toBg("yellow")
+  | Green => toBg("green")
+  | Blue => toBg("blue")
+  | Purple => toBg("purple")
+  }
+}
+
+let iconColorDark = group => {
+  let toColor = color => `text-${color}-600 hover:text-${color}-700`
+
+  switch group {
+  | Yellow => toColor("yellow")
+  | Green => toColor("green")
+  | Blue => toColor("blue")
+  | Purple => toColor("purple")
+  }
+}
+
 let index = group =>
   switch group {
   | Yellow => 0

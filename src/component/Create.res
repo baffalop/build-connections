@@ -50,6 +50,8 @@ module InputSection = {
     let setTitle = (title: string) => setRow(id, {...row, title})
     let clearRow = id => setRow(id, Puzzle.blankRow)
 
+    let iconColor = Group.iconColorDark(group)
+
     <Reorder.Item
       \"as"="section"
       value={id}
@@ -57,13 +59,13 @@ module InputSection = {
       dragControls
       className={`card p-3 ${Group.bgColor(group)} space-y-3`}>
       <div className="flex px-1 gap-2.5 items-center">
-        <DragHandle dragControls />
+        <DragHandle group dragControls />
         <CardInput group role={#title} value={title} onInput={setTitle} />
         <button
           type_="button"
           title="Clear row"
           tabIndex={-1}
-          className="text-2xl font-bold text-black/20 hover:text-black/40 cursor-pointer flex-shrink-0"
+          className={`text-2xl font-bold ${iconColor} cursor-pointer flex-shrink-0`}
           onClick={_ => clearRow(id)}>
           {React.string("×")}
         </button>
