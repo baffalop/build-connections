@@ -21,23 +21,32 @@ module Solution = {
 module Card = {
   @react.component
   let make = (~children: string, ~selected: bool, ~onClick: unit => unit) => {
-    let (buttonRef, {UseHooks.width: buttonWidth}) = UseHooks.useMeasure()
-    let (textRef, {UseHooks.width: textWidth}) = UseHooks.useMeasure()
-    let textIntrinsicWidth = Hooks.useFirstValue(textWidth)
+    let (buttonRef, {UseHooks.width: buttonWidth, height: buttonHeight}) = UseHooks.useMeasure()
+    let (textRef, {UseHooks.width: textWidth, height: textHeight}) = UseHooks.useMeasure()
 
-    let scale: float = React.useMemo2(() =>
-      switch (textIntrinsicWidth, buttonWidth->Js.Nullable.toOption) {
+    let textIntrinsicWidth = Hooks.useFirstValue(textWidth)
+    let textIntrinsicHeight = Hooks.useFirstValue(textHeight)
+
+    let scale = React.useMemo2(() => {
+      let widthScale = switch (textIntrinsicWidth, buttonWidth->Js.Nullable.toOption) {
       | (Some(text), Some(button)) => min(button /. text, 1.0)
       | _ => 1.0
       }
-    , (textIntrinsicWidth, buttonWidth))
+
+      let heightScale = switch (textIntrinsicHeight, buttonHeight->Js.Nullable.toOption) {
+      | (Some(text), Some(button)) => min(button /. text, 1.0)
+      | _ => 1.0
+      }
+
+      min(widthScale, heightScale)
+    }, ([textIntrinsicWidth, textIntrinsicHeight], [buttonWidth, buttonHeight]))
 
     open FramerMotion
 
     <Motion.Button
       ref={buttonRef}
       \"type"="button"
-      className={`card py-3 px-2 cursor-pointer flex justify-center items-center text-base !font-semibold
+      className={`card h-20 py-3 px-2 cursor-pointer flex justify-center items-center text-base !font-semibold
             ${selected
           ? "selected bg-neutral-600 text-white"
           : "bg-neutral-200 hover:bg-neutral-300"}
