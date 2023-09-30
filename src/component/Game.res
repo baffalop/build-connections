@@ -9,7 +9,7 @@ module Solution = {
       <Motion.Div
         className={`card px-4 py-2 ${Group.bgColor(
             group,
-          )} col-span-full flex flex-col place-content-center gap-1`}
+          )} col-span-full flex flex-col items-center justify-center gap-1`}
         initial={{"scale": 0.9}}
         animate={{"scale": 1}}
         transition={{"type": #spring, "duration": 0.5, "bounce": 0.4}}>
@@ -48,7 +48,7 @@ module Card = {
     <Motion.Button
       ref={buttonRef}
       \"type"="button"
-      className={`card h-20 py-3 px-2 cursor-pointer flex justify-center items-center text-base !font-semibold
+      className={`card h-0 py-3 px-2 cursor-pointer flex justify-center items-center text-base !font-semibold
             ${selected
           ? "selected bg-neutral-600 text-white"
           : "bg-neutral-200 hover:bg-neutral-300"}
