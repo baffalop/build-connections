@@ -1,5 +1,7 @@
 @react.component
 let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => unit) => {
+  let (showToast, toast) = Toast.useToast()
+
   let copyResults = async () => {
     let grid =
       guesses->Belt.Array.joinWith(
@@ -8,8 +10,11 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => 
       )
     let result = `Custom Connections\n\n${grid}`
 
-    if !(await Clipboard.writeText(result)) {
+    if await Clipboard.writeText(result) {
+      showToast("Copied to clipboard")
+    } else {
       Console.log(result)
+      showToast("Console logged")
     }
   }
 
@@ -37,6 +42,7 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => 
   open FramerMotion
 
   <div className="fixed inset-0 !m-0">
+    {toast}
     <Motion.Variant.Div
       variants={popVariants}
       initial="in"

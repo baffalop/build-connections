@@ -21,7 +21,8 @@ let useToast = (~duration=2000, ()) => {
       | None => React.null
       | Some(message) =>
         <Motion.Div
-          className="fixed inset-x-0 mx-auto top-20 max-w-max bg-neutral-900/80 rounded-full text-white text-base overflow-hidden"
+          className="fixed inset-x-0 mx-auto top-20 max-w-max z-20
+            bg-neutral-900/80 rounded-full text-white text-base overflow-hidden"
           initial={{"opacity": 0, "width": 0}}
           animate={{"opacity": 1, "width": #auto}}
           exit={{
