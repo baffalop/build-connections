@@ -19,3 +19,17 @@ let useLocalStorage = (
 
   (state, setState)
 }
+
+let useFirstValue = (value: nullable<'a>): option<'a> => {
+  let (firstValue, setFirstValue) = React.useState(() => None)
+
+  React.useEffect1(() => {
+    switch (firstValue, value->Js.Nullable.toOption) {
+    | (None, Some(v)) => setFirstValue(_ => Some(v))
+    | _ => ()
+    }
+    None
+  }, [value])
+
+  firstValue
+}

@@ -23,15 +23,7 @@ module Card = {
   let make = (~children: string, ~selected: bool, ~onClick: unit => unit) => {
     let (buttonRef, {UseHooks.width: buttonWidth}) = UseHooks.useMeasure()
     let (textRef, {UseHooks.width: textWidth}) = UseHooks.useMeasure()
-    let (textIntrinsicWidth, setTextIntrinsicWidth) = React.useState((): option<float> => None)
-
-    React.useEffect1(() => {
-      switch (textIntrinsicWidth, textWidth->Js.Nullable.toOption) {
-      | (None, Some(width)) => setTextIntrinsicWidth(_ => Some(width))
-      | _ => ()
-      }
-      None
-    }, [textWidth])
+    let textIntrinsicWidth = Hooks.useFirstValue(textWidth)
 
     let scale: float = React.useMemo2(() =>
       switch (textIntrinsicWidth, buttonWidth->Js.Nullable.toOption) {
