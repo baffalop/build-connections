@@ -50,15 +50,6 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => 
         onClick={_ => close()}>
         {React.string("×")}
       </button>
-      <h4 className="text-lg font-medium">
-        {switch lives {
-        | 4 => "Perfection! 👌"
-        | 3 => "Good stuff"
-        | 2 => "Not bad..."
-        | 1 => "Scraped by!"
-        | _ => lives > 4 ? "Unbelievable! Literally" : "...Blame the puzzle maker"
-        }->React.string}
-      </h4>
       <div className="grid grid-cols-[auto_auto_auto_auto] gap-x-1 gap-y-2">
         {guesses
         ->Belt.Array.mapWithIndex((i, guess) =>
@@ -72,6 +63,15 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => 
         ->Belt.Array.concatMany
         ->React.array}
       </div>
+      <h4 className="text-lg font-medium">
+        {switch lives {
+        | 4 => "Perfection! 👌"
+        | 3 => "Good stuff"
+        | 2 => "Not bad..."
+        | 1 => "Scraped by!"
+        | _ => lives > 4 ? "Unbelievable! Literally" : "...Blame the puzzle maker"
+        }->React.string}
+      </h4>
       <button type_="button" className="action" onClick={_ => copyResults()->Promise.done}>
         {React.string("Copy Results")}
       </button>
