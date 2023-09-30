@@ -6,6 +6,7 @@ let shakeSelected = async () => {
 type reveal = {
   revealSolution: Group.t => promise<unit>,
   revealAll: unit => promise<unit>,
+  animating: bool,
 }
 
 let useReveal = (
@@ -16,8 +17,12 @@ let useReveal = (
   ~setSolved: (Puzzle.solved => Puzzle.solved) => unit,
   ~setSelection: array<Puzzle.cardId> => unit,
 ): reveal => {
+  let (animating, setAnimating) = React.useState(() => false)
+
   let revealSolution = React.useMemo1(() => {
     async (group: Group.t) => {
+      setAnimating(_ => true)
+
       let solution =
         connections
         ->List.getAssoc(group, Utils.Id.eq)
@@ -44,12 +49,16 @@ let useReveal = (
 
       setUnsolved(Belt.Array.keep(_, card => !Puzzle.cardInGroup(card, group)))
       setSolved(Utils.Array.append(_, solution))
+
+      setAnimating(_ => false)
     }
   }, [connections])
 
   let revealAll = React.useMemo2(() => {
     async () => {
-      connections
+      setAnimating(_ => true)
+
+      await connections
       ->Puzzle.remainingSolutions(solved)
       ->Utils.Array.sequence(async ({group}) => {
         await Utils.Time.wait(500)
@@ -61,9 +70,10 @@ let useReveal = (
         await revealSolution(group)
         setSelection([])
       })
-      ->Promise.done
+
+      setAnimating(_ => false)
     }
   }, (connections, solved))
 
-  {revealSolution, revealAll}
+  {revealSolution, revealAll, animating}
 }

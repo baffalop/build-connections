@@ -97,8 +97,17 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
   let showToast = message => setToastMessage(_ => Some(message))
   let clearToast = () => setToastMessage(_ => None)
 
-  let hasSelection = Belt.Array.length(selection) > 0
-  let hasFullSelection = Belt.Array.length(selection) >= 4
+  let {revealSolution, revealAll, animating} = Animation.useReveal(
+    ~connections,
+    ~solved,
+    ~unsolved,
+    ~setUnsolved,
+    ~setSolved,
+    ~setSelection=s => setSelection(_ => s),
+  )
+
+  let hasSelection = !animating && Belt.Array.length(selection) > 0
+  let hasFullSelection = !animating && Belt.Array.length(selection) >= 4
 
   let isSelected = id => Belt.Array.some(selection, s => s == id)
   let select = (id: Puzzle.cardId) =>
@@ -109,15 +118,6 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
   let deselectAll = () => setSelection(_ => [])
 
   let (showingResults, setShowResults) = React.useState(() => false)
-
-  let {revealSolution, revealAll} = Animation.useReveal(
-    ~connections,
-    ~solved,
-    ~unsolved,
-    ~setUnsolved,
-    ~setSolved,
-    ~setSelection=s => setSelection(_ => s),
-  )
 
   let gameState = switch (lives, unsolved) {
   | (0, _) => Lost
