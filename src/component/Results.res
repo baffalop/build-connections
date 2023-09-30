@@ -82,6 +82,7 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => 
       exit={{"opacity": 0}}
       transition={{"duration": 0.15}}
       className="w-full h-full bg-neutral-900"
+      onClick={_ => close()}
     />
   </div>
 }

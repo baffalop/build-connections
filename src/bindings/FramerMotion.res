@@ -14,6 +14,7 @@ module Motion = {
       ~exit: {..}=?,
       ~transition: {..}=?,
       ~layout: bool=?,
+      ~onClick: unit => unit=?,
     ) => React.element = "div"
   }
 
@@ -44,6 +45,7 @@ module Motion = {
         ~animate: string=?,
         ~exit: string=?,
         ~layout: bool=?,
+        ~onClick: unit => unit=?,
       ) => React.element = "div"
     }
 
