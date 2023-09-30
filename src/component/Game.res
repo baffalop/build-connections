@@ -205,15 +205,15 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
     title="Custom Connections"
     className="max-w-lg"
     description={<>
+      <p> {"Create four groups of four!"->React.string} </p>
       <p>
-        {"Create four groups of four! A custom "->React.string}
+        {"A custom "->React.string}
         <a target="_blank" href="https://www.nytimes.com/games/connections">
           {"Connections"->React.string}
         </a>
         {" puzzle. "->React.string}
-      </p>
-      <p>
         <ReactRouter.Link href="/"> {"Build your own"->React.string} </ReactRouter.Link>
+        {"."->React.string}
       </p>
     </>}
     buttons={switch gameState {
