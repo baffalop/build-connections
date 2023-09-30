@@ -9,7 +9,7 @@ module Solution = {
       <Motion.Div
         className={`card px-4 py-2 ${Group.bgColor(
             group,
-          )} col-span-full flex flex-col items-center justify-center gap-1`}
+          )} col-span-full flex flex-col items-center justify-center gap-1 sm:text-lg`}
         initial={{"scale": 0.9}}
         animate={{"scale": 1}}
         transition={{"type": #spring, "duration": 0.5, "bounce": 0.4}}>
@@ -48,7 +48,7 @@ module Card = {
     <Motion.Button
       ref={buttonRef}
       \"type"="button"
-      className={`card h-0 py-3 px-2 cursor-pointer flex justify-center items-center text-base !font-semibold
+      className={`card h-0 py-3 px-2 cursor-pointer flex justify-center items-center text-base sm:text-lg !font-semibold
             ${selected
           ? "selected bg-neutral-600 text-white"
           : "bg-neutral-200 hover:bg-neutral-300"}
@@ -203,7 +203,6 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
 
   <Form
     title="Custom Connections"
-    className="max-w-lg"
     description={<>
       <p> {"Create four groups of four!"->React.string} </p>
       <p>
@@ -246,20 +245,20 @@ let make = (~connections: Puzzle.connections, ~slug: string) => {
         </AnimatePresence>
       | Playing => React.null
       }}
-      <div className="flex items-center justify-center gap-2 font-medium">
+      <div className="flex items-center justify-center gap-2">
         {switch gameState {
         | Lost => React.string("Game over!")
         | Solved => React.string("Well done!")
         | Playing =>
           <>
-            <span className="font-medium"> {React.string("Mistakes remaining:")} </span>
+            <span> {React.string("Mistakes remaining:")} </span>
             <div className="flex gap-2 w-20">
               <AnimatePresence>
                 {Belt.Array.range(1, lives)
                 ->Belt.Array.map(i =>
                   <Motion.Div
                     key={Belt.Int.toString(i)}
-                    className="bg-neutral-500 rounded-full w-3 h-3"
+                    className="bg-neutral-500 rounded-full w-4 h-4 flex-shrink-0"
                     animate={{"scale": 1}}
                     exit={{"scale": 0}}
                     transition={{"duration": 0.3}}

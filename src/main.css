@@ -3,7 +3,7 @@ body, html {
 }
 
 body {
-  @apply bg-neutral-100 text-neutral-800 text-sm;
+  @apply bg-neutral-100 text-neutral-800 text-base sm:text-lg;
 }
 
 a {
@@ -11,7 +11,7 @@ a {
 }
 
 button.action {
-  @apply rounded-full pt-1 pb-1.5 px-2.5 bg-white text-base font-medium border border-neutral-700
+  @apply rounded-full pt-1 pb-1.5 px-2.5 bg-white font-medium border border-neutral-700
     hover:bg-neutral-200 disabled:text-neutral-500 disabled:border-neutral-500 disabled:bg-neutral-100
     cursor-pointer disabled:cursor-default;
 }
@@ -21,5 +21,5 @@ button.primary:not(:disabled) {
 }
 
 .card {
-  @apply rounded-lg font-medium uppercase min-h-20 sm:min-h-24;
+  @apply rounded-lg font-medium uppercase min-h-20 sm:min-h-28;
 }
