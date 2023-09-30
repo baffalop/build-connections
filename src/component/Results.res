@@ -10,7 +10,9 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => 
       )
     let result = `Custom Connections\n\n${grid}`
 
-    if await Clipboard.writeText(result) {
+    let copySuccess = await Clipboard.writeText(result)
+
+    if copySuccess {
       showToast("Copied to clipboard")
     } else {
       Console.log(result)
