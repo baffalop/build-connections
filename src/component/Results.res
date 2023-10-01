@@ -1,6 +1,18 @@
+type rainbow = NoRainbow | Rainbow | ReverseRainbow
+
+let rainbow = Group.rainbow->List.toArray
+let reverseRainbow = rainbow->Belt.Array.reverse
+
 @react.component
-let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => unit) => {
+let make = (~guesses: array<array<Puzzle.cardId>>, ~close: unit => unit) => {
   let (showToast, toast) = Toast.useToast()
+
+  let matches = guesses->Belt.Array.map(Utils.Array.matchAllBy(_, Puzzle.groupFromId))
+  let fullMatches = matches->Belt.Array.keepMap(g => g)
+  let mistakes = matches->Belt.Array.keep(Option.isNone)->Array.length
+
+  let rainbow =
+    fullMatches == rainbow ? Rainbow : fullMatches == reverseRainbow ? ReverseRainbow : NoRainbow
 
   let copyResults = async () => {
     let grid =
@@ -73,12 +85,18 @@ let make = (~guesses: array<array<Puzzle.cardId>>, ~lives: int, ~close: unit => 
         ->React.array}
       </div>
       <h4 className="text-lg font-medium">
-        {switch lives {
-        | 4 => "Perfection! 👌"
-        | 3 => "Good stuff"
-        | 2 => "Not bad..."
-        | 1 => "Scraped by!"
-        | _ => lives > 4 ? "Unbelievable! Literally" : "...Blame the puzzle maker"
+        {switch mistakes {
+        | 0 =>
+          switch rainbow {
+          | Rainbow => "Perfection! 🌈"
+          | ReverseRainbow => "Galaxy brain 🌈"
+          | NoRainbow => "Magnificent!"
+          }
+        | 1 => "Good stuff"
+        | 2 => "Not bad"
+        | 3 => "Scraped by!"
+        | 4 => "...Blame the puzzle maker"
+        | _ => "Unbelievable! Literally"
         }->React.string}
       </h4>
       <button type_="button" className="action" onClick={_ => copyResults()->Promise.done}>
