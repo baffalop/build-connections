@@ -118,9 +118,6 @@ let make = () => {
       <button type_="button" className="action" onClick={clearAll}>
         {React.string("Clear All")}
       </button>
-      <button type_="button" className="action" onClick={_ => setRows(_ => Puzzle.sampleValues())}>
-        {React.string("Fill (test)")}
-      </button>
       <button type_="submit" className="action primary" disabled={!allValuesFilled}>
         {React.string("Create")}
       </button>
